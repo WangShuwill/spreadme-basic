@@ -14,16 +14,23 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.srpeadme.test;
 
-import java.io.Closeable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import club.spreadme.database.parser.entity.SQLBuildType;
+import club.spreadme.database.parser.support.InsertSQLBeanParser;
+import club.srpeadme.test.domain.Person;
+import org.junit.Test;
 
-public interface WrappedStatement extends AutoCloseable {
+public class SQLParserTest {
 
-    ResultSet query() throws SQLException;
+    @Test
+    public void testInsertSQLParser() {
+        Person person = new Person();
+        person.setId(System.currentTimeMillis());
+        person.setName("James");
+        person.setAge(24);
 
-    int update() throws SQLException;
+        System.out.println(new InsertSQLBeanParser().parse(person, SQLBuildType.INSERT));
+    }
 
 }

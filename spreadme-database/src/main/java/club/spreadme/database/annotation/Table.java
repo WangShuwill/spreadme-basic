@@ -13,27 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package club.spreadme.database.annotation;
 
-package club.spreadme.database.core;
-
-import club.spreadme.database.core.statement.StatementBuilder;
-import club.spreadme.database.core.statement.StatementCallback;
+import java.lang.annotation.*;
 
 /**
- * The interface of base options for database
- *
  * @author Wangshuwei
- * @since 2018-7-31
+ * @since 2017-9-15
  */
-public interface Executor {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+public @interface Table {
 
-    /**
-     * @param builder statement builder
-     * @param action  statement callback
-     * @return parsed resultset
-     * @see club.spreadme.database.core.statement.StatementBuilder
-     * @see club.spreadme.database.core.statement.StatementCallback
-     */
-    <T> T execute(StatementBuilder builder, StatementCallback<T> action);
+    // Database table name
+    String name();
 
+    // DataBase table primarykey
+    String primarykey();
 }

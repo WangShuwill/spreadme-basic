@@ -1,0 +1,126 @@
+/*
+ *  Copyright (c) 2018 Wangshuwei
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package club.spreadme.database.dao;
+
+import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.executor.support.SimplExecutor;
+import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.core.resultset.ResultSetParser;
+import club.spreadme.database.core.resultset.RowMapper;
+import club.spreadme.database.core.resultset.support.BeanRowMapper;
+import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
+import club.spreadme.database.core.resultset.support.RecordRowMapper;
+import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
+import club.spreadme.database.core.statement.support.QueryStatementCallback;
+import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
+import club.spreadme.database.core.statement.support.UpdateStatementCallback;
+import club.spreadme.lang.Assert;
+
+import javax.sql.DataSource;
+import java.util.List;
+
+public class CommonDao {
+
+    private Executor executor;
+
+    public CommonDao(DataSource dataSource) {
+        executor = new SimplExecutor(dataSource);
+    }
+
+    public CommonDao(Executor executor) {
+        this.executor = executor;
+    }
+
+    public <T> T queryOne(String sql, Class<T> clazz) {
+        return queryOne(sql, new BeanRowMapper<>(clazz));
+    }
+
+    public <T> T queryOne(String sql, Class<T> clazz, Object... objects) {
+        return queryOne(sql, new BeanRowMapper<>(clazz), objects);
+    }
+
+    public <T> Record queryOne(String sql) {
+        return queryOne(sql, new RecordRowMapper());
+    }
+
+    public <T> Record queryOne(String sql, Object... objects) {
+        return queryOne(sql, new RecordRowMapper(), objects);
+    }
+
+    public <T> T queryOne(String sql, RowMapper<T> rowMapper) {
+        List<T> results = query(new SimpleStatementBuilder(sql), new DefaultResultSetParser<>(rowMapper, 1));
+        return results.iterator().hasNext() ? results.iterator().next() : null;
+    }
+
+    public <T> T queryOne(String sql, RowMapper<T> rowMapper, Object... objects) {
+        List<T> results = query(new PrepareStatementBuilder(sql, objects), new DefaultResultSetParser<>(rowMapper, 1));
+        return results.iterator().hasNext() ? results.iterator().next() : null;
+    }
+
+    public <T> List<T> query(String sql, Class<T> clazz) {
+        return query(sql, new BeanRowMapper<>(clazz));
+    }
+
+    public <T> List<T> query(String sql, Class<T> clazz, Object... objects) {
+        return query(sql, new BeanRowMapper<>(clazz), objects);
+    }
+
+    public <T> List<Record> query(String sql) {
+        return query(sql, new RecordRowMapper());
+    }
+
+    public <T> List<Record> query(String sql, Object... objects) {
+        return query(sql, new RecordRowMapper(), objects);
+    }
+
+    public <T> List<T> query(String sql, RowMapper<T> rowMapper) {
+        return query(new SimpleStatementBuilder(sql), rowMapper);
+    }
+
+    public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... objects) {
+        return query(new PrepareStatementBuilder(sql, objects), rowMapper);
+    }
+
+    protected <T> List<T> query(SimpleStatementBuilder builder, final RowMapper<T> rowMapper) {
+        Assert.notNull(rowMapper, "RowMapper must not be null");
+        return query(builder, new DefaultResultSetParser<>(rowMapper));
+    }
+
+    protected <T> List<T> query(PrepareStatementBuilder builder, final RowMapper<T> rowMapper) {
+        Assert.notNull(rowMapper, "RowMapper must not be null");
+        return query(builder, new DefaultResultSetParser<>(rowMapper));
+    }
+
+    protected <T> T query(SimpleStatementBuilder builder, final ResultSetParser<T> parser) {
+        Assert.notNull(parser, "ResultSetParser must not be null");
+        return executor.execute(builder, new QueryStatementCallback<>(parser));
+    }
+
+    protected <T> T query(PrepareStatementBuilder builder, final ResultSetParser<T> parser) {
+        Assert.notNull(parser, "ResultSetParser must not be null");
+        return executor.execute(builder, new QueryStatementCallback<>(parser));
+    }
+
+    public int update(String sql) {
+        return executor.execute(new SimpleStatementBuilder(sql), new UpdateStatementCallback());
+    }
+
+    public int update(String sql, Object... objects) {
+        return executor.execute(new PrepareStatementBuilder(sql, objects), new UpdateStatementCallback());
+    }
+
+}

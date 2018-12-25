@@ -14,28 +14,21 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.annotation;
 
-import club.spreadme.database.core.aware.SQLProvider;
-
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.lang.annotation.*;
 
 /**
- * build wrapped statement
+ * The dao method parameter annotation
  *
- * @author wswei
- * @see club.spreadme.database.core.aware.SQLProvider
- * @see club.spreadme.database.core.aware.Aware
- * @since 2018.12.24
+ * @author WangShuwei
+ * @since 2018-12-12
  */
-public interface StatementBuilder extends SQLProvider {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+@Documented
+public @interface Param {
 
-    /**
-     * @return wrapped statement
-     * @throws SQLException sql exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
-     */
-    WrappedStatement build(Connection connection) throws SQLException;
+    String value();
 
 }

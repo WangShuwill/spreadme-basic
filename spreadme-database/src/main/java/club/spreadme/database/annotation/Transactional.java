@@ -14,26 +14,24 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.annotation;
 
-import club.spreadme.database.core.aware.SQLOptionTypeAware;
+
+import club.spreadme.database.metadata.TransactionIsolationLevel;
+
+import java.lang.annotation.*;
 
 /**
  * @author Wangshuwei
- * @see club.spreadme.database.core.aware.Aware
- * @see club.spreadme.database.core.aware.SQLOptionTypeAware
- * @since 2018-6-21
+ * @since 2018-8-26
  */
-public interface StatementCallback<T> extends SQLOptionTypeAware {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Transactional {
 
-    /**
-     * execute statement
-     *
-     * @param wrappedStatement wrapped statement
-     * @return execute result
-     * @throws Exception Exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
-     */
-    T executeStatement(WrappedStatement wrappedStatement) throws Exception;
+    TransactionIsolationLevel isolationLevel() default TransactionIsolationLevel.DEFAULT;
+
+    boolean isReadOnly() default false;
 
 }

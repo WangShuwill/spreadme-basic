@@ -14,16 +14,12 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.grammar;
 
-import java.io.Closeable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
 
-public interface WrappedStatement extends AutoCloseable {
+public class Entity implements Serializable {
 
-    ResultSet query() throws SQLException;
-
-    int update() throws SQLException;
+    private static final long serialVersionUID = 8845401705513453990L;
 
 }

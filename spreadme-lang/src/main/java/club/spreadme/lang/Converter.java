@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Conventer {
+public class Converter {
 
     public static  <T> T toNumber(final Class<?> sourceType, final Class<T> targetType, final Number value) {
         // if it is number,return

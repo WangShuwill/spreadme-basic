@@ -14,26 +14,20 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.annotation;
 
-import club.spreadme.database.core.aware.SQLOptionTypeAware;
+import java.lang.annotation.*;
 
 /**
  * @author Wangshuwei
- * @see club.spreadme.database.core.aware.Aware
- * @see club.spreadme.database.core.aware.SQLOptionTypeAware
- * @since 2018-6-21
+ * @since 2018-11-20
  */
-public interface StatementCallback<T> extends SQLOptionTypeAware {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Insert {
 
-    /**
-     * execute statement
-     *
-     * @param wrappedStatement wrapped statement
-     * @return execute result
-     * @throws Exception Exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
-     */
-    T executeStatement(WrappedStatement wrappedStatement) throws Exception;
+    String value() default "";
 
+    Class<? extends SQLProcessor> processor() default SQLProcessor.class;
 }

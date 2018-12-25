@@ -17,37 +17,28 @@
 package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.core.statement.wrapper.PrepareWrappedStatement;
+import club.spreadme.database.core.statement.wrapper.SimpleWrappedStatement;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class PrepareStatementBuilder extends AbstractStatementBuilder {
+public class SimpleStatementBuilder extends AbstractStatementBuilder {
 
     private final String sql;
-    private final Object[] parameters;
 
-    public PrepareStatementBuilder(String sql, Object[] parameters) {
+    public SimpleStatementBuilder(String sql) {
         this.sql = sql;
-        this.parameters = parameters;
     }
 
     @Override
     public WrappedStatement doBuild(Statement statement) throws SQLException {
-        return new PrepareWrappedStatement((PreparedStatement) statement);
+        return new SimpleWrappedStatement(statement, sql);
     }
 
     @Override
     public Statement createStatement(Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        int parameterIndex = 1;
-        for (Object parameter : parameters) {
-            ps.setObject(parameterIndex, parameter);
-            parameterIndex++;
-        }
-        return ps;
+        return connection.createStatement();
     }
 
     @Override

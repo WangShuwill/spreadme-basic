@@ -14,16 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.annotation;
 
-import java.io.Closeable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-public interface WrappedStatement extends AutoCloseable {
-
-    ResultSet query() throws SQLException;
-
-    int update() throws SQLException;
-
+public class SQLProcessor {
 }

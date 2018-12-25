@@ -265,7 +265,11 @@ public abstract class Reflection {
         return annotationDefinition;
     }
 
-    public static Annotation getAnnotation(AnnotatedElement annotatedElement, Class<? extends Annotation> annoClass) {
+    public static <T extends Annotation> T getAnnotation(Object obj, Class<T> annoClass) {
+        return getAnnotation(obj.getClass(), annoClass);
+    }
+
+    public static <T extends Annotation> T getAnnotation(AnnotatedElement annotatedElement, Class<T> annoClass) {
         return annotatedElement.getAnnotation(annoClass);
     }
 

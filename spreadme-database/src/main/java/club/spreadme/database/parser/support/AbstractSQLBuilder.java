@@ -14,16 +14,26 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.parser.support;
 
-import java.io.Closeable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import club.spreadme.database.parser.SQLBuilder;
 
-public interface WrappedStatement extends AutoCloseable {
+import java.util.List;
 
-    ResultSet query() throws SQLException;
+public abstract class AbstractSQLBuilder implements SQLBuilder {
 
-    int update() throws SQLException;
+    protected StringBuilder appendList(StringBuilder sql, List<?> list, String init, String sep) {
+        boolean first = true;
+        for (Object s : list) {
+            if (first) {
+                sql.append(init);
+            } else {
+                sql.append(sep);
+            }
+            sql.append(s);
+            first = false;
+        }
+        return sql;
+    }
 
 }

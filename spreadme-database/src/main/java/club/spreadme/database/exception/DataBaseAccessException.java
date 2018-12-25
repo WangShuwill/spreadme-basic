@@ -27,4 +27,8 @@ public class DataBaseAccessException extends RuntimeException {
     public DataBaseAccessException(String reason) {
         super(reason);
     }
+
+    public DataBaseAccessException(String errorSql, Exception ex) {
+        super(errorSql + ex);
+    }
 }

@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public enum SQLType {
 
-    QUERY, UPDATE, INSERT, DELETE;
+    QUERY, UPDATE;
 
     private static final Map<String, SQLType> mappings = new HashMap<>(4);
 

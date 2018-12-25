@@ -14,20 +14,19 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement.support;
+package club.spreadme.database.core.executor.support;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import club.spreadme.database.core.aware.ExecutorAware;
+import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.StatementCallback;
 
-public class DefaultStatementBuilder extends AbstractStatementBuilder {
-
-    public DefaultStatementBuilder(Connection connection, String sql) {
-        super(connection, sql, new Object[0]);
-    }
+public abstract class AbstractExecutor implements Executor, ExecutorAware {
 
     @Override
-    public Statement createStatement() throws SQLException {
-        return connection.createStatement();
+    public <T> T execute(StatementBuilder builder, StatementCallback<T> action) {
+        return doExecute(builder, action);
     }
+
+    protected abstract <T> T doExecute(StatementBuilder builder, StatementCallback<T> action);
 }

@@ -17,7 +17,7 @@
 package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.StatementBuilder;
-import club.spreadme.database.core.statement.wrapper.WrappedStatement;
+import club.spreadme.database.core.statement.WrappedStatement;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,26 +34,18 @@ import java.sql.Statement;
  */
 public abstract class AbstractStatementBuilder implements StatementBuilder {
 
-    protected Connection connection;
-    protected String sql;
-    protected Object[] args;
-
-    public AbstractStatementBuilder(Connection connection, String sql, Object[] args) {
-        this.connection = connection;
-        this.sql = sql;
-        this.args = args;
+    @Override
+    public WrappedStatement build(Connection connection) throws SQLException {
+        Statement statement = createStatement(connection);
+        prepare(statement);
+        return doBuild(statement);
     }
 
-    @Override
-    public WrappedStatement build() throws SQLException {
-        Statement statement = createStatement();
-        return new WrappedStatement(statement, sql, args, connection);
-    }
+    public abstract WrappedStatement doBuild(Statement statement) throws SQLException;
 
-    public abstract Statement createStatement() throws SQLException;
+    public abstract Statement createStatement(Connection connection) throws SQLException;
 
-    @Override
-    public String getSql() {
-        return sql;
+    public void prepare(Statement statement) throws SQLException {
+
     }
 }

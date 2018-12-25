@@ -14,27 +14,21 @@
  *  limitations under the License.
  */
 
-package club.srpeadme.test.domain;
+package club.spreadme.database.parser.entity;
 
-import club.spreadme.database.annotation.Table;
+public class SQLParameter {
 
-import java.io.Serializable;
-
-@Table(name = "person", primarykey = "id")
-public class Person implements Serializable {
-
-    private static final long serialVersionUID = 1786240784806482577L;
-
-    private Long id;
     private String name;
-    private Integer age;
+    private Class<?> type;
+    private Object value;
 
-    public Long getId() {
-        return id;
+    public SQLParameter() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public SQLParameter(String name, Class<?> type, Object value) {
+        this.name = name;
+        this.type = type;
+        this.value = value;
     }
 
     public String getName() {
@@ -45,20 +39,28 @@ public class Person implements Serializable {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public Class<?> getType() {
+        return type;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
+        return "SQLParameter{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", value=" + value +
                 '}';
     }
 }

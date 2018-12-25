@@ -14,16 +14,21 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.statement.support;
 
-import java.io.Closeable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import club.spreadme.database.core.statement.StatementCallback;
+import club.spreadme.database.core.statement.WrappedStatement;
+import club.spreadme.database.metadata.SQLType;
 
-public interface WrappedStatement extends AutoCloseable {
+public class UpdateStatementCallback implements StatementCallback<Integer> {
 
-    ResultSet query() throws SQLException;
+    @Override
+    public Integer executeStatement(WrappedStatement wrappedStatement) throws Exception {
+        return wrappedStatement.update();
+    }
 
-    int update() throws SQLException;
-
+    @Override
+    public SQLType getSqlOptionType() {
+        return SQLType.UPDATE;
+    }
 }

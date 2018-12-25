@@ -14,26 +14,29 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.executor;
 
-import club.spreadme.database.core.aware.SQLOptionTypeAware;
+import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.StatementCallback;
+
+import javax.sql.DataSource;
 
 /**
+ * The interface of base options for database
+ *
  * @author Wangshuwei
- * @see club.spreadme.database.core.aware.Aware
- * @see club.spreadme.database.core.aware.SQLOptionTypeAware
- * @since 2018-6-21
+ * @since 2018-7-31
  */
-public interface StatementCallback<T> extends SQLOptionTypeAware {
+public interface Executor {
 
     /**
-     * execute statement
-     *
-     * @param wrappedStatement wrapped statement
-     * @return execute result
-     * @throws Exception Exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
+     * @param builder statement builder
+     * @param action  statement callback
+     * @return parsed resultset
+     * @see club.spreadme.database.core.statement.StatementBuilder
+     * @see club.spreadme.database.core.statement.StatementCallback
      */
-    T executeStatement(WrappedStatement wrappedStatement) throws Exception;
+    <T> T execute(StatementBuilder builder, StatementCallback<T> action);
 
+    DataSource getDataSourcec();
 }

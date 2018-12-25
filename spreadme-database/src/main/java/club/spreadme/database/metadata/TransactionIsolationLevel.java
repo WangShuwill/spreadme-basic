@@ -13,27 +13,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package club.spreadme.database.metadata;
 
-package club.spreadme.database.core.statement;
-
-import club.spreadme.database.core.aware.SQLOptionTypeAware;
+import java.sql.Connection;
 
 /**
+ * Transaction Isolation Level
+ *
  * @author Wangshuwei
- * @see club.spreadme.database.core.aware.Aware
- * @see club.spreadme.database.core.aware.SQLOptionTypeAware
- * @since 2018-6-21
+ * @since 2018-7-2
  */
-public interface StatementCallback<T> extends SQLOptionTypeAware {
+public enum TransactionIsolationLevel {
 
-    /**
-     * execute statement
-     *
-     * @param wrappedStatement wrapped statement
-     * @return execute result
-     * @throws Exception Exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
-     */
-    T executeStatement(WrappedStatement wrappedStatement) throws Exception;
+    DEFAULT(-1),
+    NONE(Connection.TRANSACTION_NONE),
+    READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),
+    READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),
+    REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),
+    SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);
 
+    private int level;
+
+    TransactionIsolationLevel(int level) {
+        this.level = level;
+    }
+
+    public int getLevel() {
+        return level;
+    }
 }

@@ -16,43 +16,36 @@
 
 package club.spreadme.database.core.statement.wrapper;
 
-import java.sql.Connection;
+import club.spreadme.database.core.statement.WrappedStatement;
+import club.spreadme.database.util.JdbcUtil;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
-public class WrappedStatement {
+public class SimpleWrappedStatement implements WrappedStatement {
 
-    private Statement statement;
-    private String sql;
-    private Object[] args;
+    private final Statement statement;
+    private final String sql;
 
-    private Connection connection;
-
-    public WrappedStatement(Statement statement, String sql, Connection connection) {
+    public SimpleWrappedStatement(Statement statement, String sql) {
         this.statement = statement;
         this.sql = sql;
-        this.connection = connection;
     }
 
-    public WrappedStatement(Statement statement, String sql, Object[] args, Connection connection) {
-        this.statement = statement;
-        this.sql = sql;
-        this.args = args;
-        this.connection = connection;
+    @Override
+    public ResultSet query() throws SQLException {
+        return statement.executeQuery(sql);
     }
 
-    public Statement getStatement() {
-        return statement;
+    @Override
+    public int update() throws SQLException {
+        return statement.executeUpdate(sql);
     }
 
-    public String getSql() {
-        return sql;
-    }
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public Connection getConnection() {
-        return connection;
+    @Override
+    public void close() throws IOException {
+        JdbcUtil.closeStatement(statement);
     }
 }

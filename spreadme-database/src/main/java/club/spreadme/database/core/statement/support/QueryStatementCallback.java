@@ -18,14 +18,11 @@ package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.statement.StatementCallback;
-import club.spreadme.database.core.statement.wrapper.WrappedStatement;
+import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.SQLType;
 import club.spreadme.database.util.JdbcUtil;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class QueryStatementCallback<T> implements StatementCallback<T> {
 
@@ -39,9 +36,7 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
     public T executeStatement(WrappedStatement wrappedStatement) throws Exception {
         ResultSet resultSet = null;
         try {
-            Statement statement = wrappedStatement.getStatement();
-            String sql = wrappedStatement.getSql();
-            resultSet = doExcute(statement, sql);
+            resultSet = wrappedStatement.query();
             return resultSetParser.parse(resultSet);
         } finally {
             JdbcUtil.closeResultSet(resultSet);
@@ -51,14 +46,6 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
     @Override
     public SQLType getSqlOptionType() {
         return SQLType.QUERY;
-    }
-
-    protected ResultSet doExcute(Statement statement, String sql) throws SQLException {
-        if (statement instanceof PreparedStatement) {
-            return ((PreparedStatement) statement).executeQuery();
-        } else {
-            return statement.executeQuery(sql);
-        }
     }
 
 }
