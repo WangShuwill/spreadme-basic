@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>club.spreadme</groupId>
+    <artifactId>spreadme-frame</artifactId>
+    <packaging>pom</packaging>
+    <version>1.4.7</version>
+    <modules>
+        <module>spreadme-lang</module>
+        <module>spreadme-test</module>
+        <module>spreadme-database</module>
+    </modules>
+
+    <name>spreadme-frame</name>
+    <url>https://github.com/WangShuwill/spread-frame</url>
+    <description>a quikly dev framework</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <logback.version>1.2.3</logback.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/WangShuwill/spreadme-frame</url>
+        <connection>https://github.com/WangShuwill/spreadme-frame.git</connection>
+        <developerConnection>https://github.com/WangShuwill/spread-frame</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>WangShuwei</name>
+            <email>wangshuwei6@gmail.com</email>
+            <url>https://github.com/WangShuwill</url>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin-version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
