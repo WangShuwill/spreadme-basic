@@ -16,8 +16,11 @@
 
 package club.spreadme.database.core.aware;
 
+import java.sql.Connection;
+
 public interface SQLProvider extends Aware {
 
     String getSql();
 
+    Connection getConnection();
 }

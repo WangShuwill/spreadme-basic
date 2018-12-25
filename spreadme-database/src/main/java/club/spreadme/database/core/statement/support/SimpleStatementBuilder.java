@@ -32,7 +32,7 @@ public class SimpleStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
-    public WrappedStatement doBuild(Statement statement) throws SQLException {
+    public WrappedStatement doBuild(Statement statement) {
         return new SimpleWrappedStatement(statement, sql);
     }
 

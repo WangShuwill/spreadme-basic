@@ -35,7 +35,7 @@ public class PrepareStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
-    public WrappedStatement doBuild(Statement statement) throws SQLException {
+    public WrappedStatement doBuild(Statement statement) {
         return new PrepareWrappedStatement((PreparedStatement) statement);
     }
 

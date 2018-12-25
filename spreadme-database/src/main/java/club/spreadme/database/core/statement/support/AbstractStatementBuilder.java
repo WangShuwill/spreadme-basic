@@ -34,11 +34,19 @@ import java.sql.Statement;
  */
 public abstract class AbstractStatementBuilder implements StatementBuilder {
 
+    private Connection connection;
+
     @Override
     public WrappedStatement build(Connection connection) throws SQLException {
+        this.connection = connection;
         Statement statement = createStatement(connection);
         prepare(statement);
         return doBuild(statement);
+    }
+
+    @Override
+    public Connection getConnection() {
+        return connection;
     }
 
     public abstract WrappedStatement doBuild(Statement statement) throws SQLException;
@@ -46,6 +54,6 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     public abstract Statement createStatement(Connection connection) throws SQLException;
 
     public void prepare(Statement statement) throws SQLException {
-
+        
     }
 }
