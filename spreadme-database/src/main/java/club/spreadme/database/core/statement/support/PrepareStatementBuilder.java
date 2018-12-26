@@ -18,20 +18,20 @@ package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.wrapper.PrepareWrappedStatement;
+import club.spreadme.database.metadata.ConcurMode;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class PrepareStatementBuilder extends AbstractStatementBuilder {
 
     private final String sql;
     private final Object[] parameters;
+    private final ConcurMode concurMode;
 
-    public PrepareStatementBuilder(String sql, Object[] parameters) {
+    public PrepareStatementBuilder(String sql, Object[] parameters, ConcurMode concurMode) {
         this.sql = sql;
         this.parameters = parameters;
+        this.concurMode = concurMode;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class PrepareStatementBuilder extends AbstractStatementBuilder {
 
     @Override
     public Statement createStatement(Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(sql);
+        PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, concurMode.getValue());
         int parameterIndex = 1;
         for (Object parameter : parameters) {
             ps.setObject(parameterIndex, parameter);

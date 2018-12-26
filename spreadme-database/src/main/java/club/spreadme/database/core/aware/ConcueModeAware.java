@@ -14,28 +14,25 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.aware;
 
-import club.spreadme.database.core.aware.SQLProvider;
-
-import java.sql.Connection;
-import java.sql.SQLException;
+import club.spreadme.database.metadata.ConcurMode;
 
 /**
- * build wrapped statement
+ * sql option type aware
  *
  * @author wswei
- * @see club.spreadme.database.core.aware.SQLProvider
  * @see club.spreadme.database.core.aware.Aware
  * @since 2018.12.24
  */
-public interface StatementBuilder extends SQLProvider {
+public interface ConcueModeAware extends Aware {
 
     /**
-     * @return wrapped statement
-     * @throws SQLException sql exception
-     * @see club.spreadme.database.core.statement.WrappedStatement
+     * get sql option type
+     *
+     * @return sql option type
+     * @see ConcurMode
      */
-    WrappedStatement build(Connection connection, StatementConfig config) throws SQLException;
+    ConcurMode getCouncurMode();
 
 }

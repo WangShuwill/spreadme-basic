@@ -39,7 +39,7 @@ public class UpdateBeanSQLParser extends BeanSQLParser {
 
     @Override
     public SQLStatement parse() {
-        Assert.isTrue(buildType.equals(SQLBuildType.UPDATE), "is not update sql build type");
+        Assert.isTrue(buildType.equals(SQLBuildType.UPDATE), "it is not update sql build type");
         SQLBean sqlBean = parseSQLBean(bean);
         UpdateSQLBuilder sqlBuilder = new UpdateSQLBuilder(sqlBean.getTaleName());
         SQLStatement sqlStatement = new SQLStatement();
@@ -50,7 +50,10 @@ public class UpdateBeanSQLParser extends BeanSQLParser {
                 sqlParameters.add(new SQLParameter(entry.getKey(), entry.getValue().getClass(), entry.getValue()));
             }
         }
+
         sqlBuilder.where(sqlBean.getPrimaryKeyName() + " = ?");
+        Object primaryKey = sqlBean.getValueMap().get(sqlBean.getPrimaryKeyName());
+        sqlParameters.add(new SQLParameter(sqlBean.getPrimaryKeyName(), primaryKey.getClass(), primaryKey));
         sqlStatement.setSql(sqlBuilder.build().toString());
         sqlStatement.setSqlParameters(sqlParameters);
         return sqlStatement;

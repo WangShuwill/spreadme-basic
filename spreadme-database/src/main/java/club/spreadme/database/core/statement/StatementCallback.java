@@ -16,15 +16,15 @@
 
 package club.spreadme.database.core.statement;
 
-import club.spreadme.database.core.aware.SQLOptionTypeAware;
+import club.spreadme.database.core.aware.ConcueModeAware;
 
 /**
  * @author Wangshuwei
  * @see club.spreadme.database.core.aware.Aware
- * @see club.spreadme.database.core.aware.SQLOptionTypeAware
+ * @see ConcueModeAware
  * @since 2018-6-21
  */
-public interface StatementCallback<T> extends SQLOptionTypeAware {
+public interface StatementCallback<T> extends ConcueModeAware {
 
     /**
      * execute statement

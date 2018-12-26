@@ -18,11 +18,9 @@ package club.spreadme.database.core.executor;
 
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
+import club.spreadme.database.core.statement.StatementConfig;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * The interface of base options for database
@@ -40,6 +38,8 @@ public interface Executor {
      * @see club.spreadme.database.core.statement.StatementCallback
      */
     <T> T execute(StatementBuilder builder, StatementCallback<T> action);
+
+    void setStatementConfig(StatementConfig config);
 
     DataSource getDataSource();
 }

@@ -17,6 +17,7 @@
 package club.spreadme.database.core.statement.wrapper;
 
 import club.spreadme.database.core.statement.WrappedStatement;
+import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.util.JdbcUtil;
 
 import java.io.IOException;
@@ -42,6 +43,16 @@ public class SimpleWrappedStatement implements WrappedStatement {
     @Override
     public int update() throws SQLException {
         return statement.executeUpdate(sql);
+    }
+
+    @Override
+    public int[] batch() throws SQLException {
+        return statement.executeBatch();
+    }
+
+    @Override
+    public ConcurMode getConcurMode() throws SQLException {
+        return ConcurMode.resolve(statement.getResultSetConcurrency());
     }
 
     @Override

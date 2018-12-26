@@ -19,7 +19,7 @@ package club.spreadme.database.core.statement.support;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.metadata.SQLType;
+import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.util.JdbcUtil;
 
 import java.sql.ResultSet;
@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 public class QueryStatementCallback<T> implements StatementCallback<T> {
 
     private final ResultSetParser<T> resultSetParser;
+    private ConcurMode concurMode;
 
     public QueryStatementCallback(ResultSetParser<T> resultSetParser) {
         this.resultSetParser = resultSetParser;
@@ -36,6 +37,7 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
     public T executeStatement(WrappedStatement wrappedStatement) throws Exception {
         ResultSet resultSet = null;
         try {
+            concurMode = wrappedStatement.getConcurMode();
             resultSet = wrappedStatement.query();
             return resultSetParser.parse(resultSet);
         } finally {
@@ -44,8 +46,8 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
     }
 
     @Override
-    public SQLType getSqlOptionType() {
-        return SQLType.QUERY;
+    public ConcurMode getCouncurMode() {
+        return concurMode;
     }
 
 }

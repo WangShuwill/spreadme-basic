@@ -18,6 +18,6 @@ package club.spreadme.database.parser.entity;
 
 public enum SQLBuildType {
 
-    INSERT, UPDATE, DELETE
+    SELECT, INSERT, UPDATE, DELETE
 
 }

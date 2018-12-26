@@ -18,17 +18,20 @@ package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.metadata.SQLType;
+import club.spreadme.database.metadata.ConcurMode;
 
 public class UpdateStatementCallback implements StatementCallback<Integer> {
 
+    private ConcurMode concurMode;
+
     @Override
     public Integer executeStatement(WrappedStatement wrappedStatement) throws Exception {
+        concurMode = wrappedStatement.getConcurMode();
         return wrappedStatement.update();
     }
 
     @Override
-    public SQLType getSqlOptionType() {
-        return SQLType.UPDATE;
+    public ConcurMode getCouncurMode() {
+        return concurMode;
     }
 }

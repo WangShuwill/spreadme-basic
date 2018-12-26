@@ -20,13 +20,21 @@ import club.spreadme.database.core.aware.ExecutorAware;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
+import club.spreadme.database.core.statement.StatementConfig;
 
 public abstract class AbstractExecutor implements Executor, ExecutorAware {
 
+    private StatementConfig statementConfig;
+
     @Override
-    public <T> T execute(StatementBuilder builder, StatementCallback<T> action) {
-        return doExecute(builder, action);
+    public void setStatementConfig(StatementConfig config) {
+        this.statementConfig = config;
     }
 
-    protected abstract <T> T doExecute(StatementBuilder builder, StatementCallback<T> action);
+    @Override
+    public <T> T execute(StatementBuilder builder, StatementCallback<T> action) {
+        return doExecute(builder, action, statementConfig);
+    }
+
+    protected abstract <T> T doExecute(StatementBuilder builder, StatementCallback<T> action, StatementConfig config);
 }

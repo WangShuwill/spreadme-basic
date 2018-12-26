@@ -25,23 +25,33 @@ import java.util.Map;
  * @author Wangshuwei
  * @since 2018-8-1
  */
-public enum SQLType {
+public enum ConcurMode {
 
-    QUERY, UPDATE;
+    READ_ONLY(1007), UPDATABLE(1008), UNKNOWN(-1);
 
-    private static final Map<String, SQLType> mappings = new HashMap<>(4);
+    private static final Map<Integer, ConcurMode> mappings = new HashMap<>(3);
 
     static {
-        for (SQLType sqlOptionType : values()) {
-            mappings.put(sqlOptionType.name(), sqlOptionType);
+        for (ConcurMode concurMode : values()) {
+            mappings.put(concurMode.getValue(), concurMode);
         }
     }
 
-    public static SQLType resolve(String sqlOptionType) {
-        return sqlOptionType == null ? null : mappings.get(sqlOptionType);
+    public static ConcurMode resolve(Integer mode) {
+        return mode == null ? UNKNOWN : mappings.get(mode);
     }
 
-    public boolean matches(String sqlOptionType) {
-        return this == resolve(sqlOptionType);
+    public boolean matches(Integer mode) {
+        return this == resolve(mode);
+    }
+
+    private int value;
+
+    ConcurMode(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

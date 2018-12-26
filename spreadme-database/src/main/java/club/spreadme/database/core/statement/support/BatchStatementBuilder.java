@@ -17,32 +17,40 @@
 package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.core.statement.wrapper.SimpleWrappedStatement;
-import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.core.statement.wrapper.PrepareWrappedStatement;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SimpleStatementBuilder extends AbstractStatementBuilder {
+public class BatchStatementBuilder extends AbstractStatementBuilder {
 
     private final String sql;
-    private ConcurMode concurMode;
+    private final Object[][] parameterss;
 
-    public SimpleStatementBuilder(String sql, ConcurMode concurMode) {
+    public BatchStatementBuilder(String sql, Object[][] parameterss) {
         this.sql = sql;
-        this.concurMode = concurMode;
+        this.parameterss = parameterss;
     }
 
     @Override
     public WrappedStatement doBuild(Statement statement) {
-        return new SimpleWrappedStatement(statement, sql);
+        return new PrepareWrappedStatement((PreparedStatement) statement);
     }
 
     @Override
     public Statement createStatement(Connection connection) throws SQLException {
-        return connection.createStatement(ResultSet.FETCH_FORWARD, concurMode.getValue());
+        PreparedStatement ps = connection.prepareStatement(sql);
+        for (Object[] parameters : parameterss) {
+            int parameterIndex = 1;
+            for (Object parameter : parameters) {
+                ps.setObject(parameterIndex, parameter);
+                parameterIndex++;
+            }
+            ps.addBatch();
+        }
+        return ps;
     }
 
     @Override

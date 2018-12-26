@@ -17,7 +17,6 @@
 package club.spreadme.database.parser;
 
 import club.spreadme.database.parser.entity.SQLStatement;
-import club.spreadme.database.parser.support.SQLBeanParser;
 
 public interface SQLParser {
 

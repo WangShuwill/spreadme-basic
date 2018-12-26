@@ -39,7 +39,7 @@ public class InsertBeanSQLParser extends BeanSQLParser {
 
     @Override
     public SQLStatement parse() {
-        Assert.isTrue(buildType.equals(SQLBuildType.INSERT), "is not insert sql build type");
+        Assert.isTrue(buildType.equals(SQLBuildType.INSERT), "it is not insert sql build type");
         SQLBean sqlBean = parseSQLBean(bean);
         InsertSQLBuilder sqlBuilder = new InsertSQLBuilder(sqlBean.getTaleName());
         SQLStatement sqlStatement = new SQLStatement();

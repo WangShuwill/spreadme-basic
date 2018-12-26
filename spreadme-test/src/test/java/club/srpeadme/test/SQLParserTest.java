@@ -16,6 +16,8 @@
 
 package club.srpeadme.test;
 
+import club.spreadme.database.core.datasource.SpreadDataSource;
+import club.spreadme.database.core.executor.support.StreamExecutor;
 import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.entity.SQLBuildType;
 import club.spreadme.database.parser.support.BeanSQLParser;
@@ -23,7 +25,13 @@ import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
+import javax.sql.DataSource;
+
 public class SQLParserTest {
+
+    private static final String URL = "jdbc:mysql://192.168.52.128:3306/imdb?autoReconnect=true&useSSL=false";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "123456";
 
     @Test
     public void testInsertSQLParser() {
@@ -37,6 +45,18 @@ public class SQLParserTest {
 
         SQLParser sqlParser2 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.UPDATE));
         System.out.println(sqlParser2.parse());
+
+        SQLParser sqlParser3 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.DELETE));
+        System.out.println(sqlParser3.parse());
+    }
+
+    @Test
+    public void testCommonDAO() {
+        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
+
+        StreamExecutor streamExecutor = new StreamExecutor();
+        streamExecutor.setDataSource(dataSource);
+        streamExecutor.query("select * from movies").limit(2).forEach(System.out::println);
     }
 
 }

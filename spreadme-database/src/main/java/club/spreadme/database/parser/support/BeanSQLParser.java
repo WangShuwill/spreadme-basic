@@ -16,6 +16,7 @@
 
 package club.spreadme.database.parser.support;
 
+import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.parser.entity.SQLBuildType;
 import club.spreadme.database.parser.entity.SQLStatement;
 
@@ -23,7 +24,7 @@ public class BeanSQLParser extends AbstractSQLBeanParser {
 
     private BeanSQLParser delegate;
 
-    public BeanSQLParser() {
+    protected BeanSQLParser() {
 
     }
 
@@ -31,8 +32,15 @@ public class BeanSQLParser extends AbstractSQLBeanParser {
         switch (buildType) {
             case INSERT:
                 delegate = new InsertBeanSQLParser(bean, buildType);
+                break;
             case UPDATE:
                 delegate = new UpdateBeanSQLParser(bean, buildType);
+                break;
+            case DELETE:
+                delegate = new DeleteBeanSQLParser(bean, buildType);
+                break;
+            default:
+                throw new DataBaseAccessException("no sql build type match");
         }
     }
 

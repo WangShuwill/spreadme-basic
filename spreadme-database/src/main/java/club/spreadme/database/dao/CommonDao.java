@@ -28,6 +28,7 @@ import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.QueryStatementCallback;
 import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
 import club.spreadme.database.core.statement.support.UpdateStatementCallback;
+import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
@@ -62,12 +63,12 @@ public class CommonDao {
     }
 
     public <T> T queryOne(String sql, RowMapper<T> rowMapper) {
-        List<T> results = query(new SimpleStatementBuilder(sql), new DefaultResultSetParser<>(rowMapper, 1));
+        List<T> results = query(new SimpleStatementBuilder(sql, ConcurMode.READ_ONLY), new DefaultResultSetParser<>(rowMapper, 1));
         return results.iterator().hasNext() ? results.iterator().next() : null;
     }
 
     public <T> T queryOne(String sql, RowMapper<T> rowMapper, Object... objects) {
-        List<T> results = query(new PrepareStatementBuilder(sql, objects), new DefaultResultSetParser<>(rowMapper, 1));
+        List<T> results = query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new DefaultResultSetParser<>(rowMapper, 1));
         return results.iterator().hasNext() ? results.iterator().next() : null;
     }
 
@@ -88,11 +89,11 @@ public class CommonDao {
     }
 
     public <T> List<T> query(String sql, RowMapper<T> rowMapper) {
-        return query(new SimpleStatementBuilder(sql), rowMapper);
+        return query(new SimpleStatementBuilder(sql, ConcurMode.READ_ONLY), rowMapper);
     }
 
     public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... objects) {
-        return query(new PrepareStatementBuilder(sql, objects), rowMapper);
+        return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), rowMapper);
     }
 
     protected <T> List<T> query(SimpleStatementBuilder builder, final RowMapper<T> rowMapper) {
@@ -116,11 +117,11 @@ public class CommonDao {
     }
 
     public int update(String sql) {
-        return executor.execute(new SimpleStatementBuilder(sql), new UpdateStatementCallback());
+        return executor.execute(new SimpleStatementBuilder(sql, ConcurMode.UPDATABLE), new UpdateStatementCallback());
     }
 
     public int update(String sql, Object... objects) {
-        return executor.execute(new PrepareStatementBuilder(sql, objects), new UpdateStatementCallback());
+        return executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE), new UpdateStatementCallback());
     }
 
 }

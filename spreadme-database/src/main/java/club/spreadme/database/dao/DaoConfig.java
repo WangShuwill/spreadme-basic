@@ -14,25 +14,19 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.aware;
+package club.spreadme.database.dao;
 
-import club.spreadme.database.metadata.SQLType;
+import club.spreadme.database.core.statement.StatementConfig;
 
-/**
- * sql option type aware
- *
- * @author wswei
- * @see club.spreadme.database.core.aware.Aware
- * @since 2018.12.24
- */
-public interface SQLOptionTypeAware extends Aware {
+public class DaoConfig {
 
-    /**
-     * get sql option type
-     *
-     * @return sql option type
-     * @see SQLType
-     */
-    SQLType getSqlOptionType();
+    private StatementConfig statementConfig;
 
+    public StatementConfig getStatementConfig() {
+        return statementConfig;
+    }
+
+    public void setStatementConfig(StatementConfig statementConfig) {
+        this.statementConfig = statementConfig;
+    }
 }

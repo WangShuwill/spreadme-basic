@@ -14,20 +14,24 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.statement.support;
 
+import club.spreadme.database.core.statement.StatementCallback;
+import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+public class BatchStatementCallback implements StatementCallback<int[]> {
 
-public interface WrappedStatement extends AutoCloseable {
+    private ConcurMode concurMode;
 
-    ResultSet query() throws SQLException;
+    @Override
+    public int[] executeStatement(WrappedStatement wrappedStatement) throws Exception {
+        concurMode = wrappedStatement.getConcurMode();
+        return wrappedStatement.batch();
+    }
 
-    int update() throws SQLException;
-
-    int[] batch() throws SQLException;
-
-    ConcurMode getConcurMode() throws SQLException;
+    @Override
+    public ConcurMode getCouncurMode() {
+        return concurMode;
+    }
 }
