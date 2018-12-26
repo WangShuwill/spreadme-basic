@@ -16,8 +16,10 @@
 
 package club.srpeadme.test;
 
+import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.entity.SQLBuildType;
-import club.spreadme.database.parser.support.InsertSQLBeanParser;
+import club.spreadme.database.parser.support.BeanSQLParser;
+import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
@@ -30,7 +32,11 @@ public class SQLParserTest {
         person.setName("James");
         person.setAge(24);
 
-        System.out.println(new InsertSQLBeanParser().parse(person, SQLBuildType.INSERT));
+        SQLParser sqlParser1 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.INSERT));
+        System.out.println(sqlParser1.parse());
+
+        SQLParser sqlParser2 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.UPDATE));
+        System.out.println(sqlParser2.parse());
     }
 
 }

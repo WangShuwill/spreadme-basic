@@ -52,7 +52,7 @@ public class SimplExecutor extends AbstractExecutor {
     }
 
     @Override
-    public DataSource getDataSourcec() {
+    public DataSource getDataSource() {
         return dataSource;
     }
 }

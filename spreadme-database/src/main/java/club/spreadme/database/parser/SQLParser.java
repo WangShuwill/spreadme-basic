@@ -19,8 +19,8 @@ package club.spreadme.database.parser;
 import club.spreadme.database.parser.entity.SQLStatement;
 import club.spreadme.database.parser.support.SQLBeanParser;
 
-public interface SQLParser extends SQLBeanParser {
+public interface SQLParser {
 
-    SQLStatement parse(String sql, Object[] values);
+    SQLStatement parse();
 
 }

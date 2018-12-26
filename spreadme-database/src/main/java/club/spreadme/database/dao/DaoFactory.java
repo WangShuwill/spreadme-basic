@@ -14,21 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.parser.support;
+package club.spreadme.database.dao;
 
-import club.spreadme.database.parser.SQLParser;
-import club.spreadme.database.parser.entity.SQLBuildType;
-import club.spreadme.database.parser.entity.SQLStatement;
-
-public class DefaultSQLParser implements SQLParser {
-
-    @Override
-    public SQLStatement parse(String sql, Object[] values) {
-        return null;
-    }
-
-    @Override
-    public SQLStatement parse(Object bean, SQLBuildType sqlBuildType) {
-        return null;
-    }
+public class DaoFactory {
 }

@@ -18,12 +18,13 @@ package club.spreadme.database.parser.support;
 
 import club.spreadme.database.annotation.Table;
 import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.entity.SQLBean;
 import club.spreadme.lang.Reflection;
 
 import java.util.Map;
 
-public abstract class AbstractSQLBeanParser implements SQLBeanParser {
+public abstract class AbstractSQLBeanParser implements SQLParser {
 
     protected SQLBean parseSQLBean(Object bean) {
         Table tableAnno = Reflection.getAnnotation(bean, Table.class);
