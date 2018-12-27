@@ -54,14 +54,14 @@ public class SQLParserTest {
     public void testCommonDAO() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         CommonDao commonDao = CommonDao.getInstance(dataSource);
-        commonDao.withStream().query("select * from movies").limit(10).forEach(System.out::println);
+        //commonDao.withStream().query("select * from movies").limit(10).forEach(System.out::println);
 
-        //System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
+        System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
     }
 
     public static void main(String[] args){
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         CommonDao commonDao = CommonDao.getInstance(dataSource);
-        commonDao.withStream().query("select * from ovies").limit(10).forEach(System.out::println);
+        commonDao.withStream().query("select * from movies order by id desc").parallel().limit(10).forEach(System.out::println);
     }
 }

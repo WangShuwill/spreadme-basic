@@ -86,7 +86,7 @@ public class StreamResultSetParser<T> implements Spliterator<T>, ResultSetParser
 
     @Override
     public int characteristics() {
-        return ORDERED;
+        return CONCURRENT;
     }
 
     public void nest(DataSource dataSource, Connection connection, WrappedStatement wrappedStatement) {
