@@ -16,6 +16,7 @@
 
 package club.spreadme.database.metadata;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import java.util.Map;
  */
 public enum ConcurMode {
 
-    READ_ONLY(1007), UPDATABLE(1008), UNKNOWN(-1);
+    READ_ONLY(ResultSet.CONCUR_READ_ONLY), UPDATABLE(ResultSet.CONCUR_UPDATABLE), UNKNOWN(-1);
 
     private static final Map<Integer, ConcurMode> mappings = new HashMap<>(3);
 

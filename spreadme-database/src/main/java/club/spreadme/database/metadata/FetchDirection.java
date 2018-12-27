@@ -16,22 +16,23 @@
 
 package club.spreadme.database.metadata;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum FetchMode {
+public enum FetchDirection {
 
-    FORWARD(1000), REVERSE(1001), UNKNOWN(1002);
+    FORWARD(ResultSet.FETCH_FORWARD), REVERSE(ResultSet.FETCH_REVERSE), UNKNOWN(ResultSet.FETCH_UNKNOWN);
 
-    private static final Map<Integer, FetchMode> mappings = new HashMap<>(4);
+    private static final Map<Integer, FetchDirection> mappings = new HashMap<>(3);
 
     static {
-        for (FetchMode fetchMode : values()) {
-            mappings.put(fetchMode.getValue(), fetchMode);
+        for (FetchDirection fetchDirection : values()) {
+            mappings.put(fetchDirection.getValue(), fetchDirection);
         }
     }
 
-    public static FetchMode resolve(Integer mode) {
+    public static FetchDirection resolve(Integer mode) {
         return mode == null ? null : mappings.get(mode);
     }
 
@@ -41,7 +42,7 @@ public enum FetchMode {
 
     private int value;
 
-    FetchMode(int value) {
+    FetchDirection(int value) {
         this.value = value;
     }
 

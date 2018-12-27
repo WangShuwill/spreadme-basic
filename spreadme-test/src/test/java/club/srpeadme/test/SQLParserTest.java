@@ -17,9 +17,9 @@
 package club.srpeadme.test;
 
 import club.spreadme.database.core.datasource.SpreadDataSource;
-import club.spreadme.database.core.executor.support.StreamExecutor;
+import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.parser.SQLParser;
-import club.spreadme.database.parser.entity.SQLBuildType;
+import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.srpeadme.test.domain.Person;
@@ -53,10 +53,15 @@ public class SQLParserTest {
     @Test
     public void testCommonDAO() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
+        CommonDao commonDao = CommonDao.getInstance(dataSource);
+        commonDao.withStream().query("select * from movies").limit(10).forEach(System.out::println);
 
-        StreamExecutor streamExecutor = new StreamExecutor();
-        streamExecutor.setDataSource(dataSource);
-        streamExecutor.query("select * from movies").limit(2).forEach(System.out::println);
+        //System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
     }
 
+    public static void main(String[] args){
+        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
+        CommonDao commonDao = CommonDao.getInstance(dataSource);
+        commonDao.withStream().query("select * from ovies").limit(10).forEach(System.out::println);
+    }
 }

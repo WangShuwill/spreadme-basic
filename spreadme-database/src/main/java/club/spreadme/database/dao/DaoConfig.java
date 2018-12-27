@@ -16,7 +16,7 @@
 
 package club.spreadme.database.dao;
 
-import club.spreadme.database.core.statement.StatementConfig;
+import club.spreadme.database.core.grammar.StatementConfig;
 
 public class DaoConfig {
 

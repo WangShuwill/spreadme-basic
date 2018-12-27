@@ -16,6 +16,7 @@
 package club.spreadme.database.util;
 
 import club.spreadme.database.core.datasource.ConnectionHolder;
+import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.transaction.TransactionSynchronizationManager;
 import club.spreadme.database.exception.DataBaseAccessException;
 
@@ -117,6 +118,16 @@ public abstract class JdbcUtil {
             try {
                 rs.close();
             } catch (SQLException ex) {
+                throw new DataBaseAccessException(ex.getMessage());
+            }
+        }
+    }
+
+    public static void closeWrappedStatement(WrappedStatement wrappedStatement) {
+        if (wrappedStatement != null) {
+            try {
+                wrappedStatement.close();
+            } catch (Exception ex) {
                 throw new DataBaseAccessException(ex.getMessage());
             }
         }

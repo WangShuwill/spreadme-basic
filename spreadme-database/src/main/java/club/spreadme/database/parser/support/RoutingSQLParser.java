@@ -17,7 +17,7 @@
 package club.spreadme.database.parser.support;
 
 import club.spreadme.database.parser.SQLParser;
-import club.spreadme.database.parser.entity.SQLStatement;
+import club.spreadme.database.parser.grammar.SQLStatement;
 
 public class RoutingSQLParser implements SQLParser {
 

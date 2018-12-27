@@ -16,9 +16,9 @@
 
 package club.spreadme.database.core.executor.support;
 
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
-import club.spreadme.database.core.statement.StatementConfig;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.util.JdbcUtil;
@@ -39,13 +39,17 @@ public class SimplExecutor extends AbstractExecutor {
     protected <T> T doExecute(StatementBuilder builder, StatementCallback<T> action, StatementConfig config) {
         Assert.notNull(builder, "StatementBuilder must be not null");
         Assert.notNull(action, "StatementCallback must be not null");
-        Connection connection = JdbcUtil.getConnection(dataSource);
-        try (WrappedStatement wrappedStatement = builder.build(connection, config)) {
+        Connection connection = null;
+        WrappedStatement wrappedStatement = null;
+        try {
+            connection = JdbcUtil.getConnection(dataSource);
+            wrappedStatement = builder.build(connection, config);
             return action.executeStatement(wrappedStatement);
         } catch (Exception ex) {
             String errorSql = builder.getSql();
             throw new DataBaseAccessException(errorSql, ex);
         } finally {
+            JdbcUtil.closeWrappedStatement(wrappedStatement);
             JdbcUtil.closeConnection(connection, dataSource);
         }
     }

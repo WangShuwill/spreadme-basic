@@ -16,90 +16,48 @@
 
 package club.spreadme.database.core.executor.support;
 
-import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.resultset.RowMapper;
-import club.spreadme.database.core.resultset.support.RecordRowMapper;
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
-import club.spreadme.database.core.statement.StatementConfig;
+import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
+import club.spreadme.database.core.statement.support.StreamQueryStatementCallback;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.metadata.ConcurMode;
-import club.spreadme.database.metadata.FetchMode;
 import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-public class StreamExecutor {
+public class StreamExecutor extends AbstractExecutor {
 
     private DataSource dataSource;
 
-    public Stream<Record> query(String sql, Object... objects) {
-        UncheckedCloseable closeable = null;
-        try {
-            StatementBuilder statementBuilder = new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY);
-            Connection connection = JdbcUtil.getConnection(dataSource);
-            StatementConfig config = new StatementConfig();
-            config.setFetchSize(Integer.MIN_VALUE);
-            config.setFetchDirection(FetchMode.REVERSE);
-            WrappedStatement statement = statementBuilder.build(connection, config);
-
-            ResultSet resultSet = statement.query();
-
-            RowMapper<Record> rowMapper = new RecordRowMapper();
-
-            return StreamSupport.stream(new Spliterators.AbstractSpliterator<Record>(Long.MAX_VALUE, Spliterator.ORDERED) {
-                @Override
-                public boolean tryAdvance(Consumer<? super Record> action) {
-                    try {
-                        if (!resultSet.next()) {
-                            return false;
-                        }
-                        action.accept(rowMapper.mapping(resultSet));
-                        return true;
-
-                    } catch (Exception e) {
-                        throw new DataBaseAccessException(e.getMessage());
-                    }
-                }
-            }, false).onClose(closeable);
-
-        } catch (Exception ex) {
-            throw new DataBaseAccessException(ex.getMessage());
-        }
-    }
-
-    public void setDataSource(DataSource dataSource) {
+    public StreamExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    interface UncheckedCloseable extends Runnable, AutoCloseable {
-
-        default void run() {
-            try {
-                close();
-            } catch (Exception ex) {
-                throw new DataBaseAccessException(ex.getMessage());
-            }
+    @Override
+    protected <T> T doExecute(StatementBuilder builder, StatementCallback<T> action, StatementConfig config) {
+        Assert.notNull(builder, "StatementBuilder must be not null");
+        Assert.notNull(action, "StatementCallback must be not null");
+        Connection connection = null;
+        WrappedStatement wrappedStatement = null;
+        try {
+            connection = JdbcUtil.getConnection(dataSource);
+            wrappedStatement = builder.build(connection, config);
+            StreamQueryStatementCallback callback = (StreamQueryStatementCallback) action;
+            callback.nest(dataSource, connection);
+            return action.executeStatement(wrappedStatement);
+        } catch (Exception ex) {
+            JdbcUtil.closeWrappedStatement(wrappedStatement);
+            JdbcUtil.closeConnection(connection, dataSource);
+            String errorSql = builder.getSql();
+            throw new DataBaseAccessException(errorSql, ex);
         }
+    }
 
-        static UncheckedCloseable wrap(AutoCloseable autoCloseable) {
-            return autoCloseable::close;
-        }
-
-        default UncheckedCloseable nest(AutoCloseable autoCloseable) {
-            return () -> {
-                try (UncheckedCloseable uncheckedCloseable = this;) {
-                    this.close();
-                }
-            };
-        }
+    @Override
+    public DataSource getDataSource() {
+        return dataSource;
     }
 }

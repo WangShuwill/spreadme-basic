@@ -20,7 +20,7 @@ import club.spreadme.database.core.aware.ExecutorAware;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
-import club.spreadme.database.core.statement.StatementConfig;
+import club.spreadme.database.core.grammar.StatementConfig;
 
 public abstract class AbstractExecutor implements Executor, ExecutorAware {
 

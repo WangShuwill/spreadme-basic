@@ -14,15 +14,15 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.statement;
+package club.spreadme.database.core.grammar;
 
-import club.spreadme.database.metadata.FetchMode;
+import club.spreadme.database.metadata.FetchDirection;
 
 public class StatementConfig {
 
     private Integer queryTimeout;
     private Integer fetchSize;
-    private FetchMode fetchDirection;
+    private FetchDirection fetchDirection;
 
     public Integer getQueryTimeout() {
         return queryTimeout;
@@ -40,11 +40,11 @@ public class StatementConfig {
         this.fetchSize = fetchSize;
     }
 
-    public FetchMode getFetchDirection() {
+    public FetchDirection getFetchDirection() {
         return fetchDirection;
     }
 
-    public void setFetchDirection(FetchMode fetchDirection) {
+    public void setFetchDirection(FetchDirection fetchDirection) {
         this.fetchDirection = fetchDirection;
     }
 }

@@ -16,10 +16,10 @@
 
 package club.spreadme.database.parser.support;
 
-import club.spreadme.database.parser.entity.SQLBean;
-import club.spreadme.database.parser.entity.SQLBuildType;
-import club.spreadme.database.parser.entity.SQLParameter;
-import club.spreadme.database.parser.entity.SQLStatement;
+import club.spreadme.database.parser.grammar.SQLBean;
+import club.spreadme.database.parser.grammar.SQLBuildType;
+import club.spreadme.database.parser.grammar.SQLParameter;
+import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.lang.Assert;
 
 import java.util.ArrayList;

@@ -18,32 +18,46 @@ package club.spreadme.database.dao;
 
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.executor.support.SimplExecutor;
+import club.spreadme.database.core.executor.support.StreamExecutor;
 import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
 import club.spreadme.database.core.resultset.support.RecordRowMapper;
-import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
-import club.spreadme.database.core.statement.support.QueryStatementCallback;
-import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
-import club.spreadme.database.core.statement.support.UpdateStatementCallback;
+import club.spreadme.database.core.resultset.support.StreamResultSetParser;
+import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.support.*;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.metadata.FetchDirection;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class CommonDao {
 
+    private DataSource dataSource;
     private Executor executor;
 
-    public CommonDao(DataSource dataSource) {
-        executor = new SimplExecutor(dataSource);
+    private volatile static CommonDao commonDao;
+
+    private CommonDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.executor = new SimplExecutor(dataSource);
     }
 
-    public CommonDao(Executor executor) {
-        this.executor = executor;
+    public static CommonDao getInstance(DataSource dataSource) {
+        if (commonDao == null) {
+            synchronized (CommonDao.class) {
+                if (commonDao == null) {
+                    commonDao = new CommonDao(dataSource);
+                }
+            }
+        }
+        return commonDao;
     }
 
     public <T> T queryOne(String sql, Class<T> clazz) {
@@ -124,4 +138,38 @@ public class CommonDao {
         return executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE), new UpdateStatementCallback());
     }
 
+    public StreamDao withStream() {
+        return new StreamDao(dataSource);
+    }
+
+    public static class StreamDao {
+
+        private DataSource dataSource;
+        private Executor executor;
+
+        public StreamDao(DataSource dataSource) {
+            this.dataSource = dataSource;
+            this.executor = new StreamExecutor(dataSource);
+        }
+
+        public <T> Stream<Record> query(String sql, Object... objects) {
+            return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new RecordRowMapper());
+        }
+
+        public <T> Stream<T> query(String sql, Class<T> clazz, Object... objects) {
+            return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new BeanRowMapper<>(clazz));
+        }
+
+        protected <T> Stream<T> query(StatementBuilder builder, RowMapper<T> rowMapper) {
+            return query(builder, new StreamResultSetParser<>(rowMapper));
+        }
+
+        protected <T> Stream<T> query(StatementBuilder builder, StreamResultSetParser<T> resultSetParser) {
+            StatementConfig config = new StatementConfig();
+            config.setFetchSize(Integer.MIN_VALUE);
+            config.setFetchDirection(FetchDirection.REVERSE);
+            executor.setStatementConfig(config);
+            return executor.execute(builder, new StreamQueryStatementCallback<>(resultSetParser));
+        }
+    }
 }

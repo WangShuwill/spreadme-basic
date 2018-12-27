@@ -17,7 +17,7 @@
 package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.statement.StatementBuilder;
-import club.spreadme.database.core.statement.StatementConfig;
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.WrappedStatement;
 
 import java.sql.Connection;

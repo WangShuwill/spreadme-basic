@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.parser.entity;
+package club.spreadme.database.parser.grammar;
 
 public class SQLParameter {
 

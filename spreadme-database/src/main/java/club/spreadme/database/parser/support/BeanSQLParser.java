@@ -17,8 +17,8 @@
 package club.spreadme.database.parser.support;
 
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.parser.entity.SQLBuildType;
-import club.spreadme.database.parser.entity.SQLStatement;
+import club.spreadme.database.parser.grammar.SQLBuildType;
+import club.spreadme.database.parser.grammar.SQLStatement;
 
 public class BeanSQLParser extends AbstractSQLBeanParser {
 

@@ -16,9 +16,9 @@
 
 package club.spreadme.database.core.executor;
 
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
-import club.spreadme.database.core.statement.StatementConfig;
 
 import javax.sql.DataSource;
 
@@ -31,6 +31,8 @@ import javax.sql.DataSource;
 public interface Executor {
 
     /**
+     * core method execute database option
+     *
      * @param builder statement builder
      * @param action  statement callback
      * @return parsed resultset
@@ -39,7 +41,19 @@ public interface Executor {
      */
     <T> T execute(StatementBuilder builder, StatementCallback<T> action);
 
+    /**
+     * set statement config, such as fetchsize,fetchDirection....
+     *
+     * @param config statement config
+     * @see club.spreadme.database.core.grammar.StatementConfig
+     */
     void setStatementConfig(StatementConfig config);
 
+    /**
+     * get a datasourcec
+     *
+     * @return Datasource
+     * @see javax.sql.DataSource
+     */
     DataSource getDataSource();
 }
