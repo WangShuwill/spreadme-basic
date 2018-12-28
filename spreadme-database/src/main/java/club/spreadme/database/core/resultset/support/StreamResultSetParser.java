@@ -16,31 +16,23 @@
 
 package club.spreadme.database.core.resultset.support;
 
+import club.spreadme.database.core.datasource.CloseHandler;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
-import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.util.JdbcUtil;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class StreamResultSetParser<T> implements Spliterator<T>, ResultSetParser<Stream<T>> {
 
-    private DataSource dataSource;
-    private Connection connection;
-    private WrappedStatement wrappedStatement;
-    private ResultSet resultSet;
-
-    private int splitSize = 128;
-
+    private CloseHandler closeHandler;
     private RowMapper<T> rowMapper;
+
+    private ResultSet resultSet;
 
     public StreamResultSetParser(RowMapper<T> rowMapper) {
         this.rowMapper = rowMapper;
@@ -54,29 +46,21 @@ public class StreamResultSetParser<T> implements Spliterator<T>, ResultSetParser
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        closeReource();
-        return false;
+        try {
+            if (!resultSet.next()) {
+                closeHandler.close();
+                return false;
+            }
+            action.accept(rowMapper.mapping(resultSet));
+            return true;
+        } catch (Exception ex) {
+            throw new DataBaseAccessException(ex.getMessage());
+        }
     }
 
     @Override
     public Spliterator<T> trySplit() {
-        int count = 0;
-        Object[] items = new Object[splitSize];
-        try {
-            if (!resultSet.next()) {
-                closeReource();
-                return null;
-            }
-            do {
-                items[count] = rowMapper.mapping(resultSet);
-                count++;
-            } while (count < splitSize && resultSet.next());
-
-        } catch (Exception ex) {
-            closeReource();
-            throw new DataBaseAccessException(ex.getMessage());
-        }
-        return Spliterators.spliterator(items, count);
+        return null;
     }
 
     @Override
@@ -89,27 +73,11 @@ public class StreamResultSetParser<T> implements Spliterator<T>, ResultSetParser
         return CONCURRENT;
     }
 
-    public void nest(DataSource dataSource, Connection connection, WrappedStatement wrappedStatement) {
-        this.dataSource = dataSource;
-        this.connection = connection;
-        this.wrappedStatement = wrappedStatement;
-    }
-
-    public int getSplitSize() {
-        return splitSize;
-    }
-
-    public void setSplitSize(int splitSize) {
-        this.splitSize = splitSize;
-    }
-
     private Runnable closeHandle() {
-        return this::closeReource;
+        return () -> closeHandler.close();
     }
 
-    private void closeReource() {
-        JdbcUtil.closeResultSet(resultSet);
-        JdbcUtil.closeWrappedStatement(wrappedStatement);
-        JdbcUtil.closeConnection(connection, dataSource);
+    public void setCloseHandler(CloseHandler closeHandler) {
+        this.closeHandler = closeHandler;
     }
 }

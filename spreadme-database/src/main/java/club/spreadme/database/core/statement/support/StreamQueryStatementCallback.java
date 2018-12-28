@@ -16,10 +16,12 @@
 
 package club.spreadme.database.core.statement.support;
 
+import club.spreadme.database.core.datasource.CloseHandler;
 import club.spreadme.database.core.resultset.support.StreamResultSetParser;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.util.JdbcUtil;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -42,8 +44,15 @@ public class StreamQueryStatementCallback<T> implements StatementCallback<Stream
     @Override
     public Stream<T> executeStatement(WrappedStatement wrappedStatement) throws Exception {
         concurMode = wrappedStatement.getConcurMode();
-        resultSetParser.nest(dataSource, connection, wrappedStatement);
         ResultSet resultSet = wrappedStatement.query();
+        resultSetParser.setCloseHandler(new CloseHandler() {
+            @Override
+            public void close() {
+                JdbcUtil.closeResultSet(resultSet);
+                JdbcUtil.closeWrappedStatement(wrappedStatement);
+                JdbcUtil.closeConnection(connection, dataSource);
+            }
+        });
         return resultSetParser.parse(resultSet);
     }
 

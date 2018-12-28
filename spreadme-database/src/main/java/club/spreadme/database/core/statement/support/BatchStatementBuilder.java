@@ -26,12 +26,17 @@ import java.sql.Statement;
 
 public class BatchStatementBuilder extends AbstractStatementBuilder {
 
-    private final String sql;
-    private final Object[][] parameterss;
+    private String sql;
+    private Object[][] parameterss;
 
-    public BatchStatementBuilder(String sql, Object[][] parameterss) {
+    public BatchStatementBuilder(final String sql, final Object[][] parameterss) {
         this.sql = sql;
         this.parameterss = parameterss;
+    }
+
+    @Override
+    public void setSql(String sql) {
+        this.sql = sql;
     }
 
     @Override

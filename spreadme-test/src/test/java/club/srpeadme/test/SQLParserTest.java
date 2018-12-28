@@ -26,6 +26,7 @@ import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
 import javax.sql.DataSource;
+import java.util.concurrent.ExecutionException;
 
 public class SQLParserTest {
 
@@ -54,14 +55,20 @@ public class SQLParserTest {
     public void testCommonDAO() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         CommonDao commonDao = CommonDao.getInstance(dataSource);
-        //commonDao.withStream().query("select * from movies").limit(10).forEach(System.out::println);
-
         System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
     }
 
-    public static void main(String[] args){
+    @Test
+    public void testStreamDao() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         CommonDao commonDao = CommonDao.getInstance(dataSource);
-        commonDao.withStream().query("select * from movies order by id desc").parallel().limit(10).forEach(System.out::println);
+        commonDao.withStream().query("select * from movies order by id desc").limit(2).forEach(System.out::println);
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
+        CommonDao commonDao = CommonDao.getInstance(dataSource);
+        commonDao.withAsync().query("select * from movies limit 100").isDone();
+        System.out.println("Test DONE");
     }
 }

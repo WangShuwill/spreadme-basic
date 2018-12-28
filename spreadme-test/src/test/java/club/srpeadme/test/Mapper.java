@@ -14,17 +14,10 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.aware;
+package club.srpeadme.test;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
+public interface Mapper<T> {
 
-public interface SQLProvider extends Aware {
+    void map(T item);
 
-    String getSql();
-
-    Connection getConnection();
-
-    DatabaseMetaData getDatabaseMetaData();
 }

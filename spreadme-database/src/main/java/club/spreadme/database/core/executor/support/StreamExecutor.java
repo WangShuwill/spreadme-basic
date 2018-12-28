@@ -22,15 +22,17 @@ import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.support.StreamQueryStatementCallback;
 import club.spreadme.database.exception.DataBaseAccessException;
+import club.spreadme.database.metadata.FetchDirection;
 import club.spreadme.database.util.JdbcUtil;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 public class StreamExecutor extends AbstractExecutor {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public StreamExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -44,7 +46,16 @@ public class StreamExecutor extends AbstractExecutor {
         WrappedStatement wrappedStatement = null;
         try {
             connection = JdbcUtil.getConnection(dataSource);
-            wrappedStatement = builder.build(connection, config);
+            builder.setConnection(connection);
+            if (config == null) {
+                config = new StatementConfig();
+                DatabaseMetaData databaseMetaData = builder.getDatabaseMetaData();
+                String productName = databaseMetaData.getDatabaseProductName();
+                //TODO diffect database product is not same
+                config.setFetchSize(Integer.MIN_VALUE);
+                config.setFetchDirection(FetchDirection.REVERSE);
+            }
+            wrappedStatement = builder.build(config);
             StreamQueryStatementCallback callback = (StreamQueryStatementCallback) action;
             callback.nest(dataSource, connection);
             return action.executeStatement(wrappedStatement);

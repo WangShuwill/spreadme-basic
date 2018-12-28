@@ -16,11 +16,13 @@
 
 package club.spreadme.database.core.statement.support;
 
-import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.grammar.StatementConfig;
+import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.WrappedStatement;
+import club.spreadme.database.exception.DataBaseAccessException;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -38,8 +40,12 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     private Connection connection;
 
     @Override
-    public WrappedStatement build(Connection connection, StatementConfig statementConfig) throws SQLException {
+    public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public WrappedStatement build(StatementConfig statementConfig) throws SQLException {
         Statement statement = createStatement(connection);
         prepare(statement, statementConfig);
         return doBuild(statement);
@@ -48,6 +54,15 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     @Override
     public Connection getConnection() {
         return connection;
+    }
+
+    @Override
+    public DatabaseMetaData getDatabaseMetaData() {
+        try {
+            return connection.getMetaData();
+        } catch (SQLException ex) {
+            throw new DataBaseAccessException(ex.getMessage());
+        }
     }
 
     public abstract WrappedStatement doBuild(Statement statement) throws SQLException;

@@ -20,7 +20,6 @@ import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.executor.support.SimplExecutor;
 import club.spreadme.database.core.executor.support.StreamExecutor;
 import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
@@ -28,13 +27,15 @@ import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
 import club.spreadme.database.core.resultset.support.RecordRowMapper;
 import club.spreadme.database.core.resultset.support.StreamResultSetParser;
 import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.support.*;
 import club.spreadme.database.metadata.ConcurMode;
-import club.spreadme.database.metadata.FetchDirection;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public class CommonDao {
@@ -165,11 +166,27 @@ public class CommonDao {
         }
 
         protected <T> Stream<T> query(StatementBuilder builder, StreamResultSetParser<T> resultSetParser) {
-            StatementConfig config = new StatementConfig();
-            config.setFetchSize(Integer.MIN_VALUE);
-            config.setFetchDirection(FetchDirection.REVERSE);
-            executor.setStatementConfig(config);
             return executor.execute(builder, new StreamQueryStatementCallback<>(resultSetParser));
         }
+    }
+
+    public AsyncDao withAsync() {
+        return new AsyncDao();
+    }
+
+    public static class AsyncDao {
+
+        public Future<List<Record>> query(String sql, Object... objects) {
+            return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new RecordRowMapper());
+        }
+
+        protected <T> Future<List<T>> query(StatementBuilder builder, RowMapper<T> rowMapper) {
+            return query(builder, new QueryStatementCallback<>(new DefaultResultSetParser<>(rowMapper)));
+        }
+
+        protected <T> Future<T> query(StatementBuilder builder, StatementCallback<T> action) {
+            return commonDao.executor.execute(builder, new AsyncStatementCallBack<>(Executors.newCachedThreadPool(), action));
+        }
+
     }
 }

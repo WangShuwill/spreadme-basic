@@ -14,17 +14,11 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.aware;
+package club.spreadme.database.core.datasource;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
+@FunctionalInterface
+public interface CloseHandler {
 
-public interface SQLProvider extends Aware {
+    void close();
 
-    String getSql();
-
-    Connection getConnection();
-
-    DatabaseMetaData getDatabaseMetaData();
 }

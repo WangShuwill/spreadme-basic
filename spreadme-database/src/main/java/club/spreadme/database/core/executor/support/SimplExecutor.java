@@ -29,7 +29,7 @@ import java.sql.Connection;
 
 public class SimplExecutor extends AbstractExecutor {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public SimplExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -43,7 +43,8 @@ public class SimplExecutor extends AbstractExecutor {
         WrappedStatement wrappedStatement = null;
         try {
             connection = JdbcUtil.getConnection(dataSource);
-            wrappedStatement = builder.build(connection, config);
+            builder.setConnection(connection);
+            wrappedStatement = builder.build(config);
             return action.executeStatement(wrappedStatement);
         } catch (Exception ex) {
             String errorSql = builder.getSql();

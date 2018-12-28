@@ -24,14 +24,19 @@ import java.sql.*;
 
 public class PrepareStatementBuilder extends AbstractStatementBuilder {
 
-    private final String sql;
-    private final Object[] parameters;
-    private final ConcurMode concurMode;
+    private String sql;
+    private Object[] parameters;
+    private ConcurMode concurMode;
 
-    public PrepareStatementBuilder(String sql, Object[] parameters, ConcurMode concurMode) {
+    public PrepareStatementBuilder(final String sql, final Object[] parameters, final ConcurMode concurMode) {
         this.sql = sql;
         this.parameters = parameters;
         this.concurMode = concurMode;
+    }
+
+    @Override
+    public void setSql(String sql) {
+        this.sql = sql;
     }
 
     @Override

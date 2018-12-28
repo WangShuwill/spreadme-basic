@@ -27,12 +27,17 @@ import java.sql.Statement;
 
 public class SimpleStatementBuilder extends AbstractStatementBuilder {
 
-    private final String sql;
+    private String sql;
     private ConcurMode concurMode;
 
-    public SimpleStatementBuilder(String sql, ConcurMode concurMode) {
+    public SimpleStatementBuilder(final String sql, final ConcurMode concurMode) {
         this.sql = sql;
         this.concurMode = concurMode;
+    }
+
+    @Override
+    public void setSql(String sql) {
+        this.sql = sql;
     }
 
     @Override
