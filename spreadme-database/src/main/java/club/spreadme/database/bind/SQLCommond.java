@@ -14,21 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.annotation;
+package club.spreadme.database.bind;
 
-import java.lang.annotation.*;
-
-/**
- * @author Wangshuwei
- * @since 2018-11-20
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Delete {
-
-    String value() default "";
-
-    Class<? extends PostProcessor> processor() default PostProcessor.class;
-
+public class SQLCommond {
 }

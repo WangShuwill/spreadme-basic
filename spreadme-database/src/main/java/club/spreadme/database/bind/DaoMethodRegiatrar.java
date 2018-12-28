@@ -14,7 +14,15 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.annotation;
+package club.spreadme.database.bind;
 
-public class SQLProcessor {
+public interface DaoMethodRegiatrar {
+
+    void register(String key, MethodSignature methodSignature);
+
+    void register(String key, SQLCommond sqlCommond);
+
+    MethodSignature getMethodSignature(String sql);
+
+    SQLCommond getSQLCommond(String sql);
 }

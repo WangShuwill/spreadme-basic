@@ -16,19 +16,8 @@
 
 package club.spreadme.database.annotation;
 
-import java.lang.annotation.*;
+public interface PostProcessor {
 
-/**
- * @author Wangshuwei
- * @since 2018-11-20
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Delete {
-
-    String value() default "";
-
-    Class<? extends PostProcessor> processor() default PostProcessor.class;
+    void process();
 
 }

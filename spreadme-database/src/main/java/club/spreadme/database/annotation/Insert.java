@@ -29,5 +29,5 @@ public @interface Insert {
 
     String value() default "";
 
-    Class<? extends SQLProcessor> processor() default SQLProcessor.class;
+    Class<? extends PostProcessor> processor() default PostProcessor.class;
 }

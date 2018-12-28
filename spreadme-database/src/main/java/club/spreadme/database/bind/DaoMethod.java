@@ -14,21 +14,19 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.annotation;
+package club.spreadme.database.bind;
 
-import java.lang.annotation.*;
+import club.spreadme.database.core.executor.Executor;
 
-/**
- * @author Wangshuwei
- * @since 2018-11-20
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Delete {
+import java.lang.reflect.Method;
 
-    String value() default "";
+public class DaoMethod {
 
-    Class<? extends PostProcessor> processor() default PostProcessor.class;
+    public <T> DaoMethod(Class<T> daoInterface, Method method, Object[] args, Executor executor) {
 
+    }
+
+    public Object execute() {
+        return null;
+    }
 }

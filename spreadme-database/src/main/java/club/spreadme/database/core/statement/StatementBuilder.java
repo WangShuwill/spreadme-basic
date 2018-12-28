@@ -32,15 +32,29 @@ import java.sql.SQLException;
  */
 public interface StatementBuilder extends SQLProvider {
 
+    /**
+     * set a connection for build
+     *
+     * @param connection Connection
+     * @see java.sql.Connection
+     */
     void setConnection(Connection connection);
 
+    /**
+     * set a sql statement for build
+     *
+     * @param sql sql
+     */
     void setSql(String sql);
 
     /**
+     * build by connection,sql,Statementconfgi...
+     *
      * @param config Statement config
      * @return wrapped statement
      * @throws SQLException sql exception
      * @see club.spreadme.database.core.statement.WrappedStatement
+     * @see club.spreadme.database.core.grammar.StatementConfig
      */
     WrappedStatement build(StatementConfig config) throws SQLException;
 
