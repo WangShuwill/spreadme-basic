@@ -18,11 +18,15 @@ package club.spreadme.database.bind;
 
 public interface DaoMethodRegiatrar {
 
-    void register(String key, MethodSignature methodSignature);
+    void register(Object key, DaoMethod daoMethod);
 
-    void register(String key, SQLCommond sqlCommond);
+    void register(Object key, MethodSignature methodSignature);
 
-    MethodSignature getMethodSignature(String sql);
+    void register(Object key, SQLCommond sqlCommond);
 
-    SQLCommond getSQLCommond(String sql);
+    DaoMethod getDaoMethod(Object key);
+
+    MethodSignature getMethodSignature(Object key);
+
+    SQLCommond getSQLCommond(Object key);
 }

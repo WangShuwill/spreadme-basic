@@ -16,7 +16,7 @@
 
 package club.spreadme.database.core.statement.support;
 
-import club.spreadme.database.core.datasource.CloseHandler;
+import club.spreadme.database.core.resource.CloseHandler;
 import club.spreadme.database.core.resultset.support.StreamResultSetParser;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;

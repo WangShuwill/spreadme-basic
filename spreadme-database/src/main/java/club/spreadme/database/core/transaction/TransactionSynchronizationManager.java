@@ -16,7 +16,7 @@
 
 package club.spreadme.database.core.transaction;
 
-import club.spreadme.database.core.datasource.ConnectionHolder;
+import club.spreadme.database.core.resource.ConnectionHolder;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

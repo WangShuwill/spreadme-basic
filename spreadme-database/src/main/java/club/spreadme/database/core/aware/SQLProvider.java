@@ -16,6 +16,8 @@
 
 package club.spreadme.database.core.aware;
 
+import club.spreadme.database.core.grammar.StatementInfo;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -27,4 +29,6 @@ public interface SQLProvider extends Aware {
     Connection getConnection();
 
     DatabaseMetaData getDatabaseMetaData();
+
+    StatementInfo getStatementInfo();
 }

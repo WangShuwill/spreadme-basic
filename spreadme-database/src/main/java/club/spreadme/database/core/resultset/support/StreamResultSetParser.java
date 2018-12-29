@@ -16,7 +16,7 @@
 
 package club.spreadme.database.core.resultset.support;
 
-import club.spreadme.database.core.datasource.CloseHandler;
+import club.spreadme.database.core.resource.CloseHandler;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.exception.DataBaseAccessException;

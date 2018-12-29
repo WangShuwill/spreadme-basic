@@ -16,8 +16,6 @@
 
 package club.srpeadme.test;
 
-import club.spreadme.database.core.datasource.SpreadDataSource;
-import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.support.BeanSQLParser;
@@ -25,14 +23,7 @@ import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
-import javax.sql.DataSource;
-import java.util.concurrent.ExecutionException;
-
 public class SQLParserTest {
-
-    private static final String URL = "jdbc:mysql://192.168.52.128:3306/imdb?autoReconnect=true&useSSL=false";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "123456";
 
     @Test
     public void testInsertSQLParser() {
@@ -51,24 +42,4 @@ public class SQLParserTest {
         System.out.println(sqlParser3.parse());
     }
 
-    @Test
-    public void testCommonDAO() {
-        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
-        CommonDao commonDao = CommonDao.getInstance(dataSource);
-        System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
-    }
-
-    @Test
-    public void testStreamDao() {
-        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
-        CommonDao commonDao = CommonDao.getInstance(dataSource);
-        commonDao.withStream().query("select * from movies order by id desc").limit(2).forEach(System.out::println);
-    }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
-        CommonDao commonDao = CommonDao.getInstance(dataSource);
-        commonDao.withAsync().query("select * from movies limit 100").isDone();
-        System.out.println("Test DONE");
-    }
 }

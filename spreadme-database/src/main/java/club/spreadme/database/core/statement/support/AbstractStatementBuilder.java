@@ -17,6 +17,7 @@
 package club.spreadme.database.core.statement.support;
 
 import club.spreadme.database.core.grammar.StatementConfig;
+import club.spreadme.database.core.grammar.StatementInfo;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.exception.DataBaseAccessException;
@@ -38,6 +39,7 @@ import java.sql.Statement;
 public abstract class AbstractStatementBuilder implements StatementBuilder {
 
     private Connection connection;
+    private StatementInfo statementInfo;
 
     @Override
     public void setConnection(Connection connection) {
@@ -48,6 +50,7 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     public WrappedStatement build(StatementConfig statementConfig) throws SQLException {
         Statement statement = createStatement(connection);
         prepare(statement, statementConfig);
+        statementInfo  = parseStatement(statement);
         return doBuild(statement);
     }
 
@@ -63,6 +66,11 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
         } catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
+    }
+
+    @Override
+    public StatementInfo getStatementInfo() {
+        return this.statementInfo;
     }
 
     public abstract WrappedStatement doBuild(Statement statement) throws SQLException;
@@ -81,5 +89,17 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
                 statement.setFetchDirection(config.getFetchDirection().getValue());
             }
         }
+    }
+
+    private StatementInfo parseStatement(Statement statement) throws SQLException {
+
+        statement.getConnection();
+        statement.getFetchDirection();
+        statement.getFetchSize();
+        statement.getLargeMaxRows();
+        statement.getLargeUpdateCount();
+
+        return new StatementInfo();
+
     }
 }

@@ -15,7 +15,7 @@
  */
 package club.spreadme.database.util;
 
-import club.spreadme.database.core.datasource.ConnectionHolder;
+import club.spreadme.database.core.resource.ConnectionHolder;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.transaction.TransactionSynchronizationManager;
 import club.spreadme.database.exception.DataBaseAccessException;
