@@ -26,6 +26,7 @@
 
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
+        <mysql.version>6.0.5</mysql.version>
     </properties>
 
     <licenses>
@@ -56,6 +57,12 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
             </dependency>
 
             <dependency>
