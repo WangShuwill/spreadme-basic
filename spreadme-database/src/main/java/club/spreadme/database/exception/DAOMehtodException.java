@@ -14,21 +14,18 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.bind;
+package club.spreadme.database.exception;
 
-import java.lang.reflect.Method;
+/**
+ * @author Wangshuwei
+ * @since 2018-8-6
+ */
+public class DAOMehtodException extends RuntimeException {
 
-public interface DaoMethodRegiatrar {
+    private static final long serialVersionUID = -5001356535534921343L;
 
-    void register(Object key, DaoMethod daoMethod);
+    public DAOMehtodException(String reason) {
+        super(reason);
+    }
 
-    void register(Method method, MethodSignature methodSignature);
-
-    void register(Method method, SQLCommand sqlCommand);
-
-    DaoMethod getDaoMethod(Object key);
-
-    MethodSignature getMethodSignature(Class<?> daoInterface, Method method, Object[] values);
-
-    SQLCommand getSQLCommand(Method method);
 }

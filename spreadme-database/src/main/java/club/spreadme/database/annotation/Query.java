@@ -27,7 +27,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface Query {
 
-    String value() default "";
+    String value();
 
     Class<? extends PostProcessor> processor() default PostProcessor.class;
 

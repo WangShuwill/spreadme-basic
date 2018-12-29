@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,7 +47,8 @@ public class CommonDaoTest {
 
     @Test
     public void testCommonDAO() {
-        System.out.println(commonDao.query("select * from movies where id = ?", "tt0468569"));
+        List<Record> records = commonDao.query("select * from movies where id = ?", "tt0468569");
+        LOGGER.info(records.toString());
     }
 
     @Test

@@ -30,6 +30,11 @@ import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.support.*;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.parser.SQLParser;
+import club.spreadme.database.parser.grammar.SQLBuildType;
+import club.spreadme.database.parser.grammar.SQLStatement;
+import club.spreadme.database.parser.support.BeanSQLParser;
+import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
@@ -50,11 +55,26 @@ public class CommonDao {
         this.executor = new SimplExecutor(dataSource);
     }
 
+    private CommonDao(Executor executor) {
+        this.executor = executor;
+    }
+
     public static CommonDao getInstance(DataSource dataSource) {
         if (commonDao == null) {
             synchronized (CommonDao.class) {
                 if (commonDao == null) {
                     commonDao = new CommonDao(dataSource);
+                }
+            }
+        }
+        return commonDao;
+    }
+
+    public static CommonDao getInstance(Executor executor) {
+        if (commonDao == null) {
+            synchronized (CommonDao.class) {
+                if (commonDao == null) {
+                    commonDao = new CommonDao(executor);
                 }
             }
         }
@@ -131,12 +151,30 @@ public class CommonDao {
         return executor.execute(builder, new QueryStatementCallback<>(parser));
     }
 
-    public int update(String sql) {
+    public int execute(String sql) {
         return executor.execute(new SimpleStatementBuilder(sql, ConcurMode.UPDATABLE), new UpdateStatementCallback());
     }
 
-    public int update(String sql, Object... objects) {
+    public int execute(String sql, Object... objects) {
         return executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE), new UpdateStatementCallback());
+    }
+
+    public int update(Object bean) {
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.UPDATE));
+        SQLStatement sqlStatement = sqlParser.parse();
+        return execute(sqlStatement.getSql(), sqlStatement.getValues());
+    }
+
+    public int insert(Object bean) {
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.INSERT));
+        SQLStatement sqlStatement = sqlParser.parse();
+        return execute(sqlStatement.getSql(), sqlStatement.getValues());
+    }
+
+    public int delete(Object bean) {
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.DELETE));
+        SQLStatement sqlStatement = sqlParser.parse();
+        return execute(sqlStatement.getSql(), sqlStatement.getValues());
     }
 
     public StreamDao withStream() {
@@ -176,6 +214,10 @@ public class CommonDao {
 
     public static class AsyncDao {
 
+        public <T> Future<List<T>> query(String sql, Class<T> clazz, Object... objects) {
+            return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new BeanRowMapper<>(clazz));
+        }
+
         public Future<List<Record>> query(String sql, Object... objects) {
             return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new RecordRowMapper());
         }
@@ -188,5 +230,27 @@ public class CommonDao {
             return commonDao.executor.execute(builder, new AsyncStatementCallBack<>(Executors.newCachedThreadPool(), action));
         }
 
+        public Future<Integer> execute(String sql, Object... objects) {
+            return commonDao.executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE),
+                    new AsyncStatementCallBack<>(Executors.newCachedThreadPool(), new UpdateStatementCallback()));
+        }
+
+        public Future<Integer> update(Object bean) {
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.UPDATE));
+            SQLStatement sqlStatement = sqlParser.parse();
+            return execute(sqlStatement.getSql(), sqlStatement.getValues());
+        }
+
+        public Future<Integer> insert(Object bean) {
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.INSERT));
+            SQLStatement sqlStatement = sqlParser.parse();
+            return execute(sqlStatement.getSql(), sqlStatement.getValues());
+        }
+
+        public Future<Integer> delete(Object bean) {
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.DELETE));
+            SQLStatement sqlStatement = sqlParser.parse();
+            return execute(sqlStatement.getSql(), sqlStatement.getValues());
+        }
     }
 }

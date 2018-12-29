@@ -47,6 +47,10 @@ public class SQLStatement {
         this.sqlParameters = sqlParameters;
     }
 
+    public Object[] getValues() {
+        return sqlParameters.stream().map(SQLParameter::getValue).toArray();
+    }
+
     @Override
     public String toString() {
         return "SQLStatement{" +

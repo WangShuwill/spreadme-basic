@@ -18,10 +18,13 @@ package club.srpeadme.test;
 
 import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.grammar.SQLBuildType;
+import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.srpeadme.test.domain.Person;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class SQLParserTest {
 
@@ -40,6 +43,10 @@ public class SQLParserTest {
 
         SQLParser sqlParser3 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.DELETE));
         System.out.println(sqlParser3.parse());
+
+        SQLStatement sqlStatement = sqlParser1.parse();
+        System.out.println("SQL: " + sqlStatement.getSql());
+        System.out.println("Values: " + Arrays.toString(sqlStatement.getValues()));
     }
 
 }

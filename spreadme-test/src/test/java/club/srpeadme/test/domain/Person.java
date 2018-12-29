@@ -16,6 +16,7 @@
 
 package club.srpeadme.test.domain;
 
+import club.spreadme.database.annotation.Delete;
 import club.spreadme.database.annotation.Table;
 
 import java.io.Serializable;
@@ -33,6 +34,7 @@ public class Person implements Serializable {
         return id;
     }
 
+    @Delete
     public void setId(Long id) {
         this.id = id;
     }

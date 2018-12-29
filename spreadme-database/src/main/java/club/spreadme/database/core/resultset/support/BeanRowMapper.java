@@ -16,6 +16,7 @@
 
 package club.spreadme.database.core.resultset.support;
 
+import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.util.JdbcUtil;
@@ -49,6 +50,8 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             }
             return clazz.cast(rs.getObject(1));
 
+        } else if (Record.class.equals(clazz)) {
+            return (T) new RecordRowMapper().mapping(rs);
         } else {
             T object = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {

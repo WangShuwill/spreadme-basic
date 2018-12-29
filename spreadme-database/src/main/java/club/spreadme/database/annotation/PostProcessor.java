@@ -18,6 +18,12 @@ package club.spreadme.database.annotation;
 
 public interface PostProcessor {
 
-    void process();
+    void setSql(String sql);
+
+    void setParameters(Object parameters);
+
+    void setDaoMethodName(String methodName);
+
+    String process();
 
 }

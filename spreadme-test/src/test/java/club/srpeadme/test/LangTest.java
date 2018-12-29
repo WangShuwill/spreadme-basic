@@ -1,11 +1,22 @@
 package club.srpeadme.test;
 
-import club.spreadme.lang.StringUtil;
+import club.spreadme.database.annotation.Delete;
+import club.spreadme.database.annotation.Insert;
+import club.spreadme.database.annotation.Query;
+import club.spreadme.database.annotation.Update;
 import club.spreadme.lang.Reflection;
+import club.spreadme.lang.StringUtil;
 import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
 public class LangTest {
+
+    private static final List<Class> optionClazzes = Arrays.asList(
+            Query.class, Update.class, Insert.class, Delete.class);
 
     @Test
     public void testStringUtil() {
@@ -36,5 +47,16 @@ public class LangTest {
 
         Reflection.doWithField(person.getClass(), System.out::println);
 
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testAnnotation() throws NoSuchMethodException {
+        Person person = new Person();
+        Method method = person.getClass().getMethod("setId", Long.class);
+        Object[] annotations = optionClazzes.stream().map(item -> Reflection.getAnnotation(method, item)).filter(item -> item != null)
+                .toArray();
+
+        System.out.println(Arrays.toString(annotations));
     }
 }
