@@ -52,7 +52,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
         }
         //TODO sql parse
-        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values, true);
+        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
         SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
         sql = sqlStatement.getSql();
         values = sqlStatement.getValues();
@@ -92,7 +92,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
         }
 
-        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values, true);
+        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
         SQLStatement preSqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
         if (!methodSignature.isAllPrimaryParamter()) {
             if (methodSignature.getMethod().getParameterCount() > 1) {

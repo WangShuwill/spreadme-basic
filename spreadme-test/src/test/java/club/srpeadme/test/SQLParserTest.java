@@ -16,6 +16,7 @@
 
 package club.srpeadme.test;
 
+import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
@@ -34,13 +35,13 @@ public class SQLParserTest {
         person.setName("James");
         person.setAge(24);
 
-        SQLParser sqlParser1 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.INSERT));
+        SQLParser sqlParser1 = new RoutingSQLParser(new BeanSQLParser(person, SQLOptionType.INSERT));
         System.out.println(sqlParser1.parse());
 
-        SQLParser sqlParser2 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.UPDATE));
+        SQLParser sqlParser2 = new RoutingSQLParser(new BeanSQLParser(person, SQLOptionType.UPDATE));
         System.out.println(sqlParser2.parse());
 
-        SQLParser sqlParser3 = new RoutingSQLParser(new BeanSQLParser(person, SQLBuildType.DELETE));
+        SQLParser sqlParser3 = new RoutingSQLParser(new BeanSQLParser(person, SQLOptionType.DELETE));
         System.out.println(sqlParser3.parse());
 
         SQLStatement sqlStatement = sqlParser1.parse();
