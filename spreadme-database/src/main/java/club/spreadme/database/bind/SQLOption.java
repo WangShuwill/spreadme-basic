@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.parser.support;
+package club.spreadme.database.bind;
 
-import club.spreadme.database.parser.grammar.SQLBuildType;
-import club.spreadme.database.parser.grammar.SQLStatement;
+import club.spreadme.database.core.executor.Executor;
 
-public interface SQLBeanParser {
+public interface SQLOption {
 
-    SQLStatement parse(Object bean, SQLBuildType sqlBuildType);
+    Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
+
+    Object update(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
 
 }

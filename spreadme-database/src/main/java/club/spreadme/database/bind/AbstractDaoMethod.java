@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractDaoMethod implements DaoMethodRegiatrar {
+public abstract class AbstractDaoMethod extends DefaultSQLOption implements DaoMethodRegiatrar {
 
     private Map<Object, DaoMethod> daoMethodMap = new ConcurrentHashMap<>(256);
     private Map<Object, MethodSignature> methodSignatureMap = new ConcurrentHashMap<>(256);

@@ -16,8 +16,8 @@
 
 package club.spreadme.database.parser.support;
 
+import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.grammar.SQLBean;
-import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.lang.Assert;
@@ -29,17 +29,17 @@ import java.util.Map;
 public class UpdateBeanSQLParser extends BeanSQLParser {
 
     private Object bean;
-    private SQLBuildType buildType;
+    private SQLOptionType optionType;
 
-    public UpdateBeanSQLParser(Object bean, SQLBuildType buildType) {
+    public UpdateBeanSQLParser(Object bean, SQLOptionType optionType) {
         super();
         this.bean = bean;
-        this.buildType = buildType;
+        this.optionType = optionType;
     }
 
     @Override
     public SQLStatement parse() {
-        Assert.isTrue(buildType.equals(SQLBuildType.UPDATE), "it is not update sql build type");
+        Assert.isTrue(optionType.equals(SQLOptionType.UPDATE), "it is not update sql build type");
         SQLBean sqlBean = parseSQLBean(bean);
         UpdateSQLBuilder sqlBuilder = new UpdateSQLBuilder(sqlBean.getTaleName());
         SQLStatement sqlStatement = new SQLStatement();

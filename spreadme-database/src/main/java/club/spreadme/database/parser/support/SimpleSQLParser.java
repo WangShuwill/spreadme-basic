@@ -17,16 +17,17 @@
 package club.spreadme.database.parser.support;
 
 import club.spreadme.database.parser.SQLParser;
+import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
 
 public class SimpleSQLParser implements SQLParser {
 
     private final String sql;
-    private final Object[] values;
+    private final SQLParameter[] sqlParameters;
 
-    public SimpleSQLParser(String sql, Object[] values) {
+    public SimpleSQLParser(String sql, SQLParameter[] sqlParameters) {
         this.sql = sql;
-        this.values = values;
+        this.sqlParameters = sqlParameters;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class SimpleSQLParser implements SQLParser {
         return sql;
     }
 
-    public Object[] getValues() {
-        return values;
+    public SQLParameter[] getSqlParameters() {
+        return sqlParameters;
     }
 }

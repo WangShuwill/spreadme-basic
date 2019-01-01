@@ -16,23 +16,14 @@
 
 package club.spreadme.database.bind;
 
-import club.spreadme.database.annotation.PostProcessor;
+import club.spreadme.database.annotation.Transactional;
 import club.spreadme.database.core.executor.Executor;
-import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.resultset.support.BeanRowMapper;
-import club.spreadme.database.core.resultset.support.RecordRowMapper;
-import club.spreadme.database.dao.CommonDao;
-import club.spreadme.database.exception.DAOMehtodException;
-import club.spreadme.database.parser.grammar.SQLStatement;
-import club.spreadme.database.parser.support.RoutingSQLParser;
-import club.spreadme.database.parser.support.SimpleSQLParser;
-import club.spreadme.lang.StringUtil;
+import club.spreadme.database.metadata.SQLOptionType;
+import club.spreadme.lang.Reflection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 
 public class DaoMethod extends AbstractDaoMethod {
 
@@ -52,65 +43,22 @@ public class DaoMethod extends AbstractDaoMethod {
     }
 
     public Object execute() {
-        return null;
+        Object result = null;
+        Transactional transactional = Reflection.getAnnotation(this.methodSignature.getMethod(), Transactional.class);
+        if (transactional != null) {
+            //TODO transaction
+        } else {
+            result = doExecute();
+        }
+        return result;
     }
 
-    static class SQLOption {
-
-        public Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
-            String sql = sqlCommand.getSql();
-            Object[] values = methodSignature.getValues();
-
-            Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
-            sql = processSql(sql, methodSignature, processorClass);
-
-            if (StringUtil.isBlank(sql)) {
-                throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
-            }
-
-            SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, values)).parse();
-            sql = sqlStatement.getSql();
-            values = sqlStatement.getValues();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("parse sql {}", sql);
-            }
-
-            if (methodSignature.isReturnsMany()) {
-
-                Type type = methodSignature.getActualTypes()[0];
-                if (Record.class.equals(type)) {
-                    return CommonDao.getInstance(executor).query(sql, new RecordRowMapper(), values);
-                } else {
-                    return CommonDao.getInstance(executor).query(sql, new BeanRowMapper<>((Class<?>) type), values);
-                }
-
-            } else if (methodSignature.isReturnsMap()) {
-
-                return CommonDao.getInstance(executor).queryOne(sql, values);
-
-            } else {
-
-                return CommonDao.getInstance(executor).query(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
-
-            }
-        }
-
-        protected static String processSql(String sql, MethodSignature methodSignature, Class<? extends PostProcessor> processorClass) {
-            if (processorClass != null && !processorClass.isInterface() && processorClass.getModifiers() != Modifier.ABSTRACT) {
-                Object values = methodSignature.getValues();
-                String daoMethodName = methodSignature.getMethodName();
-                try {
-                    PostProcessor processor = processorClass.newInstance();
-                    processor.setSql(sql);
-                    processor.setParameters(values);
-                    processor.setDaoMethodName(daoMethodName);
-                    return StringUtil.isBlank(sql) ? sql : processor.process();
-                } catch (Exception ex) {
-                    throw new DAOMehtodException("can not instance sqlprocessor," + ex.getMessage());
-                }
-            }
-
-            return sql;
+    private Object doExecute() {
+        if (SQLOptionType.INSERT.equals(this.sqlCommand.getSqlOptionType())) {
+            return query(this.methodSignature, this.sqlCommand, this.executor);
+        } else {
+            return update(this.methodSignature, this.sqlCommand, this.executor);
         }
     }
+
 }

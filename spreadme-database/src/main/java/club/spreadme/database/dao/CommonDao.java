@@ -30,8 +30,8 @@ import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.support.*;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.SQLParser;
-import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
@@ -160,19 +160,19 @@ public class CommonDao {
     }
 
     public int update(Object bean) {
-        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.UPDATE));
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.UPDATE));
         SQLStatement sqlStatement = sqlParser.parse();
         return execute(sqlStatement.getSql(), sqlStatement.getValues());
     }
 
     public int insert(Object bean) {
-        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.INSERT));
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.INSERT));
         SQLStatement sqlStatement = sqlParser.parse();
         return execute(sqlStatement.getSql(), sqlStatement.getValues());
     }
 
     public int delete(Object bean) {
-        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.DELETE));
+        SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.DELETE));
         SQLStatement sqlStatement = sqlParser.parse();
         return execute(sqlStatement.getSql(), sqlStatement.getValues());
     }
@@ -236,19 +236,19 @@ public class CommonDao {
         }
 
         public Future<Integer> update(Object bean) {
-            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.UPDATE));
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.UPDATE));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }
 
         public Future<Integer> insert(Object bean) {
-            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.INSERT));
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.INSERT));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }
 
         public Future<Integer> delete(Object bean) {
-            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLBuildType.DELETE));
+            SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.DELETE));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }

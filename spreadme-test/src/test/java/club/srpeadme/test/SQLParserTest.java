@@ -17,7 +17,6 @@
 package club.srpeadme.test;
 
 import club.spreadme.database.parser.SQLParser;
-import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;

@@ -16,8 +16,8 @@
 
 package club.spreadme.database.parser.support;
 
+import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.grammar.SQLBean;
-import club.spreadme.database.parser.grammar.SQLBuildType;
 import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.lang.Assert;
@@ -28,17 +28,17 @@ import java.util.List;
 public class DeleteBeanSQLParser extends BeanSQLParser {
 
     private Object bean;
-    private SQLBuildType buildType;
+    private SQLOptionType optionType;
 
-    public DeleteBeanSQLParser(Object bean, SQLBuildType buildType) {
+    public DeleteBeanSQLParser(Object bean, SQLOptionType optionType) {
         super();
         this.bean = bean;
-        this.buildType = buildType;
+        this.optionType = optionType;
     }
 
     @Override
     public SQLStatement parse() {
-        Assert.isTrue(buildType.equals(SQLBuildType.DELETE), "it is not delete sql build type");
+        Assert.isTrue(optionType.equals(SQLOptionType.DELETE), "it is not delete sql build type");
         SQLBean sqlBean = parseSQLBean(bean);
         DeleteSQLBuilder sqlBuilder = new DeleteSQLBuilder(sqlBean.getTaleName());
         sqlBuilder.where(sqlBean.getPrimaryKeyName() + " = ?");

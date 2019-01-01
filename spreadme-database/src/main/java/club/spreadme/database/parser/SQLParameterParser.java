@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,10 +14,14 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.parser.grammar;
+package club.spreadme.database.parser;
 
-public enum SQLBuildType {
+import club.spreadme.database.parser.grammar.SQLParameter;
 
-    SELECT, INSERT, UPDATE, DELETE
+import java.lang.reflect.Method;
+
+public interface SQLParameterParser {
+
+    SQLParameter[] parse(Method method, Object[] values);
 
 }
