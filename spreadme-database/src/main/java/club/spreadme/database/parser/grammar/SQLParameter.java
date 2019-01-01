@@ -18,6 +18,7 @@ package club.spreadme.database.parser.grammar;
 
 public class SQLParameter {
 
+    private int index;
     private String name;
     private Class<?> type;
     private Object value;
@@ -55,10 +56,19 @@ public class SQLParameter {
         this.value = value;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         return "SQLParameter{" +
-                "name='" + name + '\'' +
+                "index=" + index +
+                ", name='" + name + '\'' +
                 ", type=" + type +
                 ", value=" + value +
                 '}';

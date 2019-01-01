@@ -16,9 +16,11 @@
 
 package club.spreadme.database.parser.support;
 
+import club.spreadme.database.annotation.Param;
 import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.parser.SQLParameterParser;
 import club.spreadme.database.parser.grammar.SQLParameter;
+import club.spreadme.lang.StringUtil;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -41,8 +43,13 @@ public abstract class AbstractSQLParameterParser implements SQLParameterParser {
                         + method.getName());
             }
             SQLParameter sqlParameter = new SQLParameter();
-            //TODO @param parse
-            sqlParameter.setName(parameters[i].getName());
+            sqlParameter.setIndex(i);
+            Param param = parameters[i].getAnnotation(Param.class);
+            String paramName = param.value();
+            if (StringUtil.isBlank(paramName)) {
+                paramName = parameters[i].getName();
+            }
+            sqlParameter.setName(paramName);
             sqlParameter.setType(values[i].getClass());
             sqlParameter.setValue(values);
             sqlParameters[i] = sqlParameter;
