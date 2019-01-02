@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements SQLOption {
 
@@ -51,13 +52,13 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
         if (StringUtil.isBlank(sql)) {
             throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
         }
-        //TODO sql parse
+
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
         SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
         sql = sqlStatement.getSql();
         values = sqlStatement.getValues();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("parse sql {}", sql);
+            LOGGER.debug("parse sql {}, values {}", sql, Arrays.toString(values));
         }
 
         if (methodSignature.isReturnsMany()) {
@@ -70,13 +71,9 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             }
 
         } else if (methodSignature.isReturnsMap()) {
-
             return CommonDao.getInstance(executor).queryOne(sql, values);
-
         } else {
-
-            return CommonDao.getInstance(executor).query(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
-
+            return CommonDao.getInstance(executor).queryOne(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
         }
     }
 
@@ -94,6 +91,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
         SQLStatement preSqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
+
         if (!methodSignature.isAllPrimaryParamter()) {
             if (methodSignature.getMethod().getParameterCount() > 1) {
                 throw new DAOMehtodException("Too many parameters for the dao method " + methodSignature.getMethodName());
@@ -103,9 +101,16 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             }
             SQLStatement sqlStatement = new RoutingSQLParser(new BeanSQLParser(preSqlStatement.getValues()[0],
                     sqlCommand.getSqlOptionType())).parse();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
+            }
             return CommonDao.getInstance(executor).execute(sqlStatement.getSql(), sqlStatement.getValues());
 
         } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
+            }
             return CommonDao.getInstance(executor).execute(preSqlStatement.getSql(), preSqlStatement.getValues());
         }
 

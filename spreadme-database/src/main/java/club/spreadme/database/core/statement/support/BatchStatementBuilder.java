@@ -16,6 +16,7 @@
 
 package club.spreadme.database.core.statement.support;
 
+import club.spreadme.database.core.cache.CacheKey;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.wrapper.PrepareWrappedStatement;
 
@@ -61,5 +62,16 @@ public class BatchStatementBuilder extends AbstractStatementBuilder {
     @Override
     public String getSql() {
         return sql;
+    }
+
+    @Override
+    public CacheKey createCachekey() {
+        CacheKey cacheKey = new CacheKey(sql);
+        for (Object[] parameters : this.parameterss) {
+            for (Object parameter : parameters) {
+                cacheKey.update(parameter);
+            }
+        }
+        return cacheKey;
     }
 }

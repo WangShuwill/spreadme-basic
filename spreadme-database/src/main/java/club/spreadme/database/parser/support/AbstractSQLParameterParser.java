@@ -20,6 +20,7 @@ import club.spreadme.database.annotation.Param;
 import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.parser.SQLParameterParser;
 import club.spreadme.database.parser.grammar.SQLParameter;
+import club.spreadme.lang.Reflection;
 import club.spreadme.lang.StringUtil;
 
 import java.lang.reflect.Method;
@@ -38,20 +39,23 @@ public abstract class AbstractSQLParameterParser implements SQLParameterParser {
                     + method.getName());
         }
         for (int i = 0; i < values.length; i++) {
-            if (Objects.equals(parameters[i].getType(), values[i].getClass())) {
+            if (!Objects.equals(parameters[i].getType(), values[i].getClass())) {
                 throw new DAOMehtodException("The type of parameter is not equal to the type of value for this method"
                         + method.getName());
             }
             SQLParameter sqlParameter = new SQLParameter();
             sqlParameter.setIndex(i);
-            Param param = parameters[i].getAnnotation(Param.class);
-            String paramName = param.value();
+            Param param = Reflection.getAnnotation(parameters[i], Param.class);
+            String paramName = "";
+            if (param != null) {
+                paramName = param.value();
+            }
             if (StringUtil.isBlank(paramName)) {
                 paramName = parameters[i].getName();
             }
             sqlParameter.setName(paramName);
             sqlParameter.setType(values[i].getClass());
-            sqlParameter.setValue(values);
+            sqlParameter.setValue(values[i]);
             sqlParameters[i] = sqlParameter;
         }
         return sqlParameters;

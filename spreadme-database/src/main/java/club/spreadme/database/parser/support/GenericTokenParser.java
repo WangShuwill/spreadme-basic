@@ -75,8 +75,7 @@ public class GenericTokenParser {
                     builder.append(src, start, src.length - start);
                     offset = src.length;
                 } else {
-                    expressIndex++;
-                    builder.append(handler.handler(expressIndex, expression.toString(), placeHolder));
+                    builder.append(handler.handler(expression.toString(), placeHolder));
                     offset = end + closeToken.length();
                 }
             }

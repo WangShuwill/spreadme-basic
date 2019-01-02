@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.parser;
+package club.srpeadme.test;
 
-public interface ExpressionHandler {
+import club.spreadme.database.annotation.Param;
+import club.spreadme.database.annotation.Query;
+import club.srpeadme.test.domain.Movie;
 
-    String PREPAREPLACEHOLDER = "#{/}"; // =
-    String STATICPLACEHOLDER = "${/}"; // LIKE
+public interface MovieDao {
 
-    String handler(String expression, String placeHolder);
+    @Query("select * from movies where id = '${id}' and type = #{type} and rating = ${rating} ")
+    Movie getMovieById(@Param("id") String id, String type, @Param("rating") Double rating);
 
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,20 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.dao;
+package club.spreadme.database.core.transaction;
 
-public class DaoFactory {
+/**
+ * @author Wangshuwei
+ * @since 2018-6-23
+ */
+@FunctionalInterface
+public interface TransactionCallback<T> {
+
+    /**
+     * Transacation atom option
+     *
+     * @return result
+     */
+    T execute();
+
 }

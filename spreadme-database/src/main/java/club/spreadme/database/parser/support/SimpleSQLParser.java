@@ -16,9 +16,14 @@
 
 package club.spreadme.database.parser.support;
 
+import club.spreadme.database.parser.ExpressionHandler;
 import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SimpleSQLParser implements SQLParser {
 
@@ -32,7 +37,11 @@ public class SimpleSQLParser implements SQLParser {
 
     @Override
     public SQLStatement parse() {
-        return null;
+        ExpressionHandler expressionHandler = new GenericExpressionHandler(this.sqlParameters);
+        GenericTokenParser tokenParser = new GenericTokenParser(expressionHandler);
+        String sql = tokenParser.parse(tokenParser.parse(this.sql, ExpressionHandler.PREPAREPLACEHOLDER),
+                ExpressionHandler.STATICPLACEHOLDER);
+        return new SQLStatement(sql, Arrays.stream(this.sqlParameters).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 
     public String getSql() {

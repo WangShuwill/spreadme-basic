@@ -58,4 +58,10 @@ public class CommonDaoTest {
         }
     }
 
+    @Test
+    public void testDao() {
+        MovieDao movieDao = commonDao.getDao(MovieDao.class);
+        LOGGER.info(movieDao.getMovieById("tt0468569", "movie", 9.0).toString());
+    }
+
 }

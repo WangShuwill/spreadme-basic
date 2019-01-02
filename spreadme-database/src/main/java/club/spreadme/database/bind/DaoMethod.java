@@ -54,7 +54,7 @@ public class DaoMethod extends AbstractDaoMethod {
     }
 
     private Object doExecute() {
-        if (SQLOptionType.INSERT.equals(this.sqlCommand.getSqlOptionType())) {
+        if (SQLOptionType.QUERY.equals(this.sqlCommand.getSqlOptionType())) {
             return query(this.methodSignature, this.sqlCommand, this.executor);
         } else {
             return update(this.methodSignature, this.sqlCommand, this.executor);

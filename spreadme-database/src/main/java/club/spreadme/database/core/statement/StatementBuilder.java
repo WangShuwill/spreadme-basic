@@ -17,6 +17,7 @@
 package club.spreadme.database.core.statement;
 
 import club.spreadme.database.core.aware.SQLProvider;
+import club.spreadme.database.core.cache.CachekeyBuiler;
 import club.spreadme.database.core.grammar.StatementConfig;
 
 import java.sql.Connection;
@@ -30,7 +31,7 @@ import java.sql.SQLException;
  * @see club.spreadme.database.core.aware.Aware
  * @since 2018.12.24
  */
-public interface StatementBuilder extends SQLProvider {
+public interface StatementBuilder extends SQLProvider, CachekeyBuiler {
 
     /**
      * set a connection for build

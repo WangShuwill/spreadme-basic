@@ -16,7 +16,10 @@
 
 package club.spreadme.database.dao;
 
+import club.spreadme.database.bind.DaoProxyFactory;
+import club.spreadme.database.core.cache.Cache;
 import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.executor.support.CachingExecutor;
 import club.spreadme.database.core.executor.support.SimplExecutor;
 import club.spreadme.database.core.executor.support.StreamExecutor;
 import club.spreadme.database.core.grammar.Record;
@@ -29,6 +32,7 @@ import club.spreadme.database.core.resultset.support.StreamResultSetParser;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.support.*;
+import club.spreadme.database.core.transaction.TransactionExecutor;
 import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.SQLParser;
@@ -47,6 +51,7 @@ public class CommonDao {
 
     private DataSource dataSource;
     private Executor executor;
+    private TransactionExecutor transactionExecutor;
 
     private volatile static CommonDao commonDao;
 
@@ -79,6 +84,17 @@ public class CommonDao {
             }
         }
         return commonDao;
+    }
+
+    public <T> T getDao(Class<T> clazz) {
+        return newInstance(clazz);
+    }
+
+    public TransactionExecutor getTransactionExecutor() {
+        if (transactionExecutor == null) {
+            transactionExecutor = new TransactionExecutor(this.dataSource);
+        }
+        return transactionExecutor;
     }
 
     public <T> T queryOne(String sql, Class<T> clazz) {
@@ -177,6 +193,10 @@ public class CommonDao {
         return execute(sqlStatement.getSql(), sqlStatement.getValues());
     }
 
+    protected <T> T newInstance(Class<T> clazz) {
+        return new DaoProxyFactory<>(clazz).newInstance(executor);
+    }
+
     public StreamDao withStream() {
         return new StreamDao(dataSource);
     }
@@ -252,5 +272,10 @@ public class CommonDao {
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }
+    }
+
+    public CommonDao withCache(Cache cache) {
+        this.executor = new CachingExecutor(this.dataSource, true, cache);
+        return this;
     }
 }

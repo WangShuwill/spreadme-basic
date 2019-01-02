@@ -16,5 +16,62 @@
 
 package club.spreadme.database.core.executor.support;
 
-public class CachingExecutor {
+import club.spreadme.database.core.cache.Cache;
+import club.spreadme.database.core.cache.CacheKey;
+import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.grammar.StatementConfig;
+import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.StatementCallback;
+import club.spreadme.database.metadata.ConcurMode;
+
+import javax.sql.DataSource;
+
+public class CachingExecutor extends AbstractExecutor {
+
+    private final DataSource dataSource;
+    private final boolean isUseCache;
+    private final Cache cache;
+    private final Executor executor;
+
+    public CachingExecutor(DataSource dataSource, boolean isUseCache, Cache cache) {
+        this.dataSource = dataSource;
+        this.isUseCache = isUseCache;
+        this.cache = cache;
+        this.executor = new SimplExecutor(dataSource);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> T doExecute(StatementBuilder builder, StatementCallback<T> action, StatementConfig config) {
+        if (!isUseCache || cache == null) {
+            return cachingExecute(builder, action, config);
+        }
+        if (!ConcurMode.READ_ONLY.equals(action.getCouncurMode())) {
+            cache.clear();
+            return cachingExecute(builder, action, config);
+
+        } else {
+            CacheKey cacheKey = builder.createCachekey();
+
+            Object cacheObject = cache.getOject(cacheKey);
+            if (cacheObject != null) {
+                return (T) cacheObject;
+            } else {
+                T object = cachingExecute(builder, action, config);
+                cache.putObject(cacheKey, object);
+                return object;
+            }
+        }
+
+    }
+
+    private <T> T cachingExecute(StatementBuilder builder, StatementCallback<T> action, StatementConfig config) {
+        executor.setStatementConfig(config);
+        return executor.execute(builder, action);
+    }
+
+    @Override
+    public DataSource getDataSource() {
+        return this.dataSource;
+    }
 }

@@ -21,12 +21,12 @@ import club.spreadme.database.parser.ExpressionHandler;
 import club.spreadme.database.parser.grammar.SQLParameter;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GenericExpressionHandler implements ExpressionHandler {
 
-    private static final String PREPAREPLACEHOLDER = "#{/}"; // =
-    private static final String STATICPLACEHOLDER = "${/}"; // LIKE
     private final SQLParameter[] sqlParameters;
 
     public GenericExpressionHandler(SQLParameter[] sqlParameters) {
@@ -34,19 +34,21 @@ public class GenericExpressionHandler implements ExpressionHandler {
     }
 
     @Override
-    public String handler(int index, String expression, String placeHolder) {
+    public String handler(String expression, String placeHolder) {
         if (Objects.equals(PREPAREPLACEHOLDER, placeHolder)) {
             return "?";
         } else {
-            SQLParameter sqlParameter = Arrays.stream(sqlParameters).filter(item -> Objects.equals(item.getIndex(), index))
-                    .findAny().orElse(null);
-            if (sqlParameter == null) {
-                sqlParameter = Arrays.stream(sqlParameters).filter(item -> Objects.equals(item.getName(), expression))
-                        .findAny().orElse(null);
+            List<SQLParameter> sqlParameters = Arrays.stream(this.sqlParameters)
+                    .filter(item -> (item !=null && Objects.equals(item.getName(), expression)))
+                    .collect(Collectors.toList());
+            if (sqlParameters.size() > 1) {
+                throw new DAOMehtodException("Too many parameters for " + expression);
             }
-            if (sqlParameter == null) {
-                throw new DAOMehtodException("No such parameter " + expression);
+            if (sqlParameters.size() < 1) {
+                throw new DAOMehtodException("No such parameters for " + expression);
             }
+            SQLParameter sqlParameter = sqlParameters.get(0);
+            this.sqlParameters[sqlParameter.getIndex()] = null;
             return sqlParameter.getValue().toString();
         }
     }

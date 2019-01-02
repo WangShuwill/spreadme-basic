@@ -16,6 +16,7 @@
 
 package club.spreadme.database.core.statement.support;
 
+import club.spreadme.database.core.cache.CacheKey;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.wrapper.SimpleWrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
@@ -53,5 +54,10 @@ public class SimpleStatementBuilder extends AbstractStatementBuilder {
     @Override
     public String getSql() {
         return sql;
+    }
+
+    @Override
+    public CacheKey createCachekey() {
+        return new CacheKey(sql);
     }
 }
