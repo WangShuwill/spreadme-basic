@@ -19,6 +19,7 @@ package club.spreadme.database.dao;
 import club.spreadme.database.bind.DaoProxyFactory;
 import club.spreadme.database.core.cache.Cache;
 import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.executor.support.AsyncExecutor;
 import club.spreadme.database.core.executor.support.CachingExecutor;
 import club.spreadme.database.core.executor.support.SimplExecutor;
 import club.spreadme.database.core.executor.support.StreamExecutor;
@@ -43,8 +44,7 @@ import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 public class CommonDao {
@@ -229,45 +229,54 @@ public class CommonDao {
     }
 
     public AsyncDao withAsync() {
-        return new AsyncDao();
+        return new AsyncDao(dataSource);
     }
 
     public static class AsyncDao {
 
-        public <T> Future<List<T>> query(String sql, Class<T> clazz, Object... objects) {
+        private DataSource dataSource;
+        private Executor executor;
+
+        public AsyncDao(DataSource dataSource) {
+            this.dataSource = dataSource;
+            this.executor = new AsyncExecutor(dataSource);
+        }
+
+
+        public <T> CompletableFuture<List<T>> query(String sql, Class<T> clazz, Object... objects) {
             return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new BeanRowMapper<>(clazz));
         }
 
-        public Future<List<Record>> query(String sql, Object... objects) {
+        public CompletableFuture<List<Record>> query(String sql, Object... objects) {
             return query(new PrepareStatementBuilder(sql, objects, ConcurMode.READ_ONLY), new RecordRowMapper());
         }
 
-        protected <T> Future<List<T>> query(StatementBuilder builder, RowMapper<T> rowMapper) {
+        protected <T> CompletableFuture<List<T>> query(StatementBuilder builder, RowMapper<T> rowMapper) {
             return query(builder, new QueryStatementCallback<>(new DefaultResultSetParser<>(rowMapper)));
         }
 
-        protected <T> Future<T> query(StatementBuilder builder, StatementCallback<T> action) {
-            return commonDao.executor.execute(builder, new AsyncStatementCallBack<>(Executors.newCachedThreadPool(), action));
+        protected <T> CompletableFuture<T> query(StatementBuilder builder, StatementCallback<T> action) {
+            return this.executor.execute(builder, new AsyncStatementCallback<>(action));
         }
 
-        public Future<Integer> execute(String sql, Object... objects) {
-            return commonDao.executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE),
-                    new AsyncStatementCallBack<>(Executors.newCachedThreadPool(), new UpdateStatementCallback()));
+        public CompletableFuture<Integer> execute(String sql, Object... objects) {
+            return this.executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE),
+                    new AsyncStatementCallback<>(new UpdateStatementCallback()));
         }
 
-        public Future<Integer> update(Object bean) {
+        public CompletableFuture<Integer> update(Object bean) {
             SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.UPDATE));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }
 
-        public Future<Integer> insert(Object bean) {
+        public CompletableFuture<Integer> insert(Object bean) {
             SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.INSERT));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());
         }
 
-        public Future<Integer> delete(Object bean) {
+        public CompletableFuture<Integer> delete(Object bean) {
             SQLParser sqlParser = new RoutingSQLParser(new BeanSQLParser(bean, SQLOptionType.DELETE));
             SQLStatement sqlStatement = sqlParser.parse();
             return execute(sqlStatement.getSql(), sqlStatement.getValues());

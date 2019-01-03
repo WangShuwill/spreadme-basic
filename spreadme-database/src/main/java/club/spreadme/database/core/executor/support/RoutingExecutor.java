@@ -31,6 +31,8 @@ public class RoutingExecutor implements Executor {
     public RoutingExecutor(DataSource dataSource, ExecutorType type) {
         if (ExecutorType.STREAM.equals(type)) {
             this.executor = new StreamExecutor(dataSource);
+        } else if (ExecutorType.ASYNC.equals(type)) {
+            this.executor = new AsyncExecutor(dataSource);
         } else {
             this.executor = new SimplExecutor(dataSource);
         }

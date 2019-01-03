@@ -19,6 +19,7 @@ package club.srpeadme.test;
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.dao.CommonDao;
+import club.srpeadme.test.domain.Movie;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -54,8 +55,22 @@ public class CommonDaoTest {
     @Test
     public void testStreamDao() {
         try (Stream<Record> stream = commonDao.withStream().query("select * from movies order by id desc")) {
-            stream.limit(10).peek(System.out::println).collect(Collectors.toList());
+            List<Record> records = stream.limit(10).collect(Collectors.toList());
+            records.forEach(item -> LOGGER.info(item.toString()));
         }
+    }
+
+    @Test
+    public void testAsyncDao() throws InterruptedException {
+        commonDao.withAsync().query("select * from movies where id = ?", Movie.class, "tt0468569")
+                .whenCompleteAsync((movies, throwable) -> movies.forEach(item -> LOGGER.info(item.toString())))
+                .exceptionally((e) -> {
+                    LOGGER.error(e.getMessage());
+                    return null;
+                });
+        LOGGER.info("Doing");
+
+        Thread.sleep(10 * 1000);
     }
 
     @Test
@@ -63,5 +78,4 @@ public class CommonDaoTest {
         MovieDao movieDao = commonDao.getDao(MovieDao.class);
         LOGGER.info(movieDao.getMovieById("tt0468569", "movie", 9.0).toString());
     }
-
 }

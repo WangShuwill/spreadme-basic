@@ -18,6 +18,6 @@ package club.spreadme.database.metadata;
 
 public enum ExecutorType {
 
-    SIMPLE, STREAM
+    SIMPLE, STREAM, ASYNC
 
 }

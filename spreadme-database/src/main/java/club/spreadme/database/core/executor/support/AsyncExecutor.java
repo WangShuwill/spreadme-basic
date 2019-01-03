@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,21 +20,19 @@ import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
-import club.spreadme.database.core.statement.support.StreamQueryStatementCallback;
+import club.spreadme.database.core.statement.support.AsyncStatementCallback;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.metadata.FetchDirection;
 import club.spreadme.database.util.JdbcUtil;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 
-public class StreamExecutor extends AbstractExecutor {
+public class AsyncExecutor extends AbstractExecutor {
 
     private final DataSource dataSource;
 
-    public StreamExecutor(DataSource dataSource) {
+    public AsyncExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -47,19 +45,11 @@ public class StreamExecutor extends AbstractExecutor {
         try {
             connection = JdbcUtil.getConnection(dataSource);
             builder.setConnection(connection);
-            if (config == null) {
-                config = new StatementConfig();
-                DatabaseMetaData databaseMetaData = builder.getDatabaseMetaData();
-                String productName = databaseMetaData.getDatabaseProductName();
-                //TODO diffect database product is not same
-                config.setFetchSize(Integer.MIN_VALUE);
-                config.setFetchDirection(FetchDirection.REVERSE);
-            }
             wrappedStatement = builder.build(config);
-            if (!StreamQueryStatementCallback.class.equals(action.getClass())) {
+            if (!AsyncStatementCallback.class.equals(action.getClass())) {
                 throw new DataBaseAccessException("The StatementCallback is not stream");
             }
-            StreamQueryStatementCallback callback = (StreamQueryStatementCallback) action;
+            AsyncStatementCallback callback = (AsyncStatementCallback) action;
             callback.nest(dataSource, connection);
             return action.executeStatement(wrappedStatement);
         } catch (Exception ex) {
@@ -72,6 +62,6 @@ public class StreamExecutor extends AbstractExecutor {
 
     @Override
     public DataSource getDataSource() {
-        return dataSource;
+        return this.dataSource;
     }
 }

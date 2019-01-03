@@ -18,11 +18,15 @@ package club.spreadme.database.bind;
 
 import club.spreadme.database.annotation.Transactional;
 import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.transaction.Transaction;
+import club.spreadme.database.core.transaction.TransactionExecutor;
 import club.spreadme.database.metadata.SQLOptionType;
+import club.spreadme.database.metadata.TransactionIsolationLevel;
 import club.spreadme.lang.Reflection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Method;
 
 public class DaoMethod extends AbstractDaoMethod {
@@ -46,11 +50,26 @@ public class DaoMethod extends AbstractDaoMethod {
         Object result = null;
         Transactional transactional = Reflection.getAnnotation(this.methodSignature.getMethod(), Transactional.class);
         if (transactional != null) {
-            //TODO transaction
+            result = doExecuteWithTx(transactional);
         } else {
             result = doExecute();
         }
         return result;
+    }
+
+    private Object doExecuteWithTx(Transactional transactional) {
+        Transaction transaction = new Transaction();
+        TransactionIsolationLevel isolationLevel = transactional.isolationLevel();
+        boolean isReadOnly = transactional.isReadOnly();
+        transaction.setIsolationLevel(isolationLevel).setReadOnly(isReadOnly);
+        TransactionExecutor transactionExecutor = getTransactionExecutor(this.executor.getDataSource(), transaction);
+        return transactionExecutor.execute(this::doExecute);
+    }
+
+    private TransactionExecutor getTransactionExecutor(DataSource dataSource, Transaction transaction) {
+        TransactionExecutor transactionExecutor = new TransactionExecutor(dataSource);
+        transactionExecutor.setTransaction(transaction);
+        return transactionExecutor;
     }
 
     private Object doExecute() {
