@@ -47,14 +47,12 @@ public class DaoMethod extends AbstractDaoMethod {
     }
 
     public Object execute() {
-        Object result = null;
         Transactional transactional = Reflection.getAnnotation(this.methodSignature.getMethod(), Transactional.class);
         if (transactional != null) {
-            result = doExecuteWithTx(transactional);
+            return doExecuteWithTx(transactional);
         } else {
-            result = doExecute();
+            return doExecute();
         }
-        return result;
     }
 
     private Object doExecuteWithTx(Transactional transactional) {

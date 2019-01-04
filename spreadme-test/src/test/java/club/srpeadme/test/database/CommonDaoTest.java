@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package club.srpeadme.test;
+package club.srpeadme.test.database;
 
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
