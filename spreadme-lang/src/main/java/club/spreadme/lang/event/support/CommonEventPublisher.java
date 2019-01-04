@@ -21,6 +21,23 @@ import club.spreadme.lang.event.EventPublisher;
 
 public class CommonEventPublisher implements EventPublisher {
 
+    private volatile static CommonEventPublisher eventPublisher;
+
+    private CommonEventPublisher() {
+
+    }
+
+    public static CommonEventPublisher getInstance() {
+        if (eventPublisher == null) {
+            synchronized (CommonEventPublisher.class) {
+                if (eventPublisher == null) {
+                    eventPublisher = new CommonEventPublisher();
+                }
+            }
+        }
+        return eventPublisher;
+    }
+
     @Override
     public void publishEvent(AbstractEvent event) {
         CommonEventMulticaster.getInstance().multicastEvent(event);

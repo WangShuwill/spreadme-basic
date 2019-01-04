@@ -16,9 +16,9 @@
 
 package club.srpeadme.test.lang.event;
 
-import club.spreadme.lang.event.IListener;
+import club.spreadme.lang.event.IEventListener;
 
-public class Student implements IListener<HomeworkEvent> {
+public class Student implements IEventListener<HomeworkEvent> {
 
     private String name;
     private long handleTime;

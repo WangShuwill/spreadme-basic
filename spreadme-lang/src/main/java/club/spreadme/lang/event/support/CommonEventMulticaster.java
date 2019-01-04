@@ -18,7 +18,7 @@ package club.spreadme.lang.event.support;
 
 import club.spreadme.lang.event.AbstractEvent;
 import club.spreadme.lang.event.EventMulticaster;
-import club.spreadme.lang.event.IListener;
+import club.spreadme.lang.event.IEventListener;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -49,13 +49,13 @@ public class CommonEventMulticaster implements EventMulticaster {
     }
 
     @Override
-    public void addApplicationListener(IListener<?> listener) {
+    public void addEventListener(IEventListener<?> listener) {
         this.listenerStorage.listeners.add(listener);
     }
 
     @Override
     public void multicastEvent(AbstractEvent event) {
-        for (final IListener<?> listener : getApplicationListeners(event)) {
+        for (final IEventListener<?> listener : getApplicationListeners(event)) {
             Executor executor = getTaskExecutor();
             if (executor != null) {
                 executor.execute(() -> invokeListener(listener, event));
@@ -73,10 +73,10 @@ public class CommonEventMulticaster implements EventMulticaster {
         return taskExecutor;
     }
 
-    private Collection<IListener<?>> getApplicationListeners(AbstractEvent event) {
-        Set<IListener<?>> allListeners = new LinkedHashSet<>();
+    private Collection<IEventListener<?>> getApplicationListeners(AbstractEvent event) {
+        Set<IEventListener<?>> allListeners = new LinkedHashSet<>();
         Class<?> sourceType = event.getSource().getClass();
-        for (IListener<?> listener : this.listenerStorage.listeners) {
+        for (IEventListener<?> listener : this.listenerStorage.listeners) {
             if (listener.supportsEventType(event.getClass()) && listener.supportsSourceType(sourceType)) {
                 allListeners.add(listener);
             }
@@ -85,13 +85,13 @@ public class CommonEventMulticaster implements EventMulticaster {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private void invokeListener(IListener listener, AbstractEvent event) {
+    private void invokeListener(IEventListener listener, AbstractEvent event) {
         listener.onApplicationEvent(event);
     }
 
     private class ListenerStorage {
 
-        public final Set<IListener<?>> listeners;
+        public final Set<IEventListener<?>> listeners;
 
         public ListenerStorage() {
             this.listeners = new LinkedHashSet<>();

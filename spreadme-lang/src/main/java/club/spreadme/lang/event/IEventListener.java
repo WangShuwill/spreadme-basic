@@ -18,7 +18,7 @@ package club.spreadme.lang.event;
 
 import java.util.EventListener;
 
-public interface IListener<E extends AbstractEvent> extends EventListener {
+public interface IEventListener<E extends AbstractEvent> extends EventListener {
 
     boolean supportsEventType(Class<?> eventType);
 

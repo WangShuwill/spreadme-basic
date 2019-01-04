@@ -16,8 +16,7 @@
 
 package club.srpeadme.test.lang;
 
-import club.spreadme.lang.event.support.CommonEventMulticaster;
-import club.spreadme.lang.event.support.CommonEventPublisher;
+import club.spreadme.lang.EventBus;
 import club.srpeadme.test.lang.event.HomeworkEvent;
 import club.srpeadme.test.lang.event.Student;
 import club.srpeadme.test.lang.event.Teacher;
@@ -32,16 +31,12 @@ public class EventTest {
         Student student1 = new Student("张三", 2 * 1000);
         Student student2 = new Student("李四", 4 * 1000);
 
+        Teacher teacher = new Teacher("zuikc");
 
-        Teacher teacher1 = new Teacher("zuikc");
+        EventBus eventBus = new EventBus(Executors.newCachedThreadPool());
+        eventBus.addEventListener(student1).addEventListener(student2);
 
-        CommonEventMulticaster eventMulticaster = CommonEventMulticaster.getInstance();
-        eventMulticaster.setTaskExecutor(Executors.newCachedThreadPool());
-        eventMulticaster.addApplicationListener(student1);
-        eventMulticaster.addApplicationListener(student2);
-
-        CommonEventPublisher eventPublisher = new CommonEventPublisher();
-        eventPublisher.publishEvent(new HomeworkEvent(teacher1));
+        eventBus.publishEvent(new HomeworkEvent(teacher));
 
         System.out.println("Doing some other thing...");
 

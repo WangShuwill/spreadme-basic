@@ -16,9 +16,13 @@
 
 package club.spreadme.lang.event;
 
+import java.util.concurrent.Executor;
+
 public interface EventMulticaster {
 
-    void addApplicationListener(IListener<?> listener);
+    void setTaskExecutor(Executor taskExecutor);
+
+    void addEventListener(IEventListener<?> listener);
 
     void multicastEvent(AbstractEvent event);
 
