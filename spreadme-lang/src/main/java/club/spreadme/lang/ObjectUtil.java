@@ -35,21 +35,29 @@ public class ObjectUtil {
         final Class<?> componentType = clazz.getComponentType();
         if (long.class.equals(componentType)) {
             return Arrays.hashCode((long[]) object);
-        } else if (int.class.equals(componentType)) {
+        }
+        else if (int.class.equals(componentType)) {
             return Arrays.hashCode((int[]) object);
-        } else if (short.class.equals(componentType)) {
+        }
+        else if (short.class.equals(componentType)) {
             return Arrays.hashCode((short[]) object);
-        } else if (char.class.equals(componentType)) {
+        }
+        else if (char.class.equals(componentType)) {
             return Arrays.hashCode((char[]) object);
-        } else if (byte.class.equals(componentType)) {
+        }
+        else if (byte.class.equals(componentType)) {
             return Arrays.hashCode((byte[]) object);
-        } else if (boolean.class.equals(componentType)) {
+        }
+        else if (boolean.class.equals(componentType)) {
             return Arrays.hashCode((boolean[]) object);
-        } else if (float.class.equals(componentType)) {
+        }
+        else if (float.class.equals(componentType)) {
             return Arrays.hashCode((float[]) object);
-        } else if (double.class.equals(componentType)) {
+        }
+        else if (double.class.equals(componentType)) {
             return Arrays.hashCode((double[]) object);
-        } else {
+        }
+        else {
             return Arrays.hashCode((Object[]) object);
         }
     }

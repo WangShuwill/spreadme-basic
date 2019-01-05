@@ -49,7 +49,8 @@ public abstract class Reflection {
         try {
             makeAccessible(field, true);
             field.set(obj, value);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -57,7 +58,8 @@ public abstract class Reflection {
     public static Object getFieldValue(Object obj, Field field) {
         try {
             return field.get(obj);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -154,7 +156,8 @@ public abstract class Reflection {
             }
             try {
                 fieldHandler.handle(field);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -197,7 +200,8 @@ public abstract class Reflection {
     public static Object invokeMethod(Method method, Object target, Object... args) {
         try {
             return method.invoke(target, args);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -211,7 +215,8 @@ public abstract class Reflection {
             }
             try {
                 methodHandler.handle(method);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -258,7 +263,8 @@ public abstract class Reflection {
             makeAccessible(field, true);
             if (ObjectUtil.equals(field.getType(), Class.class)) {
                 annotationDefinition.setType((Class) getFieldValue(invocationHandler, field));
-            } else if (ObjectUtil.equals(field.getType(), Map.class)) {
+            }
+            else if (ObjectUtil.equals(field.getType(), Map.class)) {
                 annotationDefinition.setAttributes((Map<String, Object>) getFieldValue(invocationHandler, field));
             }
         }

@@ -59,7 +59,8 @@ public class CommonEventMulticaster implements EventMulticaster {
             Executor executor = getTaskExecutor();
             if (executor != null) {
                 executor.execute(() -> invokeListener(listener, event));
-            } else {
+            }
+            else {
                 invokeListener(listener, event);
             }
         }

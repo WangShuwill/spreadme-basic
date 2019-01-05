@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class Converter {
 
-    public static  <T> T toNumber(final Class<?> sourceType, final Class<T> targetType, final Number value) {
+    public static <T> T toNumber(final Class<?> sourceType, final Class<T> targetType, final Number value) {
         // if it is number,return
         if (targetType.equals(value.getClass())) {
             return targetType.cast(value);
@@ -71,11 +71,14 @@ public class Converter {
         if (targetType.equals(BigDecimal.class)) {
             if (value instanceof Float || value instanceof Double) {
                 return targetType.cast(new BigDecimal(value.toString()));
-            } else if (value instanceof BigInteger) {
+            }
+            else if (value instanceof BigInteger) {
                 return targetType.cast(new BigDecimal((BigInteger) value));
-            } else if (value instanceof BigDecimal) {
+            }
+            else if (value instanceof BigDecimal) {
                 return targetType.cast(new BigDecimal(value.toString()));
-            } else {
+            }
+            else {
                 return targetType.cast(value.longValue());
             }
 
@@ -84,7 +87,8 @@ public class Converter {
         if (targetType.equals(BigInteger.class)) {
             if (value instanceof BigDecimal) {
                 return targetType.cast(((BigDecimal) value).toBigInteger());
-            } else {
+            }
+            else {
                 return targetType.cast(value.longValue());
             }
         }
@@ -111,7 +115,8 @@ public class Converter {
         }
         try {
             return new SimpleDateFormat().parse(object.toString());
-        } catch (ParseException ex) {
+        }
+        catch (ParseException ex) {
             throw new ConvertException(ex.getMessage());
         }
     }
