@@ -18,6 +18,6 @@ package club.spreadme.lang.event;
 
 public interface EventPublisher {
 
-    void publishEvent(AbstractEvent event);
+    void publishEvent(Event event);
 
 }

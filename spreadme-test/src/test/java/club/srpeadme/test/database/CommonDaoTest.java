@@ -43,7 +43,7 @@ public class CommonDaoTest {
     @Before
     public void initTesEnv() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
-        commonDao = CommonDao.getInstance(dataSource);
+        commonDao = CommonDao.getInstance().use(dataSource);
     }
 
     @Test

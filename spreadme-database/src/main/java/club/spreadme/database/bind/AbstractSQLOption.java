@@ -18,9 +18,7 @@ package club.spreadme.database.bind;
 
 import club.spreadme.database.annotation.PostProcessor;
 import club.spreadme.database.core.executor.Executor;
-import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
-import club.spreadme.database.core.resultset.support.RecordRowMapper;
 import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.parser.grammar.SQLParameter;
@@ -62,18 +60,13 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
         }
 
         if (methodSignature.isReturnsMany()) {
-
             Type type = methodSignature.getActualTypes()[0];
-            if (Record.class.equals(type)) {
-                return CommonDao.getInstance(executor).query(sql, new RecordRowMapper(), values);
-            } else {
-                return CommonDao.getInstance(executor).query(sql, new BeanRowMapper<>((Class<?>) type), values);
-            }
+            return CommonDao.getInstance().use(executor).query(sql, new BeanRowMapper<>((Class<?>) type), values);
 
         } else if (methodSignature.isReturnsMap()) {
-            return CommonDao.getInstance(executor).queryOne(sql, values);
+            return CommonDao.getInstance().use(executor).queryOne(sql, values);
         } else {
-            return CommonDao.getInstance(executor).queryOne(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
+            return CommonDao.getInstance().use(executor).queryOne(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
         }
     }
 
@@ -105,13 +98,13 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
             }
-            return CommonDao.getInstance(executor).execute(sqlStatement.getSql(), sqlStatement.getValues());
+            return CommonDao.getInstance().use(executor).execute(sqlStatement.getSql(), sqlStatement.getValues());
 
         } else {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
             }
-            return CommonDao.getInstance(executor).execute(preSqlStatement.getSql(), preSqlStatement.getValues());
+            return CommonDao.getInstance().use(executor).execute(preSqlStatement.getSql(), preSqlStatement.getValues());
         }
 
     }

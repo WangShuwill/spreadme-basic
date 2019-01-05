@@ -16,7 +16,7 @@
 
 package club.spreadme.lang.event.support;
 
-import club.spreadme.lang.event.AbstractEvent;
+import club.spreadme.lang.event.Event;
 import club.spreadme.lang.event.EventPublisher;
 
 public class CommonEventPublisher implements EventPublisher {
@@ -39,7 +39,7 @@ public class CommonEventPublisher implements EventPublisher {
     }
 
     @Override
-    public void publishEvent(AbstractEvent event) {
+    public void publishEvent(Event event) {
         CommonEventMulticaster.getInstance().multicastEvent(event);
     }
 }

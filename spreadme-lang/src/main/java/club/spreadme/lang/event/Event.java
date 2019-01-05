@@ -18,13 +18,13 @@ package club.spreadme.lang.event;
 
 import java.util.EventObject;
 
-public abstract class AbstractEvent extends EventObject {
+public abstract class Event extends EventObject {
 
     private static final long serialVersionUID = -7861773429555969799L;
 
     private final long timestamp;
 
-    public AbstractEvent(Object source) {
+    public Event(Object source) {
         super(source);
         this.timestamp = System.currentTimeMillis();
     }

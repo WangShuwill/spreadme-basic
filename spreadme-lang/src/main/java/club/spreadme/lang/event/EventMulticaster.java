@@ -24,6 +24,6 @@ public interface EventMulticaster {
 
     void addEventListener(IEventListener<?> listener);
 
-    void multicastEvent(AbstractEvent event);
+    void multicastEvent(Event event);
 
 }

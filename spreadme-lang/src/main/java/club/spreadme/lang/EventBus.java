@@ -16,7 +16,7 @@
 
 package club.spreadme.lang;
 
-import club.spreadme.lang.event.AbstractEvent;
+import club.spreadme.lang.event.Event;
 import club.spreadme.lang.event.EventMulticaster;
 import club.spreadme.lang.event.EventPublisher;
 import club.spreadme.lang.event.IEventListener;
@@ -48,7 +48,7 @@ public class EventBus {
         return this;
     }
 
-    public void publishEvent(AbstractEvent event) {
+    public void publishEvent(Event event) {
         eventPublisher.publishEvent(event);
     }
 

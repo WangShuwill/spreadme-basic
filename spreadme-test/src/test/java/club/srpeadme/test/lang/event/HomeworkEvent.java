@@ -16,9 +16,9 @@
 
 package club.srpeadme.test.lang.event;
 
-import club.spreadme.lang.event.AbstractEvent;
+import club.spreadme.lang.event.Event;
 
-public class HomeworkEvent extends AbstractEvent {
+public class HomeworkEvent extends Event {
 
     private static final long serialVersionUID = 1677055378379029089L;
 

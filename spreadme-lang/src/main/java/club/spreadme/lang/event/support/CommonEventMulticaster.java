@@ -16,7 +16,7 @@
 
 package club.spreadme.lang.event.support;
 
-import club.spreadme.lang.event.AbstractEvent;
+import club.spreadme.lang.event.Event;
 import club.spreadme.lang.event.EventMulticaster;
 import club.spreadme.lang.event.IEventListener;
 
@@ -54,7 +54,7 @@ public class CommonEventMulticaster implements EventMulticaster {
     }
 
     @Override
-    public void multicastEvent(AbstractEvent event) {
+    public void multicastEvent(Event event) {
         for (final IEventListener<?> listener : getApplicationListeners(event)) {
             Executor executor = getTaskExecutor();
             if (executor != null) {
@@ -73,7 +73,7 @@ public class CommonEventMulticaster implements EventMulticaster {
         return taskExecutor;
     }
 
-    private Collection<IEventListener<?>> getApplicationListeners(AbstractEvent event) {
+    private Collection<IEventListener<?>> getApplicationListeners(Event event) {
         Set<IEventListener<?>> allListeners = new LinkedHashSet<>();
         Class<?> sourceType = event.getSource().getClass();
         for (IEventListener<?> listener : this.listenerStorage.listeners) {
@@ -85,7 +85,7 @@ public class CommonEventMulticaster implements EventMulticaster {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private void invokeListener(IEventListener listener, AbstractEvent event) {
+    private void invokeListener(IEventListener listener, Event event) {
         listener.onApplicationEvent(event);
     }
 
