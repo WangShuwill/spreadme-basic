@@ -21,10 +21,12 @@ import club.spreadme.database.annotation.Query;
 import club.spreadme.database.annotation.Transactional;
 import club.srpeadme.test.domain.Movie;
 
+import java.util.List;
+
 public interface MovieDao {
 
     @Transactional
     @Query("select * from movies where id = '${id}' and type = #{type} and rating = ${rating} ")
-    Movie getMovieById(@Param("id") String id, String type, @Param("rating") Double rating);
+    List<Movie> getMovieById(@Param("id") String id, String type, @Param("rating") Double rating);
 
 }

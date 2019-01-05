@@ -19,6 +19,7 @@ package club.spreadme.database.dao;
 import club.spreadme.database.core.cache.Cache;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.executor.support.CachingExecutor;
+import club.spreadme.database.core.executor.support.SimplExecutor;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.RecordRowMapper;
@@ -65,6 +66,7 @@ public class CommonDao extends AbstractDao {
 
     public CommonDao use(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.executor = new SimplExecutor(this.dataSource);
         return commonDao;
     }
 

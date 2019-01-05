@@ -18,9 +18,17 @@ package club.spreadme.database.bind;
 
 import club.spreadme.database.annotation.PostProcessor;
 import club.spreadme.database.core.executor.Executor;
+import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
-import club.spreadme.database.dao.CommonDao;
+import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
+import club.spreadme.database.core.resultset.support.RecordRowMapper;
+import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
+import club.spreadme.database.core.statement.support.QueryStatementCallback;
+import club.spreadme.database.core.statement.support.UpdateStatementCallback;
 import club.spreadme.database.exception.DAOMehtodException;
+import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.AbstractSQLParameterParser;
@@ -34,12 +42,14 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements SQLOption {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSQLOption.class);
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
         String sql = sqlCommand.getSql();
         Object[] values = methodSignature.getValues();
@@ -59,16 +69,19 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             LOGGER.debug("parse sql {}, values {}", sql, Arrays.toString(values));
         }
 
+        StatementBuilder statementBuilder = getStatementBuilder(sql, values, ConcurMode.READ_ONLY);
         if (methodSignature.isReturnsMany()) {
             Type type = methodSignature.getActualTypes()[0];
-            return CommonDao.getInstance().use(executor).query(sql, new BeanRowMapper<>((Class<?>) type), values);
+            return query(statementBuilder, new BeanRowMapper((Class<?>) type), 0, executor);
 
         }
         else if (methodSignature.isReturnsMap()) {
-            return CommonDao.getInstance().use(executor).queryOne(sql, values);
+            List<Record> results = query(statementBuilder, new RecordRowMapper(), 1, executor);
+            return results.iterator().hasNext() ? results.iterator().next() : null;
         }
         else {
-            return CommonDao.getInstance().use(executor).queryOne(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
+            List<?> results = query(statementBuilder, new BeanRowMapper<>(methodSignature.getReturnType()), 1, executor);
+            return results.iterator().hasNext() ? results.iterator().next() : null;
         }
     }
 
@@ -100,19 +113,20 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
             }
-            return CommonDao.getInstance().use(executor).execute(sqlStatement.getSql(), sqlStatement.getValues());
-
+            StatementBuilder statementBuilder = getStatementBuilder(sqlStatement.getSql(), sqlStatement.getValues(), ConcurMode.UPDATABLE);
+            return update(statementBuilder, executor);
         }
         else {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
             }
-            return CommonDao.getInstance().use(executor).execute(preSqlStatement.getSql(), preSqlStatement.getValues());
+            StatementBuilder statementBuilder = getStatementBuilder(preSqlStatement.getSql(), preSqlStatement.getValues(), ConcurMode.UPDATABLE);
+            return update(statementBuilder, executor);
         }
 
     }
 
-    protected static String processSql(String sql, MethodSignature methodSignature, Class<? extends PostProcessor> processorClass) {
+    protected String processSql(String sql, MethodSignature methodSignature, Class<? extends PostProcessor> processorClass) {
         if (processorClass != null && !processorClass.isInterface() && processorClass.getModifiers() != Modifier.ABSTRACT) {
             Object values = methodSignature.getValues();
             String daoMethodName = methodSignature.getMethodName();
@@ -129,5 +143,17 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
         }
 
         return sql;
+    }
+
+    protected StatementBuilder getStatementBuilder(String sql, Object[] values, ConcurMode concurMode) {
+        return new PrepareStatementBuilder(sql, values, concurMode);
+    }
+
+    protected <T> List<T> query(StatementBuilder builder, final RowMapper<T> rowMapper, int rowsExpected, Executor executor) {
+        return executor.execute(builder, new QueryStatementCallback<>(new DefaultResultSetParser<>(rowMapper, rowsExpected)));
+    }
+
+    protected Integer update(StatementBuilder statementBuilder, Executor executor) {
+        return executor.execute(statementBuilder, new UpdateStatementCallback());
     }
 }
