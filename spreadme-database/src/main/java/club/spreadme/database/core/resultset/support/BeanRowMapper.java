@@ -19,7 +19,7 @@ package club.spreadme.database.core.resultset.support;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.lang.Reflection;
 
 import java.sql.ResultSet;
@@ -58,7 +58,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         else {
             T object = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {
-                String columnName = JdbcUtil.getColumnName(resultSetMetaData, i);
+                String columnName = ResourceHandler.getColumnName(resultSetMetaData, i);
                 Reflection.setFieldValue(object, columnName, rs.getObject(i));
             }
             return object;

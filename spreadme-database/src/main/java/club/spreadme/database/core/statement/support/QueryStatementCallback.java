@@ -20,7 +20,7 @@ import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 
 import java.sql.ResultSet;
 
@@ -42,7 +42,7 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
             return resultSetParser.parse(resultSet);
         }
         finally {
-            JdbcUtil.closeResultSet(resultSet);
+            ResourceHandler.closeResultSet(resultSet);
         }
     }
 

@@ -20,7 +20,7 @@ import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.metadata.ConcurMode;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -47,8 +47,8 @@ public class AsyncStatementCallback<T> implements StatementCallback<CompletableF
                 throw new DataBaseAccessException(e.getMessage());
             }
             finally {
-                JdbcUtil.closeWrappedStatement(wrappedStatement);
-                JdbcUtil.closeConnection(connection, dataSource);
+                ResourceHandler.closeWrappedStatement(wrappedStatement);
+                ResourceHandler.closeConnection(connection, dataSource);
             }
         });
     }

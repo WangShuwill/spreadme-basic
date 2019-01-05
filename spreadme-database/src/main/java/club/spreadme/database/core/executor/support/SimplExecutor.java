@@ -21,7 +21,7 @@ import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
@@ -42,7 +42,7 @@ public class SimplExecutor extends AbstractExecutor {
         Connection connection = null;
         WrappedStatement wrappedStatement = null;
         try {
-            connection = JdbcUtil.getConnection(dataSource);
+            connection = ResourceHandler.getConnection(dataSource);
             builder.setConnection(connection);
             wrappedStatement = builder.build(config);
             return action.executeStatement(wrappedStatement);
@@ -52,8 +52,8 @@ public class SimplExecutor extends AbstractExecutor {
             throw new DataBaseAccessException(errorSql, ex);
         }
         finally {
-            JdbcUtil.closeWrappedStatement(wrappedStatement);
-            JdbcUtil.closeConnection(connection, dataSource);
+            ResourceHandler.closeWrappedStatement(wrappedStatement);
+            ResourceHandler.closeConnection(connection, dataSource);
         }
     }
 

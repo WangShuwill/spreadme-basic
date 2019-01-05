@@ -22,7 +22,7 @@ import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.support.AsyncStatementCallback;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
@@ -43,19 +43,19 @@ public class AsyncExecutor extends AbstractExecutor {
         Connection connection = null;
         WrappedStatement wrappedStatement = null;
         try {
-            connection = JdbcUtil.getConnection(dataSource);
+            connection = ResourceHandler.getConnection(dataSource);
             builder.setConnection(connection);
             wrappedStatement = builder.build(config);
             if (!AsyncStatementCallback.class.equals(action.getClass())) {
-                throw new DataBaseAccessException("The StatementCallback is not stream");
+                throw new DataBaseAccessException("The StatementCallback is not async");
             }
             AsyncStatementCallback callback = (AsyncStatementCallback) action;
             callback.nest(dataSource, connection);
             return action.executeStatement(wrappedStatement);
         }
         catch (Exception ex) {
-            JdbcUtil.closeWrappedStatement(wrappedStatement);
-            JdbcUtil.closeConnection(connection, dataSource);
+            ResourceHandler.closeWrappedStatement(wrappedStatement);
+            ResourceHandler.closeConnection(connection, dataSource);
             String errorSql = builder.getSql();
             throw new DataBaseAccessException(errorSql, ex);
         }

@@ -18,7 +18,7 @@ package club.spreadme.database.core.statement.wrapper;
 
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
-import club.spreadme.database.util.JdbcUtil;
+import club.spreadme.database.core.resource.ResourceHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,6 +56,6 @@ public class SimpleWrappedStatement implements WrappedStatement {
 
     @Override
     public void close() {
-        JdbcUtil.closeStatement(statement);
+        ResourceHandler.closeStatement(statement);
     }
 }
