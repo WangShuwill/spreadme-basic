@@ -40,7 +40,8 @@ public class QueryStatementCallback<T> implements StatementCallback<T> {
             concurMode = wrappedStatement.getConcurMode();
             resultSet = wrappedStatement.query();
             return resultSetParser.parse(resultSet);
-        } finally {
+        }
+        finally {
             JdbcUtil.closeResultSet(resultSet);
         }
     }

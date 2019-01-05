@@ -50,7 +50,8 @@ public class DaoMethod extends AbstractDaoMethod {
         Transactional transactional = Reflection.getAnnotation(this.methodSignature.getMethod(), Transactional.class);
         if (transactional != null) {
             return doExecuteWithTx(transactional);
-        } else {
+        }
+        else {
             return doExecute();
         }
     }
@@ -73,7 +74,8 @@ public class DaoMethod extends AbstractDaoMethod {
     private Object doExecute() {
         if (SQLOptionType.QUERY.equals(this.sqlCommand.getSqlOptionType())) {
             return query(this.methodSignature, this.sqlCommand, this.executor);
-        } else {
+        }
+        else {
             return update(this.methodSignature, this.sqlCommand, this.executor);
         }
     }

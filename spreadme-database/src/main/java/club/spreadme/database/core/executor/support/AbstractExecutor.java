@@ -33,7 +33,6 @@ public abstract class AbstractExecutor implements Executor, ExecutorAware {
 
     @Override
     public <T> T execute(StatementBuilder builder, StatementCallback<T> action) {
-
         return doExecute(builder, action, statementConfig);
     }
 

@@ -37,9 +37,10 @@ public class GenericExpressionHandler implements ExpressionHandler {
     public String handler(String expression, String placeHolder) {
         if (Objects.equals(PREPAREPLACEHOLDER, placeHolder)) {
             return "?";
-        } else {
+        }
+        else {
             List<SQLParameter> sqlParameters = Arrays.stream(this.sqlParameters)
-                    .filter(item -> (item !=null && Objects.equals(item.getName(), expression)))
+                    .filter(item -> (item != null && Objects.equals(item.getName(), expression)))
                     .collect(Collectors.toList());
             if (sqlParameters.size() > 1) {
                 throw new DAOMehtodException("Too many parameters for " + expression);

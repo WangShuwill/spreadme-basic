@@ -94,7 +94,8 @@ public class SpreadDataSource implements DataSource {
         if (driver != null) {
             try {
                 Class.forName(driver);
-            } catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -117,14 +118,16 @@ public class SpreadDataSource implements DataSource {
                         LOGGER.debug("Return a connection {} to idleconnections", newProxyConnection.getRealConnectionHashCode());
                     }
                     state.notifyAll();
-                } else {
+                }
+                else {
                     proxyConnection.getRealConnection().close();
                     proxyConnection.inValid();
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("Close the connection {}", proxyConnection.getRealConnectionHashCode());
                     }
                 }
-            } else {
+            }
+            else {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("a invalid connection {} can not return idleconnections", proxyConnection.getRealConnectionHashCode());
                 }
@@ -144,14 +147,16 @@ public class SpreadDataSource implements DataSource {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("get a connection {} from idleconnections", proxyConnection.getRealConnectionHashCode());
                     }
-                } else {
+                }
+                else {
                     // if active connection count less than maximum active connection count,create new connection
                     if (state.activeConnections.size() < maximumActiveConnections) {
                         proxyConnection = new ProxyConnection(this, createConnection());
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug("create a new connection {}", proxyConnection.getRealConnectionHashCode());
                         }
-                    } else {
+                    }
+                    else {
                         ProxyConnection oldActiveProxyConnection = state.activeConnections.get(0);
                         long checkoutTimestamp = oldActiveProxyConnection.getCheckoutTimestamp();
                         // deal orverdue connection
@@ -166,7 +171,8 @@ public class SpreadDataSource implements DataSource {
                             proxyConnection.setLastUsedTimestamp(oldActiveProxyConnection.getLastUsedTimestamp());
                             // invalid the old connection
                             oldActiveProxyConnection.inValid();
-                        } else {
+                        }
+                        else {
                             try {
                                 if (!iswait) {
                                     iswait = true;
@@ -175,7 +181,8 @@ public class SpreadDataSource implements DataSource {
                                     LOGGER.debug("Waiting as long as {} milliseconds for connection", poolTimeToWait);
                                 }
                                 state.wait(poolTimeToWait);
-                            } catch (InterruptedException e) {
+                            }
+                            catch (InterruptedException e) {
                                 break;
                             }
                         }
@@ -208,7 +215,8 @@ public class SpreadDataSource implements DataSource {
 
         try {
             result = !proxyConnection.getRealConnection().isClosed();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("The connection {} is bad : {}", proxyConnection.getRealConnectionHashCode(), e.getMessage());
             }

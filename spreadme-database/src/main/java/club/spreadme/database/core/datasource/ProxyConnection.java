@@ -56,7 +56,8 @@ public class ProxyConnection implements InvocationHandler {
         if (CLOSEMETHODNAME.hashCode() == method.getName().hashCode() && CLOSEMETHODNAME.equals(methodName)) {
             dataSource.pushConnection(this);
             return null;
-        } else {
+        }
+        else {
             if (!Object.class.equals(method.getDeclaringClass())) {
                 if (!vaild) {
                     throw new DataBaseAccessException("The connection is not valid");
@@ -123,9 +124,11 @@ public class ProxyConnection implements InvocationHandler {
     public boolean equals(Object obj) {
         if (obj instanceof ProxyConnection) {
             return realConnection.hashCode() == ((ProxyConnection) obj).getRealConnection().hashCode();
-        } else if (obj instanceof Connection) {
+        }
+        else if (obj instanceof Connection) {
             return hashCode == obj.hashCode();
-        } else {
+        }
+        else {
             return false;
         }
     }

@@ -75,9 +75,9 @@ public class Record extends HashMap<String, Object> implements Serializable {
         return this;
     }
 
-    public Record setPrimayKeyValue(String primaryKey, Object primaryValue){
+    public Record setPrimayKeyValue(String primaryKey, Object primaryValue) {
         this.primaryKeyName = primaryKey;
-        this.set(primaryKeyName,primaryValue);
+        this.set(primaryKeyName, primaryValue);
         return this;
     }
 

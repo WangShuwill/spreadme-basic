@@ -46,10 +46,12 @@ public class SimplExecutor extends AbstractExecutor {
             builder.setConnection(connection);
             wrappedStatement = builder.build(config);
             return action.executeStatement(wrappedStatement);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             String errorSql = builder.getSql();
             throw new DataBaseAccessException(errorSql, ex);
-        } finally {
+        }
+        finally {
             JdbcUtil.closeWrappedStatement(wrappedStatement);
             JdbcUtil.closeConnection(connection, dataSource);
         }

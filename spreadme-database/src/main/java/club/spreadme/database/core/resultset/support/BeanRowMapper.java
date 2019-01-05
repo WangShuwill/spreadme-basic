@@ -40,6 +40,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T mapping(ResultSet rs) throws Exception {
         ResultSetMetaData resultSetMetaData = rs.getMetaData();
         int columnCount = resultSetMetaData.getColumnCount();
@@ -50,9 +51,11 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             }
             return clazz.cast(rs.getObject(1));
 
-        } else if (Record.class.equals(clazz)) {
+        }
+        else if (Record.class.equals(clazz)) {
             return (T) new RecordRowMapper().mapping(rs);
-        } else {
+        }
+        else {
             T object = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = JdbcUtil.getColumnName(resultSetMetaData, i);

@@ -35,7 +35,8 @@ public abstract class AbstractSQLBeanParser implements SQLParser {
             tableName = tableAnno == null ? ((Record) bean).getTableName() : tableAnno.name();
             primaryKeyName = tableAnno == null ? ((Record) bean).getPrimaryKeyName() : tableAnno.primarykey();
             beanMap = (Record) bean;
-        } else {
+        }
+        else {
             tableName = tableAnno == null ? null : tableAnno.name();
             primaryKeyName = tableName == null ? null : tableAnno.primarykey();
             beanMap = Reflection.parseBeanToMap(bean);

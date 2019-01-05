@@ -48,7 +48,8 @@ public class TransactionInvocationHandler implements InvocationHandler {
         return transactionExecutor.execute(() -> {
             try {
                 return method.invoke(proxy, args);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
             return null;

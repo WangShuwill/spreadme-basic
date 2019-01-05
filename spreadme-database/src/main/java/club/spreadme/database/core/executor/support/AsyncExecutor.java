@@ -52,7 +52,8 @@ public class AsyncExecutor extends AbstractExecutor {
             AsyncStatementCallback callback = (AsyncStatementCallback) action;
             callback.nest(dataSource, connection);
             return action.executeStatement(wrappedStatement);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             JdbcUtil.closeWrappedStatement(wrappedStatement);
             JdbcUtil.closeConnection(connection, dataSource);
             String errorSql = builder.getSql();

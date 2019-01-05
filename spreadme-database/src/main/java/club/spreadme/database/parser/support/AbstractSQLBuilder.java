@@ -27,7 +27,8 @@ public abstract class AbstractSQLBuilder implements SQLBuilder {
         for (Object s : list) {
             if (first) {
                 sql.append(init);
-            } else {
+            }
+            else {
                 sql.append(sep);
             }
             sql.append(s);

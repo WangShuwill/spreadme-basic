@@ -77,7 +77,8 @@ public class DefaultTransactionManager implements TransactionManager {
         }
         try {
             doCommit(transactionStatus);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }
@@ -90,7 +91,8 @@ public class DefaultTransactionManager implements TransactionManager {
 
         try {
             doRollBack(transactionStatus);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }
@@ -124,7 +126,8 @@ public class DefaultTransactionManager implements TransactionManager {
                 LOGGER.debug("Transaction Begin,Connection Hashcode is {}", connection.hashCode());
             }
 
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }
@@ -145,9 +148,11 @@ public class DefaultTransactionManager implements TransactionManager {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Transaction close,Connection Hashcode is {}", connection.hashCode());
                 }
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex) {
                 throw new DataBaseAccessException(ex.getMessage());
-            } finally {
+            }
+            finally {
                 connectionHolder.setTransactionActive(false);
                 connectionHolder.removeConnection(dataSource);
                 TransactionSynchronizationManager.clear();
@@ -165,7 +170,8 @@ public class DefaultTransactionManager implements TransactionManager {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Transaction commit,Connection Hashcode is {}", connection.hashCode());
                 }
-            } else {
+            }
+            else {
                 connectionHolder.setCommitOnly(true);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Transaction commit status set {},the isNewTransaction status {}",
@@ -174,7 +180,8 @@ public class DefaultTransactionManager implements TransactionManager {
                 }
             }
 
-        } finally {
+        }
+        finally {
             close(transactionStatus);
         }
     }
@@ -188,7 +195,8 @@ public class DefaultTransactionManager implements TransactionManager {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Transaction rollback,Connection Hashcode is {}", connection.hashCode());
                 }
-            } else {
+            }
+            else {
                 connectionHolder.setRollbackOnly(true);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Transaction rollback status set {},the isNewTransaction status {}",
@@ -197,7 +205,8 @@ public class DefaultTransactionManager implements TransactionManager {
                 }
             }
 
-        } finally {
+        }
+        finally {
             close(transactionStatus);
         }
     }

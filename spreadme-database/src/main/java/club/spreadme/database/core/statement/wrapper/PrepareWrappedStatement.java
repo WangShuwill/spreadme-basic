@@ -20,7 +20,6 @@ import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.util.JdbcUtil;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +53,7 @@ public class PrepareWrappedStatement implements WrappedStatement {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         JdbcUtil.closeStatement(preparedStatement);
     }
 

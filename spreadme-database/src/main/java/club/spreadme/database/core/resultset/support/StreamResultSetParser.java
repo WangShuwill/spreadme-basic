@@ -53,7 +53,8 @@ public class StreamResultSetParser<T> implements Spliterator<T>, ResultSetParser
             }
             action.accept(rowMapper.mapping(resultSet));
             return true;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }

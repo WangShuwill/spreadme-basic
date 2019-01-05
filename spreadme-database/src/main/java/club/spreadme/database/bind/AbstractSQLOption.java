@@ -63,9 +63,11 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             Type type = methodSignature.getActualTypes()[0];
             return CommonDao.getInstance().use(executor).query(sql, new BeanRowMapper<>((Class<?>) type), values);
 
-        } else if (methodSignature.isReturnsMap()) {
+        }
+        else if (methodSignature.isReturnsMap()) {
             return CommonDao.getInstance().use(executor).queryOne(sql, values);
-        } else {
+        }
+        else {
             return CommonDao.getInstance().use(executor).queryOne(sql, new BeanRowMapper<>(methodSignature.getReturnType()), values);
         }
     }
@@ -100,7 +102,8 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             }
             return CommonDao.getInstance().use(executor).execute(sqlStatement.getSql(), sqlStatement.getValues());
 
-        } else {
+        }
+        else {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
             }
@@ -119,7 +122,8 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
                 processor.setParameters(values);
                 processor.setDaoMethodName(daoMethodName);
                 return StringUtil.isBlank(sql) ? sql : processor.process();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 throw new DAOMehtodException("can not instance sqlprocessor," + ex.getMessage());
             }
         }

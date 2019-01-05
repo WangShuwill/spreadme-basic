@@ -50,13 +50,15 @@ public class CachingExecutor extends AbstractExecutor {
             cache.clear();
             return cachingExecute(builder, action, config);
 
-        } else {
+        }
+        else {
             CacheKey cacheKey = builder.createCachekey();
 
             Object cacheObject = cache.getOject(cacheKey);
             if (cacheObject != null) {
                 return (T) cacheObject;
-            } else {
+            }
+            else {
                 T object = cachingExecute(builder, action, config);
                 cache.putObject(cacheKey, object);
                 return object;

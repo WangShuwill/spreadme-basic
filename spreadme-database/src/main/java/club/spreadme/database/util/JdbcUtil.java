@@ -50,7 +50,8 @@ public abstract class JdbcUtil {
             Connection connection = dataSource.getConnection();
             databaseMetaData = connection.getMetaData();
             return connection;
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new DataBaseAccessException(e.getMessage());
         }
     }
@@ -64,7 +65,8 @@ public abstract class JdbcUtil {
     public static void closeConnection(Connection connection, DataSource dataSource) {
         try {
             doCloseConnection(connection, dataSource);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }
@@ -102,7 +104,8 @@ public abstract class JdbcUtil {
         if (stmt != null) {
             try {
                 stmt.close();
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex) {
                 throw new DataBaseAccessException(ex.getMessage());
             }
         }
@@ -117,7 +120,8 @@ public abstract class JdbcUtil {
         if (rs != null) {
             try {
                 rs.close();
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex) {
                 throw new DataBaseAccessException(ex.getMessage());
             }
         }
@@ -127,7 +131,8 @@ public abstract class JdbcUtil {
         if (wrappedStatement != null) {
             try {
                 wrappedStatement.close();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 throw new DataBaseAccessException(ex.getMessage());
             }
         }
@@ -143,7 +148,8 @@ public abstract class JdbcUtil {
     public static String getColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) {
         try {
             return resultSetMetaData.getColumnLabel(columnIndex);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }
@@ -158,7 +164,8 @@ public abstract class JdbcUtil {
     public static Object getResultSetValue(ResultSet rs, int index) {
         try {
             return rs.getObject(index);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }

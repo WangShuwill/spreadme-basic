@@ -49,10 +49,12 @@ public class MethodSignature {
 
         if (resolveReturnType instanceof Class<?>) {
             this.returnType = (Class<?>) resolveReturnType;
-        } else if (resolveReturnType instanceof ParameterizedType) {
+        }
+        else if (resolveReturnType instanceof ParameterizedType) {
             this.returnType = (Class<?>) ((ParameterizedType) resolveReturnType).getRawType();
             this.actualTypes = ((ParameterizedType) resolveReturnType).getActualTypeArguments();
-        } else {
+        }
+        else {
             this.returnType = method.getReturnType();
         }
 

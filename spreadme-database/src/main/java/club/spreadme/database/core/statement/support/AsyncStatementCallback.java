@@ -42,9 +42,11 @@ public class AsyncStatementCallback<T> implements StatementCallback<CompletableF
         return CompletableFuture.supplyAsync(() -> {
             try {
                 return callback.executeStatement(wrappedStatement);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new DataBaseAccessException(e.getMessage());
-            } finally {
+            }
+            finally {
                 JdbcUtil.closeWrappedStatement(wrappedStatement);
                 JdbcUtil.closeConnection(connection, dataSource);
             }

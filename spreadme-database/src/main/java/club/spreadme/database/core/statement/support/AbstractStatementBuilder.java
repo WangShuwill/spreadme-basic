@@ -50,7 +50,7 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     public WrappedStatement build(StatementConfig statementConfig) throws SQLException {
         Statement statement = createStatement(connection);
         prepare(statement, statementConfig);
-        statementInfo  = parseStatement(statement);
+        statementInfo = parseStatement(statement);
         return doBuild(statement);
     }
 
@@ -63,7 +63,8 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     public DatabaseMetaData getDatabaseMetaData() {
         try {
             return connection.getMetaData();
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             throw new DataBaseAccessException(ex.getMessage());
         }
     }

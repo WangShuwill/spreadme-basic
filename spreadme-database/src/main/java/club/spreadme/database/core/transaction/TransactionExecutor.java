@@ -45,7 +45,8 @@ public class TransactionExecutor {
         T result;
         try {
             result = transactionCallback.execute();
-        } catch (Throwable ex) {
+        }
+        catch (Throwable ex) {
             transactionManager.rollback(transactionStatus);
             throw ex;
         }

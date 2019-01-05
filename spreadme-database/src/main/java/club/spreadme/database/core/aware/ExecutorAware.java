@@ -16,7 +16,7 @@
 
 package club.spreadme.database.core.aware;
 
-public interface ExecutorAware {
+public interface ExecutorAware extends Aware {
 
 
 }

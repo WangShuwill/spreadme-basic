@@ -16,8 +16,10 @@
 
 package club.spreadme.database.core.resource;
 
+import java.io.Closeable;
+
 @FunctionalInterface
-public interface CloseHandler {
+public interface CloseHandler extends Closeable {
 
     void close();
 
