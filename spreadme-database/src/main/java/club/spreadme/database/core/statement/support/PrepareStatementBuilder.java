@@ -41,6 +41,11 @@ public class PrepareStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
+    public void setValues(Object[] values) {
+        this.parameters = values;
+    }
+
+    @Override
     public WrappedStatement doBuild(Statement statement) {
         return new PrepareWrappedStatement((PreparedStatement) statement);
     }
@@ -59,6 +64,11 @@ public class PrepareStatementBuilder extends AbstractStatementBuilder {
     @Override
     public String getSql() {
         return sql;
+    }
+
+    @Override
+    public Object[] getValues() {
+        return parameters;
     }
 
     @Override

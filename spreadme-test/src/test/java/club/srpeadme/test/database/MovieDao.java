@@ -19,6 +19,7 @@ package club.srpeadme.test.database;
 import club.spreadme.database.annotation.Param;
 import club.spreadme.database.annotation.Query;
 import club.spreadme.database.annotation.Transactional;
+import club.spreadme.database.plugin.paginator.Page;
 import club.srpeadme.test.domain.Movie;
 
 import java.util.List;
@@ -26,7 +27,11 @@ import java.util.List;
 public interface MovieDao {
 
     @Transactional
-    @Query("select * from movies where id = '${id}' and type = #{type} and rating = ${rating} ")
+    @Query(value = "select * from movies where id = '${id}' and type = #{type} and rating = ${rating}",
+            processor = MovieDaoPostProcessor.class)
     List<Movie> getMovieById(@Param("id") String id, String type, @Param("rating") Double rating);
+
+    @Query("select * from movies where primarytitle = #{primarytitle} and type = '${type}'")
+    List<Movie> getMoviesByName(String primarytitle, @Param("type") String type, Page<Movie> page);
 
 }

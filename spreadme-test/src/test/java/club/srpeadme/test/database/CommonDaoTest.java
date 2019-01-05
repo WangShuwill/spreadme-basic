@@ -19,6 +19,8 @@ package club.srpeadme.test.database;
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.dao.CommonDao;
+import club.spreadme.database.plugin.paginator.Page;
+import club.spreadme.database.plugin.paginator.Paginator;
 import club.srpeadme.test.domain.Movie;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +46,7 @@ public class CommonDaoTest {
     public void initTesEnv() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         commonDao = CommonDao.getInstance().use(dataSource);
+        commonDao.addInterceptor(new Paginator());
     }
 
     @Test
@@ -77,5 +80,12 @@ public class CommonDaoTest {
     public void testDao() {
         MovieDao movieDao = commonDao.getDao(MovieDao.class);
         LOGGER.info(movieDao.getMovieById("tt0468569", "movie", 9.0).toString());
+        LOGGER.info(movieDao.getMovieById("tt0468569", "movie", 9.9).toString());
+    }
+
+    @Test
+    public void testPagination() {
+        MovieDao movieDao = commonDao.getDao(MovieDao.class);
+        LOGGER.info(movieDao.getMoviesByName("The Dark Knight", "movie", new Page<Movie>().setPageSize(5).setPageNum(1)).toString());
     }
 }

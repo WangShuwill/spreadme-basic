@@ -16,14 +16,10 @@
 
 package club.spreadme.database.annotation;
 
+import club.spreadme.database.parser.grammar.SQLStatement;
+
 public interface PostProcessor {
 
-    void setSql(String sql);
-
-    void setParameters(Object parameters);
-
-    void setDaoMethodName(String methodName);
-
-    String process();
+    SQLStatement process(SQLStatement sqlStatement);
 
 }

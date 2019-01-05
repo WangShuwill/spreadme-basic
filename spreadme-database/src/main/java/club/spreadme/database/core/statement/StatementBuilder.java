@@ -49,6 +49,13 @@ public interface StatementBuilder extends SQLProvider, CachekeyBuiler {
     void setSql(String sql);
 
     /**
+     * set value for statement
+     *
+     * @param values values
+     */
+    void setValues(Object[] values);
+
+    /**
      * build by connection,sql,Statementconfgi...
      *
      * @param config Statement config

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package club.spreadme.database.core.cache;
-
-import java.util.concurrent.locks.ReentrantLock;
+package club.spreadme.database.plugin;
 
 /**
  * @author Wangshuwei
- * @since 2018-7-31
+ * @since 2018-8-13
  */
-public interface Cache {
+public interface Interceptor {
 
-    String getId();
+    Object intercept(Invocation invocation) throws Throwable;
 
-    void put(Object key, Object value);
+    Object plugin(Object target);
 
-    Object get(Object key);
-
-    Object remove(Object key);
-
-    void clear();
-
-    int getSize();
-
-    ReentrantLock getReadWriteLock();
 }

@@ -36,6 +36,8 @@ import club.spreadme.database.parser.SQLParser;
 import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
+import club.spreadme.database.plugin.Interceptor;
+import club.spreadme.database.plugin.PluginHandler;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -77,6 +79,12 @@ public class CommonDao extends AbstractDao {
 
     public <T> T getDao(Class<T> clazz) {
         return newInstance(clazz);
+    }
+
+    public void addInterceptor(Interceptor... interceptors) {
+        for (Interceptor interceptor : interceptors) {
+            PluginHandler.INTERCEPTOR_CHAIN.addInterceptor(interceptor);
+        }
     }
 
     public TransactionExecutor getTransactionExecutor() {

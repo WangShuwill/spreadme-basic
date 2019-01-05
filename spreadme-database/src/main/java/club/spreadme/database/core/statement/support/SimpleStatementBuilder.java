@@ -42,6 +42,11 @@ public class SimpleStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
+    public void setValues(Object[] values) {
+
+    }
+
+    @Override
     public WrappedStatement doBuild(Statement statement) {
         return new SimpleWrappedStatement(statement, sql);
     }
@@ -54,6 +59,11 @@ public class SimpleStatementBuilder extends AbstractStatementBuilder {
     @Override
     public String getSql() {
         return sql;
+    }
+
+    @Override
+    public Object[] getValues() {
+        return new Object[0];
     }
 
     @Override

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package club.spreadme.database.core.cache;
+package club.spreadme.database.plugin.annotation;
 
-import java.util.concurrent.locks.ReentrantLock;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Wangshuwei
- * @since 2018-7-31
+ * @since 2018-8-13
  */
-public interface Cache {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({})
+public @interface Signature {
 
-    String getId();
+    Class<?> type();
 
-    void put(Object key, Object value);
+    String method();
 
-    Object get(Object key);
+    Class<?>[] args();
 
-    Object remove(Object key);
-
-    void clear();
-
-    int getSize();
-
-    ReentrantLock getReadWriteLock();
 }

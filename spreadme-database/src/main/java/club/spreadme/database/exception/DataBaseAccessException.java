@@ -16,6 +16,11 @@
 
 package club.spreadme.database.exception;
 
+import club.spreadme.database.core.aware.SQLProvider;
+import club.spreadme.database.plugin.Plugin;
+
+import java.lang.reflect.Proxy;
+
 /**
  * @author Wangshuwei
  * @since 2018-6-21
@@ -28,7 +33,17 @@ public class DataBaseAccessException extends RuntimeException {
         super(reason);
     }
 
-    public DataBaseAccessException(String errorSql, Exception ex) {
-        super(errorSql + ex);
+    public DataBaseAccessException(SQLProvider sqlProvider, Exception ex) {
+        super(getErrorSql(sqlProvider) + "\n" + ex);
+    }
+
+    protected static String getErrorSql(Object object) {
+        Object target = object;
+        if (Proxy.isProxyClass(object.getClass())) {
+            // compatible the plugin proxy
+            target = Plugin.getTarget(object);
+        }
+        SQLProvider sqlProvider = target instanceof SQLProvider ? (SQLProvider) target : null;
+        return sqlProvider == null ? "" : sqlProvider.getSql();
     }
 }

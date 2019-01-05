@@ -26,6 +26,8 @@ public interface SQLProvider extends Aware {
 
     String getSql();
 
+    Object[] getValues();
+
     Connection getConnection();
 
     DatabaseMetaData getDatabaseMetaData();

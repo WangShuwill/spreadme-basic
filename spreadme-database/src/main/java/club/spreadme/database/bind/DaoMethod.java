@@ -37,9 +37,6 @@ public class DaoMethod extends AbstractDaoMethod {
     private MethodSignature methodSignature;
     private SQLCommand sqlCommand;
 
-    public DaoMethod() {
-    }
-
     public <T> DaoMethod(final Class<T> daoInterface, final Method method, final Object[] values, final Executor executor) {
         this.executor = executor;
         this.methodSignature = getMethodSignature(daoInterface, method, values);

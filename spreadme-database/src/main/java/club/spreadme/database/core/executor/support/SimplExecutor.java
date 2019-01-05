@@ -48,8 +48,7 @@ public class SimplExecutor extends AbstractExecutor {
             return action.executeStatement(wrappedStatement);
         }
         catch (Exception ex) {
-            String errorSql = builder.getSql();
-            throw new DataBaseAccessException(errorSql, ex);
+            throw new DataBaseAccessException(builder, ex);
         }
         finally {
             ResourceHandler.closeWrappedStatement(wrappedStatement);

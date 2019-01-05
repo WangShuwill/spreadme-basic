@@ -66,8 +66,7 @@ public class StreamExecutor extends AbstractExecutor {
         catch (Exception ex) {
             ResourceHandler.closeWrappedStatement(wrappedStatement);
             ResourceHandler.closeConnection(connection, dataSource);
-            String errorSql = builder.getSql();
-            throw new DataBaseAccessException(errorSql, ex);
+            throw new DataBaseAccessException(builder, ex);
         }
     }
 

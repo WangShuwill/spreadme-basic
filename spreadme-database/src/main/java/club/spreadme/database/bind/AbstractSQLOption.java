@@ -35,6 +35,8 @@ import club.spreadme.database.parser.support.AbstractSQLParameterParser;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.spreadme.database.parser.support.SimpleSQLParser;
+import club.spreadme.database.plugin.InterceptorChain;
+import club.spreadme.database.plugin.PluginHandler;
 import club.spreadme.lang.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,28 +45,28 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements SQLOption {
+public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements SQLOption, PluginHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSQLOption.class);
 
     @Override
     @SuppressWarnings("unchecked")
     public Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
-        String sql = sqlCommand.getSql();
-        Object[] values = methodSignature.getValues();
 
+        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
+        SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
+
+        // post process sqlstatement
         Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
-        sql = processSql(sql, methodSignature, processorClass);
+        sqlStatement = postProcessSQLStatement(sqlStatement, processorClass);
 
+        String sql = sqlStatement.getSql();
         if (StringUtil.isBlank(sql)) {
             throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
         }
-
-        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
-        SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
-        sql = sqlStatement.getSql();
-        values = sqlStatement.getValues();
+        Object[] values = sqlStatement.getValues();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("parse sql {}, values {}", sql, Arrays.toString(values));
         }
@@ -87,18 +89,9 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
     @Override
     public Object update(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
-        String sql = sqlCommand.getSql();
-        Object[] values = methodSignature.getValues();
 
-        Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
-        sql = processSql(sql, methodSignature, processorClass);
-
-        if (StringUtil.isBlank(sql)) {
-            throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
-        }
-
-        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), values);
-        SQLStatement preSqlStatement = new RoutingSQLParser(new SimpleSQLParser(sql, sqlParameters)).parse();
+        SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
+        SQLStatement preSqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
 
         if (!methodSignature.isAllPrimaryParamter()) {
             if (methodSignature.getMethod().getParameterCount() > 1) {
@@ -110,6 +103,14 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             SQLStatement sqlStatement = new RoutingSQLParser(new BeanSQLParser(preSqlStatement.getValues()[0],
                     sqlCommand.getSqlOptionType())).parse();
 
+            // post process sqlstatement
+            Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
+            sqlStatement = postProcessSQLStatement(sqlStatement, processorClass);
+
+            if (StringUtil.isBlank(sqlStatement.getSql())) {
+                throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
+            }
+
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
             }
@@ -117,6 +118,14 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
             return update(statementBuilder, executor);
         }
         else {
+            // post process sqlstatement
+            Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
+            preSqlStatement = postProcessSQLStatement(preSqlStatement, processorClass);
+
+            if (StringUtil.isBlank(preSqlStatement.getSql())) {
+                throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
+            }
+
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
             }
@@ -126,34 +135,35 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
     }
 
-    protected String processSql(String sql, MethodSignature methodSignature, Class<? extends PostProcessor> processorClass) {
+    @Override
+    public InterceptorChain getInterceptorChain() {
+        return PluginHandler.INTERCEPTOR_CHAIN;
+    }
+
+    protected SQLStatement postProcessSQLStatement(SQLStatement sqlStatement, Class<? extends PostProcessor> processorClass) {
         if (processorClass != null && !processorClass.isInterface() && processorClass.getModifiers() != Modifier.ABSTRACT) {
-            Object values = methodSignature.getValues();
-            String daoMethodName = methodSignature.getMethodName();
             try {
                 PostProcessor processor = processorClass.newInstance();
-                processor.setSql(sql);
-                processor.setParameters(values);
-                processor.setDaoMethodName(daoMethodName);
-                return StringUtil.isBlank(sql) ? sql : processor.process();
+                return Optional.ofNullable(processor.process(sqlStatement)).orElse(sqlStatement);
             }
             catch (Exception ex) {
                 throw new DAOMehtodException("can not instance sqlprocessor," + ex.getMessage());
             }
         }
 
-        return sql;
+        return sqlStatement;
     }
 
     protected StatementBuilder getStatementBuilder(String sql, Object[] values, ConcurMode concurMode) {
-        return new PrepareStatementBuilder(sql, values, concurMode);
+        StatementBuilder builder = new PrepareStatementBuilder(sql, values, concurMode);
+        return (StatementBuilder) getInterceptorChain().pluginAll(builder);
     }
 
     protected <T> List<T> query(StatementBuilder builder, final RowMapper<T> rowMapper, int rowsExpected, Executor executor) {
         return executor.execute(builder, new QueryStatementCallback<>(new DefaultResultSetParser<>(rowMapper, rowsExpected)));
     }
 
-    protected Integer update(StatementBuilder statementBuilder, Executor executor) {
-        return executor.execute(statementBuilder, new UpdateStatementCallback());
+    protected Integer update(StatementBuilder builder, Executor executor) {
+        return executor.execute(builder, new UpdateStatementCallback());
     }
 }

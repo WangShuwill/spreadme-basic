@@ -20,13 +20,9 @@ import java.lang.reflect.Method;
 
 public interface DaoMethodRegiatrar {
 
-    void register(Object key, DaoMethod daoMethod);
-
     void register(Method method, MethodSignature methodSignature);
 
     void register(Method method, SQLCommand sqlCommand);
-
-    DaoMethod getDaoMethod(Object key);
 
     MethodSignature getMethodSignature(Class<?> daoInterface, Method method, Object[] values);
 

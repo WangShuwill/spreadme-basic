@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package club.spreadme.database.core.cache;
-
-import java.util.concurrent.locks.ReentrantLock;
+package club.spreadme.database.exception;
 
 /**
  * @author Wangshuwei
- * @since 2018-7-31
+ * @since 2018-8-13
  */
-public interface Cache {
+public class PluginException extends RuntimeException {
 
-    String getId();
+    private static final long serialVersionUID = 5242735517593135644L;
 
-    void put(Object key, Object value);
-
-    Object get(Object key);
-
-    Object remove(Object key);
-
-    void clear();
-
-    int getSize();
-
-    ReentrantLock getReadWriteLock();
+    public PluginException(String reason) {
+        super(reason);
+    }
 }

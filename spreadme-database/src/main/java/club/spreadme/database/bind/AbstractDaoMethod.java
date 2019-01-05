@@ -16,49 +16,41 @@
 
 package club.spreadme.database.bind;
 
+import club.spreadme.database.core.cache.Cache;
+import club.spreadme.database.core.cache.PerpetualCache;
+
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractDaoMethod extends AbstractSQLOption implements DaoMethodRegiatrar {
 
-    private Map<Object, DaoMethod> daoMethodMap = new ConcurrentHashMap<>(256);
-    private Map<Object, MethodSignature> methodSignatureMap = new ConcurrentHashMap<>(256);
-    private Map<Object, SQLCommand> sqlCommandMap = new ConcurrentHashMap<>(256);
-
-    @Override
-    public void register(Object key, DaoMethod daoMethod) {
-        daoMethodMap.put(key, daoMethod);
-    }
+    private static Cache mscache = new PerpetualCache("MethodSignature");
+    private static Cache sdcache = new PerpetualCache("SQLCommand");
 
     @Override
     public void register(Method method, MethodSignature methodSignature) {
-        methodSignatureMap.put(method, methodSignature);
+        mscache.put(method, methodSignature);
     }
 
     @Override
     public void register(Method method, SQLCommand sqlCommand) {
-        sqlCommandMap.put(method, sqlCommand);
-    }
-
-    @Override
-    public DaoMethod getDaoMethod(Object key) {
-        return daoMethodMap.get(key);
+        sdcache.put(method, sqlCommand);
     }
 
     @Override
     public MethodSignature getMethodSignature(Class<?> daoInterface, Method method, Object[] values) {
-        MethodSignature methodSignature = methodSignatureMap.get(method);
+        MethodSignature methodSignature = (MethodSignature) mscache.get(method);
         if (methodSignature == null) {
             methodSignature = new MethodSignature(daoInterface, method, values);
             register(method, methodSignature);
         }
+        // reset method values
+        methodSignature.setValues(values);
         return methodSignature;
     }
 
     @Override
     public SQLCommand getSQLCommand(Method method) {
-        SQLCommand sqlCommand = sqlCommandMap.get(method);
+        SQLCommand sqlCommand = (SQLCommand) sdcache.get(method);
         if (sqlCommand == null) {
             sqlCommand = new SQLCommand(method);
             register(method, sqlCommand);
