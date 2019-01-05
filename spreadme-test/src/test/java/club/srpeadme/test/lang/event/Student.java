@@ -43,7 +43,8 @@ public class Student implements IEventListener<HomeworkEvent> {
         Teacher teacher = (Teacher) event.getSource();
         try {
             Thread.sleep(handleTime);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.printf("学生%s被通知%s布置了作业 \n", this.name, teacher.getName());
