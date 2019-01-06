@@ -12,6 +12,7 @@
         <module>spreadme-lang</module>
         <module>spreadme-test</module>
         <module>spreadme-database</module>
+        <module>spreadme-util</module>
     </modules>
 
     <name>spreadme-frame</name>
