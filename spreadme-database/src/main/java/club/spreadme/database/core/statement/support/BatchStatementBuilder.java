@@ -41,11 +41,6 @@ public class BatchStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
-    public void setValues(Object[] values) {
-
-    }
-
-    @Override
     public WrappedStatement doBuild(Statement statement) {
         return new PrepareWrappedStatement((PreparedStatement) statement);
     }
@@ -67,11 +62,6 @@ public class BatchStatementBuilder extends AbstractStatementBuilder {
     @Override
     public String getSql() {
         return sql;
-    }
-
-    @Override
-    public Object[] getValues() {
-        return parameterss;
     }
 
     @Override

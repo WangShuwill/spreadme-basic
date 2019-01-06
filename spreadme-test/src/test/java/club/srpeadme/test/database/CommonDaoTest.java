@@ -57,7 +57,7 @@ public class CommonDaoTest {
 
     @Test
     public void testStreamDao() {
-        try (Stream<Record> stream = commonDao.withStream().query("select * from movies order by id desc")) {
+        try (Stream<Record> stream = commonDao.withStream().fetchSize(Integer.MIN_VALUE).query("select * from movies order by id desc")) {
             List<Record> records = stream.limit(10).collect(Collectors.toList());
             records.forEach(item -> LOGGER.info(item.toString()));
         }

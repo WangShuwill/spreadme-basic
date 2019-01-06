@@ -23,6 +23,7 @@ import club.spreadme.database.core.executor.support.SimplExecutor;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.RecordRowMapper;
+import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
 import club.spreadme.database.core.statement.support.UpdateStatementCallback;
@@ -127,11 +128,13 @@ public class CommonDao extends AbstractDao {
     }
 
     public int execute(String sql) {
-        return executor.execute(new SimpleStatementBuilder(sql, ConcurMode.UPDATABLE), new UpdateStatementCallback());
+        StatementBuilder builder = getPorxyStatementBuilder(new SimpleStatementBuilder(sql, ConcurMode.UPDATABLE));
+        return executor.execute(builder, new UpdateStatementCallback());
     }
 
     public int execute(String sql, Object... objects) {
-        return executor.execute(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE), new UpdateStatementCallback());
+        StatementBuilder builder = getPorxyStatementBuilder(new PrepareStatementBuilder(sql, objects, ConcurMode.UPDATABLE));
+        return executor.execute(builder, new UpdateStatementCallback());
     }
 
     public int update(Object bean) {

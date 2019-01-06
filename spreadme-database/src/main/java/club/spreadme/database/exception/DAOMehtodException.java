@@ -28,4 +28,8 @@ public class DAOMehtodException extends RuntimeException {
         super(reason);
     }
 
+    public DAOMehtodException(String reason, Throwable ex) {
+        super(reason, ex);
+    }
+
 }

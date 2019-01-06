@@ -21,16 +21,18 @@ import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
+import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.QueryStatementCallback;
 import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.plugin.PluginHandler;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-public abstract class AbstractDao {
+public abstract class AbstractDao implements PluginHandler {
 
     protected DataSource dataSource;
     protected Executor executor;
@@ -73,11 +75,15 @@ public abstract class AbstractDao {
 
     protected <T> T query(SimpleStatementBuilder builder, final ResultSetParser<T> parser) {
         Assert.notNull(parser, "ResultSetParser must not be null");
-        return executor.execute(builder, new QueryStatementCallback<>(parser));
+        return executor.execute(getPorxyStatementBuilder(builder), new QueryStatementCallback<>(parser));
     }
 
     protected <T> T query(PrepareStatementBuilder builder, final ResultSetParser<T> parser) {
         Assert.notNull(parser, "ResultSetParser must not be null");
-        return executor.execute(builder, new QueryStatementCallback<>(parser));
+        return executor.execute(getPorxyStatementBuilder(builder), new QueryStatementCallback<>(parser));
+    }
+
+    protected StatementBuilder getPorxyStatementBuilder(StatementBuilder builder) {
+        return (StatementBuilder) getInterceptorChain().pluginAll(builder);
     }
 }

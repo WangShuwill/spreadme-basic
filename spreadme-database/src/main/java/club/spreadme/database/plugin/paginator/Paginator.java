@@ -76,7 +76,9 @@ public class Paginator implements Interceptor {
             int limit = pagesize * (pagenum - 1);
             sql = generatePageSql(sql, dataBaseProductName, limit, pagesize);
             statementBuilder.setSql(sql);
-            statementBuilder.setValues(values.toArray());
+            if (values.size() > 0) {
+                statementBuilder.setValues(values.toArray());
+            }
         }
         return invocation.proceed();
     }

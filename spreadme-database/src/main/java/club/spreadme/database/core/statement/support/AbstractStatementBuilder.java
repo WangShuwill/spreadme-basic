@@ -47,6 +47,16 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     }
 
     @Override
+    public void setValues(Object[] values) {
+
+    }
+
+    @Override
+    public Object[] getValues() {
+        return new Object[0];
+    }
+
+    @Override
     public WrappedStatement build(StatementConfig statementConfig) throws SQLException {
         Statement statement = createStatement(connection);
         prepare(statement, statementConfig);

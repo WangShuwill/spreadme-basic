@@ -35,7 +35,6 @@ import club.spreadme.database.parser.support.AbstractSQLParameterParser;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.spreadme.database.parser.support.SimpleSQLParser;
-import club.spreadme.database.plugin.InterceptorChain;
 import club.spreadme.database.plugin.PluginHandler;
 import club.spreadme.lang.StringUtil;
 import org.slf4j.Logger;
@@ -135,11 +134,6 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
     }
 
-    @Override
-    public InterceptorChain getInterceptorChain() {
-        return PluginHandler.INTERCEPTOR_CHAIN;
-    }
-
     protected SQLStatement postProcessSQLStatement(SQLStatement sqlStatement, Class<? extends PostProcessor> processorClass) {
         if (processorClass != null && !processorClass.isInterface() && processorClass.getModifiers() != Modifier.ABSTRACT) {
             try {
@@ -147,7 +141,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
                 return Optional.ofNullable(processor.process(sqlStatement)).orElse(sqlStatement);
             }
             catch (Exception ex) {
-                throw new DAOMehtodException("can not instance sqlprocessor," + ex.getMessage());
+                throw new DAOMehtodException("can not instance sqlprocessor", ex);
             }
         }
 
@@ -156,6 +150,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
     protected StatementBuilder getStatementBuilder(String sql, Object[] values, ConcurMode concurMode) {
         StatementBuilder builder = new PrepareStatementBuilder(sql, values, concurMode);
+        // load plugin for statement builder
         return (StatementBuilder) getInterceptorChain().pluginAll(builder);
     }
 

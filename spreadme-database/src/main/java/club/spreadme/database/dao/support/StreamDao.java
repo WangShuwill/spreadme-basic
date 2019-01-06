@@ -19,6 +19,7 @@ package club.spreadme.database.dao.support;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.executor.support.StreamExecutor;
 import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.RecordRowMapper;
@@ -27,6 +28,7 @@ import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.StreamQueryStatementCallback;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.database.metadata.FetchDirection;
 
 import javax.sql.DataSource;
 import java.util.stream.Stream;
@@ -37,6 +39,14 @@ public class StreamDao {
 
     public StreamDao(DataSource dataSource) {
         this.executor = new StreamExecutor(dataSource);
+    }
+
+    public StreamDao fetchSize(int fetchSize) {
+        StatementConfig statementConfig = new StatementConfig();
+        statementConfig.setFetchDirection(FetchDirection.REVERSE);
+        statementConfig.setFetchSize(fetchSize);
+        this.executor.setStatementConfig(statementConfig);
+        return this;
     }
 
     public <T> Stream<Record> query(String sql, Object... objects) {

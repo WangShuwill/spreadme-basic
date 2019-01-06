@@ -33,8 +33,8 @@ public class DataBaseAccessException extends RuntimeException {
         super(reason);
     }
 
-    public DataBaseAccessException(SQLProvider sqlProvider, Exception ex) {
-        super(getErrorSql(sqlProvider) + "\n" + ex);
+    public DataBaseAccessException(SQLProvider sqlProvider, Throwable ex) {
+        super(getErrorSql(sqlProvider), ex);
     }
 
     protected static String getErrorSql(Object object) {

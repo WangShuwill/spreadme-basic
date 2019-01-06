@@ -20,6 +20,8 @@ public interface PluginHandler {
 
     InterceptorChain INTERCEPTOR_CHAIN = new InterceptorChain();
 
-    InterceptorChain getInterceptorChain();
+    default InterceptorChain getInterceptorChain() {
+        return INTERCEPTOR_CHAIN;
+    }
 
 }

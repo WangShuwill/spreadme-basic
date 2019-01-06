@@ -17,18 +17,17 @@
 package club.spreadme.database.core.executor.support;
 
 import club.spreadme.database.core.grammar.StatementConfig;
+import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.support.StreamQueryStatementCallback;
 import club.spreadme.database.exception.DataBaseAccessException;
-import club.spreadme.database.metadata.FetchDirection;
-import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.lang.Assert;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 public class StreamExecutor extends AbstractExecutor {
 
@@ -45,16 +44,11 @@ public class StreamExecutor extends AbstractExecutor {
         Connection connection = null;
         WrappedStatement wrappedStatement = null;
         try {
+            if (config == null) {
+                throw new SQLException("Statement config is null");
+            }
             connection = ResourceHandler.getConnection(dataSource);
             builder.setConnection(connection);
-            if (config == null) {
-                config = new StatementConfig();
-                DatabaseMetaData databaseMetaData = builder.getDatabaseMetaData();
-                String productName = databaseMetaData.getDatabaseProductName();
-                //TODO diffect database product is not same
-                config.setFetchSize(Integer.MIN_VALUE);
-                config.setFetchDirection(FetchDirection.REVERSE);
-            }
             wrappedStatement = builder.build(config);
             if (!StreamQueryStatementCallback.class.equals(action.getClass())) {
                 throw new DataBaseAccessException("The StatementCallback is not stream");
