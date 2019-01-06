@@ -14,16 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.bind;
+package club.spreadme.util;
 
-import club.spreadme.database.bind.support.MethodSignature;
-import club.spreadme.database.bind.support.SQLCommand;
-import club.spreadme.database.core.executor.Executor;
-
-public interface SQLOption {
-
-    Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
-
-    Object update(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
-
+public abstract class WebUtil {
 }

@@ -17,7 +17,7 @@
 package club.spreadme.database.bind.support;
 
 import club.spreadme.database.annotation.PostProcessor;
-import club.spreadme.database.bind.SQLOption;
+import club.spreadme.database.bind.DatabaseOption;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.RowMapper;
@@ -47,7 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements SQLOption, PluginHandler {
+public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements DatabaseOption, PluginHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSQLOption.class);
 
