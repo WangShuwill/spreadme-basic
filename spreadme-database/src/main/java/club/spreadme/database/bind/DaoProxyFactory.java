@@ -33,12 +33,12 @@ public class DaoProxyFactory<T> {
     }
 
     @SuppressWarnings("unchecked")
-    protected T newInstance(DaoProxy<T> iDaoProxy) {
-        return (T) Proxy.newProxyInstance(daoInterfance.getClassLoader(), new Class[]{daoInterfance}, iDaoProxy);
+    protected T newInstance(DaoInvocationHandler<T> invocationHandler) {
+        return (T) Proxy.newProxyInstance(daoInterfance.getClassLoader(), new Class[]{daoInterfance}, invocationHandler);
     }
 
     public T newInstance(Executor executor) {
-        final DaoProxy<T> iDaoProxy = new DaoProxy<>(daoInterfance, executor);
+        final DaoInvocationHandler<T> iDaoProxy = new DaoInvocationHandler<>(daoInterfance, executor);
         return newInstance(iDaoProxy);
     }
 }

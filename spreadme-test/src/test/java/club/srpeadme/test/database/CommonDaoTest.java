@@ -21,6 +21,7 @@ import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;
+import club.spreadme.database.plugin.paginator.dialect.MySQLPaginationDialect;
 import club.srpeadme.test.domain.Movie;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,9 @@ public class CommonDaoTest {
     public void initTesEnv() {
         DataSource dataSource = new SpreadDataSource(URL, USERNAME, PASSWORD);
         commonDao = CommonDao.getInstance().use(dataSource);
-        commonDao.addInterceptor(new Paginator());
+        Paginator paginator = new Paginator();
+        paginator.addDialect(MySQLPaginationDialect.class);
+        commonDao.addInterceptor(paginator);
     }
 
     @Test

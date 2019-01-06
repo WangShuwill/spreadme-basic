@@ -18,18 +18,16 @@ package club.spreadme.database.plugin.paginator;
 
 import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
+import club.spreadme.database.exception.PluginException;
 import club.spreadme.database.plugin.Interceptor;
 import club.spreadme.database.plugin.Invocation;
 import club.spreadme.database.plugin.Plugin;
 import club.spreadme.database.plugin.annotation.Intercepts;
 import club.spreadme.database.plugin.annotation.Signature;
-import club.spreadme.database.plugin.paginator.dialect.MySQLPaginationDialect;
-import club.spreadme.database.plugin.paginator.dialect.OraclePaginationDialect;
 import club.spreadme.database.plugin.paginator.dialect.PaginationDialect;
 
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +43,7 @@ public class Paginator implements Interceptor {
     private List<Class<? extends PaginationDialect>> paginationDialects = new ArrayList<>();
 
     public Paginator() {
-        paginationDialects.addAll(Arrays.asList(MySQLPaginationDialect.class, OraclePaginationDialect.class));
+
     }
 
     public Paginator(Class<? extends PaginationDialect>[] paginationDialects) {
@@ -74,6 +72,9 @@ public class Paginator implements Interceptor {
         if (page != null) {
             int pagesize = page.getPageSize(), pagenum = page.getPageNum();
             int limit = pagesize * (pagenum - 1);
+            if (paginationDialects.size() < 1) {
+                throw new PluginException("No pagination dialog");
+            }
             sql = generatePageSql(sql, dataBaseProductName, limit, pagesize);
             statementBuilder.setSql(sql);
             if (values.size() > 0) {

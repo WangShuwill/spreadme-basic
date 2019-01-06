@@ -16,8 +16,6 @@
 
 package club.spreadme.database.plugin.paginator;
 
-import club.spreadme.database.metadata.SpeicalType;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,7 +23,7 @@ import java.util.List;
  * @author Wangshuwei
  * @since 2018-6-26
  */
-public class Page<T> implements SpeicalType, Serializable {
+public class Page<T> implements Serializable {
 
     private static final long serialVersionUID = 3552956183543557566L;
 

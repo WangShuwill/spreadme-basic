@@ -24,15 +24,15 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class DaoProxy<T> implements InvocationHandler, Serializable {
+public class DaoInvocationHandler<T> implements InvocationHandler, Serializable {
 
     private static final long serialVersionUID = 8096301565159000631L;
-    private static Logger LOGGER = LoggerFactory.getLogger(DaoProxy.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(DaoInvocationHandler.class);
 
     private final Class<T> daoInterface;
     private final Executor executor;
 
-    public DaoProxy(Class<T> daoInterface, Executor executor) {
+    public DaoInvocationHandler(Class<T> daoInterface, Executor executor) {
         this.daoInterface = daoInterface;
         this.executor = executor;
     }
