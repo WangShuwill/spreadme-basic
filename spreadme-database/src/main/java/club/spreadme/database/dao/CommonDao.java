@@ -16,7 +16,7 @@
 
 package club.spreadme.database.dao;
 
-import club.spreadme.database.core.cache.Cache;
+import club.spreadme.database.bind.DaoProxyFactory;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.executor.support.CachingExecutor;
 import club.spreadme.database.core.executor.support.SimplExecutor;
@@ -38,6 +38,7 @@ import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.spreadme.database.plugin.Interceptor;
+import club.spreadme.lang.cache.Cache;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -78,7 +79,7 @@ public class CommonDao extends AbstractDao {
     }
 
     public <T> T getDao(Class<T> clazz) {
-        return newInstance(clazz);
+        return DaoProxyFactory.get(clazz, this.executor);
     }
 
     public void addInterceptor(Interceptor... interceptors) {

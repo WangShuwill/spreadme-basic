@@ -17,15 +17,10 @@
 package club.spreadme.database.bind.support;
 
 import club.spreadme.database.bind.DaoMethodRegiatrar;
-import club.spreadme.database.core.cache.Cache;
-import club.spreadme.database.core.cache.PerpetualCache;
 
 import java.lang.reflect.Method;
 
-public abstract class AbstractDaoMethod extends AbstractSQLOption implements DaoMethodRegiatrar {
-
-    private static Cache mscache = new PerpetualCache("MethodSignature");
-    private static Cache sdcache = new PerpetualCache("SQLCommand");
+public abstract class AbstractDaoMethodContext extends AbstractSQLOption implements DaoMethodRegiatrar {
 
     @Override
     public void register(Method method, MethodSignature methodSignature) {
@@ -39,7 +34,7 @@ public abstract class AbstractDaoMethod extends AbstractSQLOption implements Dao
 
     @Override
     public MethodSignature getMethodSignature(Class<?> daoInterface, Method method, Object[] values) {
-        MethodSignature methodSignature = (MethodSignature) mscache.get(method);
+        MethodSignature methodSignature = mscache.get(method, MethodSignature.class);
         if (methodSignature == null) {
             methodSignature = new MethodSignature(daoInterface, method, values);
             register(method, methodSignature);
@@ -51,7 +46,7 @@ public abstract class AbstractDaoMethod extends AbstractSQLOption implements Dao
 
     @Override
     public SQLCommand getSQLCommand(Method method) {
-        SQLCommand sqlCommand = (SQLCommand) sdcache.get(method);
+        SQLCommand sqlCommand = sdcache.get(method, SQLCommand.class);
         if (sqlCommand == null) {
             sqlCommand = new SQLCommand(method);
             register(method, sqlCommand);

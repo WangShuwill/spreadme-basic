@@ -17,21 +17,20 @@
 package club.spreadme.database.bind;
 
 import club.spreadme.database.annotation.Transactional;
+import club.spreadme.database.bind.support.AbstractDaoMethodContext;
+import club.spreadme.database.bind.support.MethodSignature;
+import club.spreadme.database.bind.support.SQLCommand;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.transaction.Transaction;
 import club.spreadme.database.core.transaction.TransactionExecutor;
 import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.metadata.TransactionIsolationLevel;
 import club.spreadme.lang.Reflection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
 
-public class DaoMethod extends AbstractDaoMethod {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DaoMethod.class);
+public class DaoMethod extends AbstractDaoMethodContext {
 
     private Executor executor;
     private MethodSignature methodSignature;
@@ -43,38 +42,33 @@ public class DaoMethod extends AbstractDaoMethod {
         this.sqlCommand = getSQLCommand(method);
     }
 
-    public Object execute() {
+    public Object invoke() {
         Transactional transactional = Reflection.getAnnotation(this.methodSignature.getMethod(), Transactional.class);
-        if (transactional != null) {
-            return doExecuteWithTx(transactional);
-        }
-        else {
-            return doExecute();
-        }
+        return transactional != null ? doInvoke(transactional) : doInvoke();
     }
 
-    private Object doExecuteWithTx(Transactional transactional) {
+    private Object doInvoke(Transactional transactional) {
         Transaction transaction = new Transaction();
         TransactionIsolationLevel isolationLevel = transactional.isolationLevel();
         boolean isReadOnly = transactional.isReadOnly();
         transaction.setIsolationLevel(isolationLevel).setReadOnly(isReadOnly);
         TransactionExecutor transactionExecutor = getTransactionExecutor(this.executor.getDataSource(), transaction);
-        return transactionExecutor.execute(this::doExecute);
+        return transactionExecutor.execute(this::doInvoke);
     }
 
-    private TransactionExecutor getTransactionExecutor(DataSource dataSource, Transaction transaction) {
-        TransactionExecutor transactionExecutor = new TransactionExecutor(dataSource);
-        transactionExecutor.setTransaction(transaction);
-        return transactionExecutor;
-    }
-
-    private Object doExecute() {
+    private Object doInvoke() {
         if (SQLOptionType.QUERY.equals(this.sqlCommand.getSqlOptionType())) {
             return query(this.methodSignature, this.sqlCommand, this.executor);
         }
         else {
             return update(this.methodSignature, this.sqlCommand, this.executor);
         }
+    }
+
+    private TransactionExecutor getTransactionExecutor(DataSource dataSource, Transaction transaction) {
+        TransactionExecutor transactionExecutor = new TransactionExecutor(dataSource);
+        transactionExecutor.setTransaction(transaction);
+        return transactionExecutor;
     }
 
 }

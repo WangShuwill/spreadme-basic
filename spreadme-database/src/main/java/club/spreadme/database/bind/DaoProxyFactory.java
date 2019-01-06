@@ -16,6 +16,7 @@
 
 package club.spreadme.database.bind;
 
+import club.spreadme.database.bind.support.DaoInvocationHandler;
 import club.spreadme.database.core.executor.Executor;
 
 import java.lang.reflect.Proxy;
@@ -26,19 +27,20 @@ import java.lang.reflect.Proxy;
  */
 public class DaoProxyFactory<T> {
 
-    private final Class<T> daoInterfance;
+    private final Class<T> daoInterface;
 
-    public DaoProxyFactory(Class<T> daoInterfance) {
-        this.daoInterfance = daoInterfance;
+    private DaoProxyFactory(Class<T> daoInterface) {
+        this.daoInterface = daoInterface;
+    }
+
+    public static <T> T get(Class<T> daoInterface, Executor executor) {
+        DaoProxyFactory<T> daoProxyFactory = new DaoProxyFactory<>(daoInterface);
+        return daoProxyFactory.newInstance(executor);
     }
 
     @SuppressWarnings("unchecked")
-    protected T newInstance(DaoInvocationHandler<T> invocationHandler) {
-        return (T) Proxy.newProxyInstance(daoInterfance.getClassLoader(), new Class[]{daoInterfance}, invocationHandler);
-    }
-
-    public T newInstance(Executor executor) {
-        final DaoInvocationHandler<T> iDaoProxy = new DaoInvocationHandler<>(daoInterfance, executor);
-        return newInstance(iDaoProxy);
+    protected T newInstance(Executor executor) {
+        final DaoInvocationHandler<T> invocationHandler = new DaoInvocationHandler<>(daoInterface, executor);
+        return (T) Proxy.newProxyInstance(daoInterface.getClassLoader(), new Class[]{daoInterface}, invocationHandler);
     }
 }

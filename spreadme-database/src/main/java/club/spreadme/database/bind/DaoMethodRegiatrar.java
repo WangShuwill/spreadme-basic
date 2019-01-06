@@ -16,9 +16,17 @@
 
 package club.spreadme.database.bind;
 
+import club.spreadme.database.bind.support.MethodSignature;
+import club.spreadme.database.bind.support.SQLCommand;
+import club.spreadme.database.core.cache.PerpetualCache;
+import club.spreadme.lang.cache.Cache;
+
 import java.lang.reflect.Method;
 
 public interface DaoMethodRegiatrar {
+
+    Cache mscache = new PerpetualCache("MethodSignature");
+    Cache sdcache = new PerpetualCache("SQLCommand");
 
     void register(Method method, MethodSignature methodSignature);
 

@@ -16,7 +16,6 @@
 
 package club.spreadme.database.dao.support;
 
-import club.spreadme.database.bind.DaoProxyFactory;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.resultset.ResultSetParser;
 import club.spreadme.database.core.resultset.RowMapper;
@@ -39,10 +38,6 @@ public abstract class AbstractDao implements PluginHandler {
 
     public AbstractDao() {
 
-    }
-
-    protected <T> T newInstance(Class<T> clazz) {
-        return new DaoProxyFactory<>(clazz).newInstance(executor);
     }
 
     protected <T> T queryOne(String sql, RowMapper<T> rowMapper) {

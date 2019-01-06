@@ -16,13 +16,13 @@
 
 package club.spreadme.database.core.executor.support;
 
-import club.spreadme.database.core.cache.Cache;
 import club.spreadme.database.core.cache.CacheKey;
 import club.spreadme.database.core.executor.Executor;
 import club.spreadme.database.core.grammar.StatementConfig;
 import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.StatementCallback;
 import club.spreadme.database.metadata.ConcurMode;
+import club.spreadme.lang.cache.Cache;
 
 import javax.sql.DataSource;
 
@@ -54,7 +54,7 @@ public class CachingExecutor extends AbstractExecutor {
         else {
             CacheKey cacheKey = builder.createCachekey();
 
-            Object cacheObject = cache.get(cacheKey);
+            Object cacheObject = cache.get(cacheKey).get();
             if (cacheObject != null) {
                 return (T) cacheObject;
             }

@@ -16,74 +16,15 @@
 
 package club.spreadme.database.core.cache;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
+import club.spreadme.lang.cache.support.ConcurrentMapCache;
 
 /**
  * @author Wangshuwei
  * @since 2018-8-1
  */
-public class PerpetualCache implements Cache {
+public class PerpetualCache extends ConcurrentMapCache {
 
-    private Map<Object, Object> cache = new ConcurrentHashMap<>(256);
-
-    private final String id;
-    private ReentrantLock reentrantLock;
-
-    public PerpetualCache(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void put(Object key, Object value) {
-        cache.put(key, value);
-    }
-
-    @Override
-    public Object get(Object key) {
-        return cache.get(key);
-    }
-
-    @Override
-    public Object remove(Object key) {
-        return cache.remove(key);
-    }
-
-    @Override
-    public void clear() {
-        cache.clear();
-    }
-
-    @Override
-    public int getSize() {
-        return cache.size();
-    }
-
-    @Override
-    public ReentrantLock getReadWriteLock() {
-        return reentrantLock;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Cache)) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        Cache cache = (Cache) obj;
-        return getId().equals(cache.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
+    public PerpetualCache(String name) {
+        super(name, true);
     }
 }
