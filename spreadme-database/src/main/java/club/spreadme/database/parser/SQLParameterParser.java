@@ -20,8 +20,21 @@ import club.spreadme.database.parser.grammar.SQLParameter;
 
 import java.lang.reflect.Method;
 
+/**
+ * SQLParameter parser
+ *
+ * @author wswei
+ */
 public interface SQLParameterParser {
 
+    /**
+     * parse method and values of method's parameters to SQLParameters
+     *
+     * @param method method
+     * @param values values of method's parameter
+     * @return SQLParameter
+     * @see club.spreadme.database.parser.grammar.SQLParameter
+     */
     SQLParameter[] parse(Method method, Object[] values);
 
 }

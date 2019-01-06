@@ -69,11 +69,7 @@ public class CommonDaoTest {
     @Test
     public void testAsyncDao() throws InterruptedException {
         commonDao.withAsync().query("select * from movies where id = ?", Movie.class, "tt0468569")
-                .whenCompleteAsync((movies, throwable) -> movies.forEach(item -> LOGGER.info(item.toString())))
-                .exceptionally((e) -> {
-                    LOGGER.error(e.getMessage());
-                    return null;
-                });
+                .whenCompleteAsync((movies, throwable) -> movies.forEach(item -> LOGGER.info(item.toString())));
         LOGGER.info("Doing");
 
         Thread.sleep(10 * 1000);

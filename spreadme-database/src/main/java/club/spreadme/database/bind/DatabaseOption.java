@@ -20,7 +20,12 @@ import club.spreadme.database.bind.support.MethodSignature;
 import club.spreadme.database.bind.support.SQLCommand;
 import club.spreadme.database.core.executor.Executor;
 
-public interface SQLOption {
+/**
+ * database option
+ *
+ * @author wswei
+ */
+public interface DatabaseOption {
 
     /**
      * query option for database
@@ -32,6 +37,14 @@ public interface SQLOption {
      */
     Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
 
+    /**
+     * update delete insert for database
+     *
+     * @param methodSignature MethodSignature
+     * @param sqlCommand      SQLCommond
+     * @param executor        Executor
+     * @return update result
+     */
     Object update(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor);
 
 }

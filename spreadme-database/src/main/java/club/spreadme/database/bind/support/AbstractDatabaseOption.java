@@ -47,14 +47,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractSQLOption extends AbstractSQLParameterParser implements DatabaseOption, PluginHandler {
+public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser implements DatabaseOption, PluginHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSQLOption.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDatabaseOption.class);
 
     @Override
     @SuppressWarnings("unchecked")
     public Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
-
+        // First parse method and values of method parameters to SQLParameter, then parse sqlparameters to sqlstatement
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
         SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
 
@@ -70,7 +70,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("parse sql {}, values {}", sql, Arrays.toString(values));
         }
-
+        // get statement builder
         StatementBuilder statementBuilder = getStatementBuilder(sql, values, ConcurMode.READ_ONLY);
         if (methodSignature.isReturnsMany()) {
             Type type = methodSignature.getActualTypes()[0];
@@ -89,7 +89,7 @@ public abstract class AbstractSQLOption extends AbstractSQLParameterParser imple
 
     @Override
     public Object update(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
-
+        // First parse method and values of method parameters to SQLParameter, then parse sqlparameters to sqlstatement
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
         SQLStatement preSqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
 

@@ -27,6 +27,7 @@ public interface TransactionCallback<T> {
      * Transacation atom option
      *
      * @return result
+     * @see club.spreadme.database.core.transaction.TransactionExecutor
      */
     T execute();
 

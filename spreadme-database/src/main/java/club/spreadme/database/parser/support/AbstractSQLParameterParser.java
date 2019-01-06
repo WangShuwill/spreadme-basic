@@ -31,21 +31,22 @@ public abstract class AbstractSQLParameterParser implements SQLParameterParser {
 
     @Override
     public SQLParameter[] parse(Method method, Object[] values) {
+        // get count of parameter and method's parameters
         int parameterCount = method.getParameterCount();
         Parameter[] parameters = method.getParameters();
+        // create array of SQLParameter
         SQLParameter[] sqlParameters = new SQLParameter[parameterCount];
         if (parameterCount != values.length) {
-            throw new DAOMehtodException("The cout of parameter is not equal to the count of value for this method"
-                    + method.getName());
+            throw new DAOMehtodException("The parameter's count not equal to value's for " + method.getName());
         }
         for (int i = 0; i < values.length; i++) {
             if (!Objects.equals(parameters[i].getType(), values[i].getClass())) {
-                throw new DAOMehtodException("The type of parameter is not equal to the type of value for this method"
-                        + method.getName());
+                throw new DAOMehtodException("The parameter's type not equal to value'type for " + method.getName());
             }
             SQLParameter sqlParameter = new SQLParameter();
             sqlParameter.setIndex(i);
             Param param = Reflection.getAnnotation(parameters[i], Param.class);
+            // get parameter's name
             String paramName = "";
             if (param != null) {
                 paramName = param.value();

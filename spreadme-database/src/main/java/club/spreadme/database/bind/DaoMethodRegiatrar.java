@@ -23,16 +23,53 @@ import club.spreadme.lang.cache.Cache;
 
 import java.lang.reflect.Method;
 
+/**
+ * DaoMethod registrar, cache MethodSignature and SQLCommond
+ *
+ * @author wswei
+ */
 public interface DaoMethodRegiatrar {
 
+    // MehthodSignature cache
     Cache mscache = new PerpetualCache("MethodSignature");
+    // SQLCommond cache
     Cache sdcache = new PerpetualCache("SQLCommand");
 
+    /**
+     * register methodSignature to cache
+     *
+     * @param method          method
+     * @param methodSignature method signature
+     * @see club.spreadme.database.bind.support.MethodSignature
+     */
     void register(Method method, MethodSignature methodSignature);
 
+    /**
+     * register sqlcommond to cache
+     *
+     * @param method     method
+     * @param sqlCommand sqlCommond
+     * @see club.spreadme.database.bind.support.SQLCommand
+     */
     void register(Method method, SQLCommand sqlCommand);
 
+    /**
+     * get methodsignature from cache
+     *
+     * @param daoInterface dao interface
+     * @param method       method
+     * @param values       method values
+     * @return MethodSignature
+     * @see club.spreadme.database.bind.support.MethodSignature
+     */
     MethodSignature getMethodSignature(Class<?> daoInterface, Method method, Object[] values);
 
+    /**
+     * get sqlcommond from cache
+     *
+     * @param method method
+     * @return SQLCommond
+     * @see club.spreadme.database.bind.support.SQLCommand
+     */
     SQLCommand getSQLCommand(Method method);
 }

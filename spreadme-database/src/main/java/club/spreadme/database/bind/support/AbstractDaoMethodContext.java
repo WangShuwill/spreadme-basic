@@ -20,7 +20,7 @@ import club.spreadme.database.bind.DaoMethodRegiatrar;
 
 import java.lang.reflect.Method;
 
-public abstract class AbstractDaoMethodContext extends AbstractSQLOption implements DaoMethodRegiatrar {
+public abstract class AbstractDaoMethodContext extends AbstractDatabaseOption implements DaoMethodRegiatrar {
 
     @Override
     public void register(Method method, MethodSignature methodSignature) {
