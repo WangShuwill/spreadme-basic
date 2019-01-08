@@ -17,10 +17,15 @@
 package club.spreadme.lang.cache.support;
 
 import club.spreadme.lang.cache.Cache;
+import club.spreadme.lang.cache.CacheLoader;
 import club.spreadme.lang.cache.ValueWrapper;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractValueAdaptingCache implements Cache {
 
+    private static Lock lock = new ReentrantLock();
     private final boolean allowNullValues;
 
     public AbstractValueAdaptingCache(boolean allowNullValues) {
@@ -45,6 +50,31 @@ public abstract class AbstractValueAdaptingCache implements Cache {
             throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
         }
         return (T) value;
+    }
+
+    // 防止缓存击穿
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T get(Object key, Cache cache, CacheLoader cacheLoader) {
+        Object result = cache.get(key).get();
+        if (result == null) {
+            if (lock.tryLock()) {
+                try {
+                    result = cacheLoader.load();
+                    cache.put(key, result);
+                }
+                finally {
+                    lock.unlock();
+                }
+            }
+            else {
+                result = cache.get(key).get();
+                if (result == null) {
+                    return get(key, cache, cacheLoader);
+                }
+            }
+        }
+        return (T) result;
     }
 
     protected abstract Object lookup(Object key);

@@ -26,6 +26,7 @@ import club.srpeadme.test.domain.Person;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,5 +75,8 @@ public class LangTest {
                 .toArray();
 
         System.out.println(Arrays.toString(annotations));
+
+        List<Person> people = new ArrayList<>();
+        System.out.println(Reflection.getSuperClassGenricType(people.getClass(), 0));
     }
 }

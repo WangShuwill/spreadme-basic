@@ -30,6 +30,8 @@ public interface Cache {
 
     <T> T get(Object key, Callable<T> valueLoader);
 
+    <T> T get(Object key, Cache cache, CacheLoader cacheLoader);
+
     void put(Object key, Object value);
 
     ValueWrapper putIfAbsent(Object key, Object value);
