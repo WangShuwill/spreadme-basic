@@ -127,4 +127,18 @@ public abstract class StringUtil {
         }
         return sb.toString();
     }
+
+    public static String toUpper(final String source, Integer... indexs) {
+        if (isBlank(source) || indexs.length < 1) {
+            return source;
+        }
+        char[] chars = source.toCharArray();
+        if (indexs.length > chars.length) {
+            return source;
+        }
+        for (Integer index : indexs) {
+            chars[index] -= 32;
+        }
+        return new String(chars);
+    }
 }

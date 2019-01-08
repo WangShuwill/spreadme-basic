@@ -18,6 +18,7 @@ package club.srpeadme.test.database;
 
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
+import club.spreadme.database.core.transaction.TransactionCallback;
 import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;
@@ -86,5 +87,24 @@ public class CommonDaoTest {
     public void testPagination() {
         MovieDao movieDao = commonDao.getDao(MovieDao.class);
         LOGGER.info(movieDao.getMoviesByName("The Dark Knight", "movie", new Page<Movie>().setPageSize(5).setPageNum(1)).toString());
+    }
+
+    @Test
+    public void testDaoUpdate() {
+        MovieDao movieDao = commonDao.getDao(MovieDao.class);
+        commonDao.getTransactionExecutor().execute(() -> {
+            Movie movied = movieDao.getMovieById("tt0000000");
+            movieDao.delete(movied.getId());
+
+            Movie movie = new Movie();
+            movie.setId("tt0000000");
+            movie.setOriginalTitle("Test");
+            movie.setPrimaryTitle("Test");
+            movie.setType("movie");
+            movieDao.insert(movie);
+
+            movie.setEndYear(2020);
+            return movieDao.update(movie);
+        });
     }
 }

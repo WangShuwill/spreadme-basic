@@ -58,14 +58,14 @@ public class SQLCommand {
         Annotation optionAnnotation = (Annotation) optionAnnotations[0];
         AnnotationDefinition annotationDefinition = Reflection.getAnnotationDefinition(optionAnnotation);
         this.type = annotationDefinition.getType().getTypeName();
+        String packageName = annotationDefinition.getType().getPackage().getName();
+        this.sqlOptionType = SQLOptionType.resolve(type.replace(packageName + ".", "").toUpperCase());
         this.sql = Optional.ofNullable(annotationDefinition.getAttributes().get("value")).orElse("").toString();
-        if (StringUtil.isBlank(this.sql)) {
+        if (SQLOptionType.QUERY.equals(this.sqlOptionType) && StringUtil.isBlank(this.sql)) {
             throw new DAOMehtodException("No sql statement fo database option annatation for the method " + method.getName());
         }
 
         this.postProcessor = (Class<? extends PostProcessor>) annotationDefinition.getAttributes().get("processor");
-        String packageName = annotationDefinition.getType().getPackage().getName();
-        this.sqlOptionType = SQLOptionType.resolve(type.replace(packageName + ".", "").toUpperCase());
     }
 
     public String getType() {

@@ -51,7 +51,7 @@ public class LangTest {
 
         System.out.println(StringUtil.trimStart(target, "i"));
         System.out.println(StringUtil.trimEnd(target, "t,"));
-
+        System.out.println(StringUtil.toUpper(target, 1, 2, 3));
     }
 
     @Test
