@@ -18,7 +18,6 @@ package club.srpeadme.test.database;
 
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.transaction.TransactionCallback;
 import club.spreadme.database.dao.CommonDao;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;

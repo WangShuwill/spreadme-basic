@@ -17,4 +17,5 @@
 package club.spreadme.util;
 
 public abstract class WebUtil {
+
 }

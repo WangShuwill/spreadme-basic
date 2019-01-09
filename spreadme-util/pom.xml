@@ -15,7 +15,26 @@
     <name>spreadme-util</name>
 
     <dependencies>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>club.spreadme</groupId>
+            <artifactId>spreadme-lang</artifactId>
+            <version>1.4.7</version>
+        </dependency>
     </dependencies>
 
 </project>
