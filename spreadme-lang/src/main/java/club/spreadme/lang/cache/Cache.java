@@ -17,8 +17,12 @@
 package club.spreadme.lang.cache;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public interface Cache {
+
+    Lock lock = new ReentrantLock();
 
     String getName();
 
@@ -30,7 +34,29 @@ public interface Cache {
 
     <T> T get(Object key, Callable<T> valueLoader);
 
-    <T> T get(Object key, Cache cache, CacheLoader cacheLoader);
+    // 防止缓存击穿
+    @SuppressWarnings("unchecked")
+    default <T> T get(Object key, Cache cache, CacheLoader cacheLoader) {
+        Object result = cache.get(key).get();
+        if (result == null) {
+            if (lock.tryLock()) {
+                try {
+                    result = cacheLoader.load();
+                    cache.put(key, result);
+                }
+                finally {
+                    lock.unlock();
+                }
+            }
+            else {
+                result = cache.get(key).get();
+                if (result == null) {
+                    return get(key, cache, cacheLoader);
+                }
+            }
+        }
+        return (T) result;
+    }
 
     void put(Object key, Object value);
 

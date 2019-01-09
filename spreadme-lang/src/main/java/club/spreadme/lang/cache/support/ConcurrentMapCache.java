@@ -22,7 +22,7 @@ import club.spreadme.lang.cache.ValueWrapper;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentMapCache extends AbstractValueAdaptingCache {
+public class ConcurrentMapCache extends AbstractCache {
 
     private final String name;
     private final ConcurrentHashMap<Object, Object> store;
