@@ -16,6 +16,11 @@
 
 package club.spreadme.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 public abstract class WebUtil {
 
+    public static String getClientIp(HttpServletRequest request) {
+        return "";
+    }
 }
