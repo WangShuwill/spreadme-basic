@@ -60,7 +60,6 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
     public WrappedStatement build(StatementConfig statementConfig) throws SQLException {
         Statement statement = createStatement(connection);
         prepare(statement, statementConfig);
-        statementInfo = parseStatement(statement);
         return doBuild(statement);
     }
 
@@ -100,17 +99,5 @@ public abstract class AbstractStatementBuilder implements StatementBuilder {
                 statement.setFetchDirection(config.getFetchDirection().getValue());
             }
         }
-    }
-
-    private StatementInfo parseStatement(Statement statement) throws SQLException {
-
-        statement.getConnection();
-        statement.getFetchDirection();
-        statement.getFetchSize();
-        statement.getLargeMaxRows();
-        statement.getLargeUpdateCount();
-
-        return new StatementInfo();
-
     }
 }
