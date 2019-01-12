@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.util;
+package club.spreadme.util.web;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,19 +14,12 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.dao;
+package club.spreadme.util.logger;
 
-import club.spreadme.database.core.grammar.StatementConfig;
+import java.lang.annotation.*;
 
-public class DaoConfig {
-
-    private StatementConfig statementConfig;
-
-    public StatementConfig getStatementConfig() {
-        return statementConfig;
-    }
-
-    public void setStatementConfig(StatementConfig statementConfig) {
-        this.statementConfig = statementConfig;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@Documented
+public @interface Logable {
 }

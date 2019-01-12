@@ -78,14 +78,26 @@ public class CommonDao extends AbstractDao {
         return commonDao;
     }
 
+    @Override
+    public ICommonDao use(Interceptor[] interceptors) {
+        for (Interceptor interceptor : interceptors) {
+            INTERCEPTOR_CHAIN.addInterceptor(interceptor);
+        }
+        return this;
+    }
+
+    @Override
+    public ICommonDao use(Cache cache) {
+        this.executor = new CachingExecutor(this.dataSource, true, cache);
+        return this;
+    }
+
     public <T> T getDao(Class<T> clazz) {
         return DaoProxyFactory.get(clazz, this.executor);
     }
 
     public void addInterceptor(Interceptor... interceptors) {
-        for (Interceptor interceptor : interceptors) {
-            INTERCEPTOR_CHAIN.addInterceptor(interceptor);
-        }
+
     }
 
     public TransactionExecutor getTransactionExecutor() {
@@ -103,11 +115,11 @@ public class CommonDao extends AbstractDao {
         return queryOne(sql, new BeanRowMapper<>(clazz), objects);
     }
 
-    public <T> Record queryOne(String sql) {
+    public Record queryOne(String sql) {
         return queryOne(sql, new RecordRowMapper());
     }
 
-    public <T> Record queryOne(String sql, Object... objects) {
+    public Record queryOne(String sql, Object... objects) {
         return queryOne(sql, new RecordRowMapper(), objects);
     }
 
@@ -119,11 +131,11 @@ public class CommonDao extends AbstractDao {
         return query(sql, new BeanRowMapper<>(clazz), objects);
     }
 
-    public <T> List<Record> query(String sql) {
+    public List<Record> query(String sql) {
         return query(sql, new RecordRowMapper());
     }
 
-    public <T> List<Record> query(String sql, Object... objects) {
+    public List<Record> query(String sql, Object... objects) {
         return query(sql, new RecordRowMapper(), objects);
     }
 
@@ -161,10 +173,5 @@ public class CommonDao extends AbstractDao {
 
     public AsyncDao withAsync() {
         return new AsyncDao(dataSource);
-    }
-
-    public CommonDao withCache(Cache cache) {
-        this.executor = new CachingExecutor(this.dataSource, true, cache);
-        return this;
     }
 }
