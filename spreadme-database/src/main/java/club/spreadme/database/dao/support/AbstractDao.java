@@ -24,6 +24,7 @@ import club.spreadme.database.core.statement.StatementBuilder;
 import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.QueryStatementCallback;
 import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
+import club.spreadme.database.dao.ICommonDao;
 import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.plugin.PluginHandler;
 import club.spreadme.lang.Assert;
@@ -31,7 +32,7 @@ import club.spreadme.lang.Assert;
 import javax.sql.DataSource;
 import java.util.List;
 
-public abstract class AbstractDao implements PluginHandler {
+public abstract class AbstractDao implements PluginHandler, ICommonDao {
 
     protected DataSource dataSource;
     protected Executor executor;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Wangshuwei
+ *  Copyright (c) 2019 Wangshuwei
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.dao;
+package club.spreadme.database.dao.support;
 
 import club.spreadme.database.bind.DaoProxyFactory;
 import club.spreadme.database.core.executor.Executor;
@@ -28,9 +28,7 @@ import club.spreadme.database.core.statement.support.PrepareStatementBuilder;
 import club.spreadme.database.core.statement.support.SimpleStatementBuilder;
 import club.spreadme.database.core.statement.support.UpdateStatementCallback;
 import club.spreadme.database.core.transaction.TransactionExecutor;
-import club.spreadme.database.dao.support.AbstractDao;
-import club.spreadme.database.dao.support.AsyncDao;
-import club.spreadme.database.dao.support.StreamDao;
+import club.spreadme.database.dao.ICommonDao;
 import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.metadata.SQLOptionType;
 import club.spreadme.database.parser.SQLParser;

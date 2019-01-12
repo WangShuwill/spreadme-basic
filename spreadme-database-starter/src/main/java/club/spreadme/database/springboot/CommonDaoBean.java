@@ -16,13 +16,13 @@
 
 package club.spreadme.database.springboot;
 
-import club.spreadme.database.dao.CommonDao;
+import club.spreadme.database.dao.ICommonDao;
 import org.springframework.beans.factory.FactoryBean;
 
 public class CommonDaoBean<T> implements FactoryBean<T> {
 
     private Class<T> daoInterfance;
-    private CommonDao commonDao;
+    private ICommonDao commonDao;
 
     public CommonDaoBean() {
 
@@ -55,11 +55,11 @@ public class CommonDaoBean<T> implements FactoryBean<T> {
         this.daoInterfance = daoInterfance;
     }
 
-    public CommonDao getCommonDao() {
+    public ICommonDao getCommonDao() {
         return commonDao;
     }
 
-    public void setCommonDao(CommonDao commonDao) {
+    public void setCommonDao(ICommonDao commonDao) {
         this.commonDao = commonDao;
     }
 }

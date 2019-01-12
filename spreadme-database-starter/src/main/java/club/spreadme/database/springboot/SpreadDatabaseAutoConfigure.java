@@ -17,7 +17,8 @@
 package club.spreadme.database.springboot;
 
 import club.spreadme.database.annotation.Dao;
-import club.spreadme.database.dao.CommonDao;
+import club.spreadme.database.dao.ICommonDao;
+import club.spreadme.database.dao.support.CommonDao;
 import club.spreadme.database.plugin.Interceptor;
 import club.spreadme.database.plugin.paginator.Paginator;
 import club.spreadme.database.plugin.paginator.dialect.PaginationDialect;
@@ -47,7 +48,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Configuration
-@ConditionalOnClass(CommonDao.class)
+@ConditionalOnClass(ICommonDao.class)
 @EnableConfigurationProperties(SpreadDatabaseProperties.class)
 public class SpreadDatabaseAutoConfigure {
 
@@ -56,7 +57,7 @@ public class SpreadDatabaseAutoConfigure {
     private SpreadDatabaseProperties properties;
 
     @Bean
-    CommonDao commonDao() {
+    ICommonDao commonDao() {
         DruidDataSource dataSource = new DruidDataSource();
         // datasource basic infomation
         dataSource.setUrl(properties.getUrl());
@@ -86,7 +87,7 @@ public class SpreadDatabaseAutoConfigure {
                 commonDao.addInterceptor(interceptor.newInstance());
             }
             for (Class<? extends Cache> cache : properties.getCaches()) {
-                commonDao.withCache(cache.newInstance());
+                commonDao.use(cache.newInstance());
             }
         }
         catch (Exception e) {
