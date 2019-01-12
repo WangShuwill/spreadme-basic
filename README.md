@@ -4,8 +4,10 @@ spreadme-frame是一套同于Java快捷开发的框架,集成了常用的工具�
 变得更加简单高效.
 
 主要包含以下几个模块
-- spreadme-lang 字符串操作,反射,事件驱动等通用组件.
-- spreadme-datase 一套用于简化JDBC开发的工具.
+- spreadme-lang : 字符串操作,反射,事件驱动等通用组件.
+- spreadme-datase : 一套用于简化JDBC开发的工具.
+- spreadme-database-springboot : starter for springboot
+- spreadme-util : common utils for development
 
 Liense
 ------
@@ -29,3 +31,5 @@ Tutorials
 
 - #### spread-lang
 - #### spread-database
+- #### spread-database-springboot
+- #### spread-util
