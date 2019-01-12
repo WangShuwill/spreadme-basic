@@ -13,6 +13,7 @@
         <module>spreadme-test</module>
         <module>spreadme-database</module>
         <module>spreadme-util</module>
+        <module>spreadme-database-starter</module>
     </modules>
 
     <name>spreadme-frame</name>
@@ -28,6 +29,7 @@
         <ehcache.version>2.10.4</ehcache.version>
         <servlet.api.version>3.1.0</servlet.api.version>
         <spring.version>5.1.3.RELEASE</spring.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <mysql.version>6.0.5</mysql.version>
@@ -80,6 +82,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
 
             <dependency>
