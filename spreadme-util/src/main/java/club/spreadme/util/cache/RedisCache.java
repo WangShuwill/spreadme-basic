@@ -20,39 +20,52 @@ import club.spreadme.lang.cache.Cache;
 import club.spreadme.lang.cache.SpreadCache;
 import club.spreadme.lang.cache.ValueLoader;
 import club.spreadme.lang.serializer.Serializer;
-import redis.clients.jedis.Jedis;
+import io.lettuce.core.api.sync.RedisCommands;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-public class RedisCache implements SpreadCache<String, Object> {
+public class RedisCache<K extends String, V> implements SpreadCache<K, V> {
 
-    private final Jedis jedis;
-    private Serializer<Object> serializer;
+    private final RedisCommands<byte[], byte[]> redisCommands;
+    private Serializer<V> serializer;
 
-    public RedisCache(Jedis jedis) {
-        this.jedis = jedis;
+    public RedisCache(RedisCommands<byte[], byte[]> redisCommands) {
+        this.redisCommands = redisCommands;
     }
 
     @Override
-    public void setSerializer(Serializer<Object> serializer) {
+    public void setSerializer(Serializer<V> serializer) {
         this.serializer = serializer;
     }
 
     @Override
-    public Object get(String key, Serializer<Object> serializer) {
-        byte[] bytes = jedis.get(key.getBytes());
+    public void put(K key, V value, int expiredtime, TimeUnit timeUnit) {
+        byte[] bytes = serializer.serialize(value);
+        redisCommands.setex(key.getBytes(), timeUnit.toSeconds(expiredtime), bytes);
+    }
+
+    @Override
+    public void put(K key, V value, int expiredtime, TimeUnit timeUnit, Serializer<V> serializer) {
+        byte[] bytes = serializer.serialize(value);
+        redisCommands.setex(key.getBytes(), timeUnit.toSeconds(expiredtime), bytes);
+    }
+
+    @Override
+    public V get(K key, Serializer<V> serializer) {
+        byte[] bytes = redisCommands.get(key.getBytes());
         return serializer.deSerialize(bytes);
     }
 
     @Override
-    public void put(String key, Object value, Serializer<Object> serializer) {
+    public void put(K key, V value, Serializer<V> serializer) {
         byte[] bytes = serializer.serialize(value);
-        jedis.set(key.getBytes(), bytes);
+        redisCommands.set(key.getBytes(), bytes);
     }
 
     @Override
-    public Object get(String key, Cache<String, Object> cache, ValueLoader<Object> valueLoader) {
-        Object result = cache.get(key);
+    public V get(K key, Cache<K, V> cache, ValueLoader<V> valueLoader) {
+        V result = cache.get(key);
         if (result == null) {
             if (lock.tryLock()) {
                 try {
@@ -74,22 +87,8 @@ public class RedisCache implements SpreadCache<String, Object> {
     }
 
     @Override
-    public void put(String key, Object value, int expiredtime, TimeUnit timeUnit, Serializer<Object> serializer) {
-        byte[] bytes = serializer.serialize(value);
-        jedis.set(key.getBytes(), bytes);
-        jedis.expireAt(key, timeUnit.toMillis(expiredtime));
-    }
-
-    @Override
-    public void put(String key, Object value, int expiredtime, TimeUnit timeUnit) {
-        byte[] bytes = serializer.serialize(value);
-        jedis.set(key.getBytes(), bytes);
-        jedis.expireAt(key, timeUnit.toMillis(expiredtime));
-    }
-
-    @Override
-    public Object get(String key, SpreadCache<String, Object> cache, int expiredtime, TimeUnit timeUnit, ValueLoader<Object> valueLoader, Serializer<Object> serializer) {
-        Object result = cache.get(key);
+    public V get(K key, SpreadCache<K, V> cache, int expiredtime, TimeUnit timeUnit, ValueLoader<V> valueLoader, Serializer<V> serializer) {
+        V result = cache.get(key);
         if (result == null) {
             if (lock.tryLock()) {
                 try {
@@ -111,8 +110,8 @@ public class RedisCache implements SpreadCache<String, Object> {
     }
 
     @Override
-    public Object get(String key, SpreadCache<String, Object> cache, ValueLoader<Object> valueLoader, Serializer<Object> serializer) {
-        Object result = cache.get(key);
+    public V get(K key, SpreadCache<K, V> cache, ValueLoader<V> valueLoader, Serializer<V> serializer) {
+        V result = cache.get(key, serializer);
         if (result == null) {
             if (lock.tryLock()) {
                 try {
@@ -135,29 +134,29 @@ public class RedisCache implements SpreadCache<String, Object> {
 
     @Override
     public String getName() {
-        return jedis.clientGetname();
+        return Arrays.toString(redisCommands.clientGetname());
     }
 
     @Override
     public Object getNativeCache() {
-        return jedis;
+        return redisCommands;
     }
 
     @Override
-    public Object get(String key) {
-        byte[] bytes = jedis.get(key.getBytes());
+    public V get(K key) {
+        byte[] bytes = redisCommands.get(key.getBytes());
         return serializer.deSerialize(bytes);
     }
 
     @Override
-    public void put(String key, Object value) {
+    public void put(K key, V value) {
         byte[] bytes = serializer.serialize(value);
-        jedis.set(key.getBytes(), bytes);
+        redisCommands.set(key.getBytes(), bytes);
     }
 
     @Override
-    public Object putIfAbsent(String key, Object value) {
-        if (jedis.exists(key)) {
+    public V putIfAbsent(K key, V value) {
+        if (redisCommands.exists(key.getBytes()) > 0) {
             return get(key);
         }
         else {
@@ -167,12 +166,12 @@ public class RedisCache implements SpreadCache<String, Object> {
     }
 
     @Override
-    public void remove(String key) {
-        jedis.del(key);
+    public void remove(K key) {
+        redisCommands.del(key.getBytes());
     }
 
     @Override
     public void clear() {
-        jedis.flushDB();
+        redisCommands.flushdb();
     }
 }

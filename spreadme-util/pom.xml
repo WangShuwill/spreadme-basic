@@ -36,6 +36,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>club.spreadme</groupId>
             <artifactId>spreadme-lang</artifactId>
             <version>1.4.7</version>
