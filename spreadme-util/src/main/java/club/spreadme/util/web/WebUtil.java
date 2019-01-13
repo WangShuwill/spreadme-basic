@@ -16,11 +16,31 @@
 
 package club.spreadme.util.web;
 
+import club.spreadme.lang.StringUtil;
+
 import javax.servlet.http.HttpServletRequest;
 
 public abstract class WebUtil {
 
     public static String getClientIp(HttpServletRequest request) {
-        return "";
+        String ip = request.getHeader("X-Forwarded-For");
+        if (StringUtil.isNotBlank(ip) && (!"unKnown".equalsIgnoreCase(ip))) {
+            int index = ip.indexOf(",");
+            if (index != -1) {
+                ip = ip.substring(0, index);
+            }
+        } else {
+            ip = request.getHeader("X-Real-IP");
+            if ((StringUtil.isBlank(ip)) || ("unKnown".equalsIgnoreCase(ip))) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if ((StringUtil.isBlank(ip)) || ("unKnown".equalsIgnoreCase(ip))) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if ((StringUtil.isBlank(ip)) || ("unknown".equalsIgnoreCase(ip))) {
+                ip = request.getRemoteAddr();
+            }
+        }
+        return ip;
     }
 }
