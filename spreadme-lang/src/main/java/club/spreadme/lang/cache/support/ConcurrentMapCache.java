@@ -17,22 +17,20 @@
 package club.spreadme.lang.cache.support;
 
 import club.spreadme.lang.Assert;
-import club.spreadme.lang.cache.ValueWrapper;
+import club.spreadme.lang.cache.Cache;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentMapCache extends AbstractCache {
+public class ConcurrentMapCache<K, V> implements Cache<K, V> {
 
     private final String name;
-    private final ConcurrentHashMap<Object, Object> store;
+    private final ConcurrentHashMap<K, V> store;
 
-    public ConcurrentMapCache(String name, boolean allowNullValues) {
-        this(name, new ConcurrentHashMap<>(256), allowNullValues);
+    public ConcurrentMapCache(String name) {
+        this(name, new ConcurrentHashMap<>(256));
     }
 
-    public ConcurrentMapCache(String name, ConcurrentHashMap<Object, Object> store, boolean allowNullValues) {
-        super(allowNullValues);
+    public ConcurrentMapCache(String name, ConcurrentHashMap<K, V> store) {
         Assert.notNull(name, "Name must not be null");
         Assert.notNull(store, "Store must not be null");
         this.name = name;
@@ -50,48 +48,23 @@ public class ConcurrentMapCache extends AbstractCache {
     }
 
     @Override
-    protected Object lookup(Object key) {
+    public V get(K key) {
         return this.store.get(key);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T get(Object key, Callable<T> valueLoader) {
-        ValueWrapper storeValue = get(key);
-        if (storeValue != null) {
-            return (T) storeValue.get();
-        }
-
-        synchronized (this.store) {
-            storeValue = get(key);
-            if (storeValue != null) {
-                return (T) storeValue.get();
-            }
-
-            T value;
-            try {
-                value = valueLoader.call();
-            }
-            catch (Throwable ex) {
-                throw new RuntimeException(ex);
-            }
-            return value;
-        }
+    public void put(K key, V value) {
+        this.store.put(key, value);
     }
 
     @Override
-    public void put(Object key, Object value) {
-        this.store.put(key, toStoreValue(value));
+    public V putIfAbsent(K key, V value) {
+        this.store.putIfAbsent(key, value);
+        return value;
     }
 
     @Override
-    public ValueWrapper putIfAbsent(Object key, Object value) {
-        this.store.putIfAbsent(key, toStoreValue(value));
-        return toValueWrapper(value);
-    }
-
-    @Override
-    public void remove(Object key) {
+    public void remove(K key) {
         this.store.remove(key);
     }
 

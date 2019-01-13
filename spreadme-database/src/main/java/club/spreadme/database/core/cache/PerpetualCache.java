@@ -22,9 +22,9 @@ import club.spreadme.lang.cache.support.ConcurrentMapCache;
  * @author Wangshuwei
  * @since 2018-8-1
  */
-public class PerpetualCache extends ConcurrentMapCache {
+public class PerpetualCache<K, V> extends ConcurrentMapCache<K, V> {
 
     public PerpetualCache(String name) {
-        super(name, true);
+        super(name);
     }
 }

@@ -69,7 +69,7 @@ public class ClassPathDaoScanner extends ClassPathBeanDefinitionScanner {
     protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinitionHolder> definitionHolders = super.doScan(basePackages);
         if (definitionHolders.isEmpty()) {
-            LOGGER.warn("No dao was found in '{}' package. Please check your configuration.", Arrays.toString(basePackages));
+            LOGGER.warn("No dao was found in '{}' package. Please check your config.", Arrays.toString(basePackages));
         } else {
             processBeanDefinitions(definitionHolders);
         }

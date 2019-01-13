@@ -16,11 +16,10 @@
 
 package club.spreadme.lang.cache;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public interface Cache {
+public interface Cache<K, V> {
 
     Lock lock = new ReentrantLock();
 
@@ -28,41 +27,21 @@ public interface Cache {
 
     Object getNativeCache();
 
-    ValueWrapper get(Object key);
+    V get(K key);
 
-    <T> T get(Object key, Class<T> type);
-
-    <T> T get(Object key, Callable<T> valueLoader);
-
-    // 防止缓存击穿
-    @SuppressWarnings("unchecked")
-    default <T> T get(Object key, Cache cache, CacheLoader cacheLoader) {
-        Object result = cache.get(key).get();
-        if (result == null) {
-            if (lock.tryLock()) {
-                try {
-                    result = cacheLoader.load();
-                    cache.put(key, result);
-                }
-                finally {
-                    lock.unlock();
-                }
-            }
-            else {
-                result = cache.get(key).get();
-                if (result == null) {
-                    return get(key, cache, cacheLoader);
-                }
-            }
+    default V get(K key, Class<V> type) {
+        V value = get(key);
+        if (value != null && type != null && !type.isInstance(value)) {
+            throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
         }
-        return (T) result;
+        return value;
     }
 
-    void put(Object key, Object value);
+    void put(K key, V value);
 
-    ValueWrapper putIfAbsent(Object key, Object value);
+    V putIfAbsent(K key, V value);
 
-    void remove(Object key);
+    void remove(K key);
 
     void clear();
 }

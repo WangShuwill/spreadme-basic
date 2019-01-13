@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package club.spreadme.lang.cache;
+package club.spreadme.lang.serializer;
 
-@FunctionalInterface
-public interface CacheLoader {
+public interface Serializer<T> {
 
-    <T> T load();
+    byte[] serialize(T object);
 
+    T deSerialize(byte[] bytes);
 }

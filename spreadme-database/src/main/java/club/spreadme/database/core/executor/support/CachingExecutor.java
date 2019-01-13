@@ -53,7 +53,7 @@ public class CachingExecutor extends AbstractExecutor {
         }
         else {
             CacheKey cacheKey = builder.createCachekey();
-            Object cacheObject = cache.get(cacheKey).get();
+            Object cacheObject = cache.get(cacheKey);
             if (cacheObject != null) {
                 return (T) cacheObject;
             }

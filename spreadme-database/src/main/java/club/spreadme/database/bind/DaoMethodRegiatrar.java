@@ -31,9 +31,9 @@ import java.lang.reflect.Method;
 public interface DaoMethodRegiatrar {
 
     // MehthodSignature cache
-    Cache mscache = new PerpetualCache("MethodSignature");
+    Cache<Method, MethodSignature> mscache = new PerpetualCache<>("MethodSignature");
     // SQLCommond cache
-    Cache sdcache = new PerpetualCache("SQLCommand");
+    Cache<Method, SQLCommand> sdcache = new PerpetualCache<>("SQLCommand");
 
     /**
      * register methodSignature to cache

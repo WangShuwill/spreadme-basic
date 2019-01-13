@@ -123,7 +123,7 @@ public class SpreadDatabaseAutoConfigure {
 
                 List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
                 if (LOGGER.isDebugEnabled()) {
-                    packages.forEach(pkg -> LOGGER.debug("Using auto-configuration base package {}", pkg));
+                    packages.forEach(pkg -> LOGGER.debug("Using auto-config base package {}", pkg));
                 }
 
                 scanner.setAnnotationClass(Dao.class);
@@ -132,7 +132,7 @@ public class SpreadDatabaseAutoConfigure {
 
             }
             catch (IllegalStateException ex) {
-                LOGGER.debug("Could not determine auto-configuration package, automatic mapper scanning disabled.", ex);
+                LOGGER.debug("Could not determine auto-config package, automatic mapper scanning disabled.", ex);
             }
         }
     }

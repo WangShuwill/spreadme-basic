@@ -14,44 +14,11 @@
  *  limitations under the License.
  */
 
-package club.spreadme.util.cache;
+package club.spreadme.lang.cache;
 
-import club.spreadme.lang.cache.Cache;
+@FunctionalInterface
+public interface ValueLoader<T> {
 
-public class EhcacheCache<K, V> implements Cache<K, V> {
+    T load();
 
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public Object getNativeCache() {
-        return null;
-    }
-
-    @Override
-    public V get(K key) {
-        return null;
-    }
-
-    @Override
-    public void put(K key, V value) {
-
-    }
-
-    @Override
-    public V putIfAbsent(K key, V value) {
-        return null;
-    }
-
-    @Override
-    public void remove(K key) {
-
-    }
-
-    @Override
-    public void clear() {
-
-    }
 }
