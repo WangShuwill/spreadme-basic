@@ -128,7 +128,7 @@ public abstract class Reflection {
         Assert.notNull(clazz, "Class must be not null");
         Field[] fields = getDeclareFields(clazz);
         for (Field field : fields) {
-            if (ObjectUtil.equals(name, field.getName()) && (type == null || ObjectUtil.equals(type, field.getType()))) {
+            if (name.equalsIgnoreCase(field.getName()) && (type == null || type.equals(field.getType()))) {
                 return field;
             }
         }
@@ -181,7 +181,7 @@ public abstract class Reflection {
         Assert.notNull(clazz, "Class must be not null");
         Method[] methods = clazz.isInterface() ? clazz.getMethods() : getDeclareMethods(clazz);
         for (Method method : methods) {
-            if (ObjectUtil.equals(name, method.getName()) &&
+            if (name.equals(method.getName()) &&
                     (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
                 return method;
             }
@@ -261,10 +261,10 @@ public abstract class Reflection {
         Field[] fields = getDeclareFields(invocationHandler.getClass());
         for (Field field : fields) {
             makeAccessible(field, true);
-            if (ObjectUtil.equals(field.getType(), Class.class)) {
+            if (field.getType().equals(Class.class)) {
                 annotationDefinition.setType((Class) getFieldValue(invocationHandler, field));
             }
-            else if (ObjectUtil.equals(field.getType(), Map.class)) {
+            else if (field.getType().equals(Map.class)) {
                 annotationDefinition.setAttributes((Map<String, Object>) getFieldValue(invocationHandler, field));
             }
         }

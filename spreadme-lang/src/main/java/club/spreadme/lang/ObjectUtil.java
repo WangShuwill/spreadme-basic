@@ -20,10 +20,6 @@ import java.util.Arrays;
 
 public class ObjectUtil {
 
-    public static boolean equals(Object obj1, Object obj2) {
-        return java.util.Objects.equals(obj1, obj2);
-    }
-
     public static int hashcode(Object object) {
         if (object == null) {
             return 0;
