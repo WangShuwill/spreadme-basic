@@ -30,6 +30,7 @@
         <servlet.api.version>3.1.0</servlet.api.version>
         <spring.version>5.1.3.RELEASE</spring.version>
         <lettuce.version>5.1.3.RELEASE</lettuce.version>
+        <fastjson.version>1.2.54</fastjson.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
@@ -89,6 +90,12 @@
                 <groupId>io.lettuce</groupId>
                 <artifactId>lettuce-core</artifactId>
                 <version>${lettuce.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
 
             <dependency>
