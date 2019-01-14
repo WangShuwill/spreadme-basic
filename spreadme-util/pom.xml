@@ -36,6 +36,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>club.spreadme</groupId>
             <artifactId>spreadme-lang</artifactId>
             <version>1.4.7</version>
