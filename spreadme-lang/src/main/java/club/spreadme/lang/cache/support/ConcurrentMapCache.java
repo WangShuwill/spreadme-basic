@@ -17,11 +17,10 @@
 package club.spreadme.lang.cache.support;
 
 import club.spreadme.lang.Assert;
-import club.spreadme.lang.cache.Cache;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentMapCache<K, V> implements Cache<K, V> {
+public class ConcurrentMapCache<K, V> extends AbstractCache<K, V> {
 
     private final String name;
     private final ConcurrentHashMap<K, V> store;

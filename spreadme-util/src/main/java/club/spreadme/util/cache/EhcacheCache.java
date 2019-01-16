@@ -16,9 +16,9 @@
 
 package club.spreadme.util.cache;
 
-import club.spreadme.lang.cache.Cache;
+import club.spreadme.lang.cache.support.AbstractCache;
 
-public class EhcacheCache<K, V> implements Cache<K, V> {
+public class EhcacheCache<K, V> extends AbstractCache<K, V> {
 
     @Override
     public String getName() {

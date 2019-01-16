@@ -17,15 +17,15 @@
 package club.spreadme.util.cache;
 
 import club.spreadme.lang.cache.Cache;
-import club.spreadme.lang.cache.SpreadCache;
 import club.spreadme.lang.cache.ValueLoader;
+import club.spreadme.lang.cache.support.AbstractCache;
 import club.spreadme.lang.serializer.Serializer;
 import io.lettuce.core.api.sync.RedisCommands;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-public class RedisCache<K extends String, V> implements SpreadCache<K, V> {
+public class RedisCache<K extends String, V> extends AbstractCache<K, V> {
 
     private final RedisCommands<byte[], byte[]> redisCommands;
     private Serializer<V> serializer;
@@ -87,7 +87,7 @@ public class RedisCache<K extends String, V> implements SpreadCache<K, V> {
     }
 
     @Override
-    public V get(K key, SpreadCache<K, V> cache, int expiredtime, TimeUnit timeUnit, ValueLoader<V> valueLoader, Serializer<V> serializer) {
+    public V get(K key, Cache<K, V> cache, int expiredtime, TimeUnit timeUnit, ValueLoader<V> valueLoader, Serializer<V> serializer) {
         V result = cache.get(key);
         if (result == null) {
             if (lock.tryLock()) {
@@ -110,7 +110,7 @@ public class RedisCache<K extends String, V> implements SpreadCache<K, V> {
     }
 
     @Override
-    public V get(K key, SpreadCache<K, V> cache, ValueLoader<V> valueLoader, Serializer<V> serializer) {
+    public V get(K key, Cache<K, V> cache, ValueLoader<V> valueLoader, Serializer<V> serializer) {
         V result = cache.get(key, serializer);
         if (result == null) {
             if (lock.tryLock()) {
