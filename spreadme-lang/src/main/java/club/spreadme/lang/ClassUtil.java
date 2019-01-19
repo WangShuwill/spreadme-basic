@@ -14,17 +14,12 @@
  *  limitations under the License.
  */
 
-package club.srpeadme.test.lang;
+package club.spreadme.lang;
 
-import club.spreadme.lang.properties.PropertyUtil;
-import org.junit.Test;
+public abstract class ClassUtil {
 
-public class SysTest {
-
-    @Test
-    public void sysTest() {
-        PropertyUtil.loadProperties();
-        System.out.println(PropertyUtil.getValue("application","spreaddatabase.url"));
+    public static String getClassPath() {
+        return ClassUtil.class.getResource("/").getPath();
     }
 
 }
