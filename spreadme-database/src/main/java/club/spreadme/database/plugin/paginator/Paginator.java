@@ -37,9 +37,6 @@ import java.util.List;
 @Intercepts({@Signature(type = StatementBuilder.class, method = "build", args = {StatementConfig.class})})
 public class Paginator implements Interceptor {
 
-    private static final String SQLFIELD = "sql";
-    private static final String OBJECTSFIELD = "objects";
-
     private List<Class<? extends PaginationDialect>> paginationDialects = new ArrayList<>();
 
     public Paginator() {
