@@ -16,8 +16,6 @@
 
 package club.spreadme.database.core.type.support;
 
-import club.spreadme.database.core.type.AbstractTypeHandler;
-
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

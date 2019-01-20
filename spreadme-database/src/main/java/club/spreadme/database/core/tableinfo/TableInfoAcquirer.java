@@ -21,7 +21,7 @@ import club.spreadme.database.core.grammar.TableInfo;
 import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
-import club.spreadme.database.core.type.AbstractTypeHandler;
+import club.spreadme.database.core.type.support.AbstractTypeHandler;
 import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
 import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.exception.DataBaseAccessException;
@@ -96,7 +96,7 @@ public class TableInfoAcquirer {
             resultSet = databaseMetaData.getColumns(catalog, schema, tableName, columnName);
             List<TableInfo> tableInfos = new DefaultResultSetParser<>(new BeanRowMapper<>(TableInfo.class)).parse(resultSet);
             tableInfos.forEach(tableInfo -> {
-                AbstractTypeHandler<?> typeHandler = (AbstractTypeHandler<?>) TypeHandlerRegiatrar.getTypeReference(JDBCType.valueOf(tableInfo.getData_type()));
+                AbstractTypeHandler<?> typeHandler = (AbstractTypeHandler<?>) TypeHandlerRegiatrar.getTypeHandler(JDBCType.valueOf(tableInfo.getData_type()));
                 if (typeHandler == null) {
                     throw new DAOMehtodException("The JDBCType " + tableInfo.getType_name() + "are not support handle");
                 }

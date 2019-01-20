@@ -16,27 +16,30 @@
 
 package club.spreadme.database.core.type.support;
 
-import java.sql.JDBCType;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.StringReader;
+import java.sql.*;
 
-public class StringTypeHandler extends AbstractTypeHandler<String> {
+public class NClobTypeHandler extends AbstractTypeHandler<String> {
 
     @Override
     protected void setNonNullParameter(PreparedStatement ps, int index, String parameter, JDBCType jdbcType) throws SQLException {
-        ps.setString(index, parameter);
+        StringReader reader = new StringReader(parameter);
+        ps.setCharacterStream(index, reader, parameter.length());
     }
 
     @Override
     protected String getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
-        String result = resultSet.getString(columnName);
-        return resultSet.wasNull() ? null : result;
+        Clob clob = resultSet.getClob(columnName);
+        return toString(clob);
     }
 
     @Override
     protected String getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
-        String result = resultSet.getString(columnIndex);
-        return resultSet.wasNull() ? null : result;
+        Clob clob = resultSet.getClob(columnIndex);
+        return toString(clob);
+    }
+
+    private String toString(Clob clob) throws SQLException {
+        return clob == null ? null : clob.getSubString(1, (int) clob.length());
     }
 }

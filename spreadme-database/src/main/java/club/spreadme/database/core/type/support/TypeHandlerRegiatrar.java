@@ -20,16 +20,22 @@ import club.spreadme.database.core.type.TypeHandler;
 import club.spreadme.lang.cache.Cache;
 import club.spreadme.lang.cache.support.ConcurrentMapCache;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.JDBCType;
+import java.util.Date;
 
 public final class TypeHandlerRegiatrar {
 
     private static final Cache<JDBCType, TypeHandler<?>> JDBC_TYPE_HANDLER_CACHE = new ConcurrentMapCache<>("JDBC_TYPE_HANDLER_CACHE");
+    private static final Cache<Class<?>, TypeHandler<?>> ALL_TYPE_HANDLER_CACHE = new ConcurrentMapCache<>("ALL_TYPE_HANDLER_CACHE");
 
+    // default typehandler regiatar
     static {
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.BOOLEAN, new BooleanTypeHandler());
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.BIT, new BooleanTypeHandler());
 
+        JDBC_TYPE_HANDLER_CACHE.put(JDBCType.NCLOB, new NClobTypeHandler());
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.TINYINT, new ByteTypeHandler());
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.SMALLINT, new ShortTypeHandler());
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.INTEGER, new IntegerTypeHandler());
@@ -51,7 +57,52 @@ public final class TypeHandlerRegiatrar {
         JDBC_TYPE_HANDLER_CACHE.put(JDBCType.DATE, new DateTypeHandler());
     }
 
-    public static TypeHandler<?> getTypeReference(JDBCType jdbcType) {
+    // default class regiatar
+    static {
+        ALL_TYPE_HANDLER_CACHE.put(Boolean.class, new BooleanTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(boolean.class, new BooleanTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Byte.class, new ByteTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(byte.class, new ByteTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Short.class, new ShortTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(short.class, new ShortTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Integer.class, new IntegerTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(int.class, new IntegerTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Long.class, new LongTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(long.class, new LongTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Float.class, new FloatTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(float.class, new FloatTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Double.class, new DateTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(double.class, new DateTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(String.class, new StringTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(BigInteger.class, new BigIntegerTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(BigDecimal.class, new BigDecimalTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(byte[].class, new ByteArrayTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(Byte[].class, new ByteArrayTypeHandler());
+
+        ALL_TYPE_HANDLER_CACHE.put(Date.class, new DateTypeHandler());
+    }
+
+    public static void registerTypeHandler(JDBCType jdbcType, TypeHandler<?> typeHandler) {
+        JDBC_TYPE_HANDLER_CACHE.put(jdbcType, typeHandler);
+    }
+
+    public static void registerClass(Class<?> clazz, TypeHandler<?> typeHandler){
+        ALL_TYPE_HANDLER_CACHE.put(clazz, typeHandler);
+    }
+
+    public static TypeHandler<?> getTypeHandler(JDBCType jdbcType) {
         return JDBC_TYPE_HANDLER_CACHE.get(jdbcType);
+    }
+
+    public static TypeHandler<?> getTypeHandler(Class<?> clazz){
+        return ALL_TYPE_HANDLER_CACHE.get(clazz);
     }
 }

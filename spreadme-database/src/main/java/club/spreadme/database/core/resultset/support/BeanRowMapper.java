@@ -16,12 +16,14 @@
 
 package club.spreadme.database.core.resultset.support;
 
-import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.resultset.RowMapper;
-import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.core.resource.ResourceHandler;
+import club.spreadme.database.core.resultset.RowMapper;
+import club.spreadme.database.core.type.TypeHandler;
+import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
+import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.lang.Reflection;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
@@ -49,19 +51,28 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             if (columnCount > 1) {
                 throw new DataBaseAccessException("Too much parameter from " + clazz.getName());
             }
-            return clazz.cast(rs.getObject(1));
+            TypeHandler typeHandler = TypeHandlerRegiatrar.getTypeHandler(clazz);
+            if (typeHandler == null) {
+                throw new DataBaseAccessException("Not find typehandler for " + clazz);
+            }
+            return (T) typeHandler.getResult(rs, 1);
 
         }
-        else if (Record.class.equals(clazz)) {
-            return (T) new RecordRowMapper().mapping(rs);
-        }
         else {
-            T object = clazz.newInstance();
+            T entity = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = ResourceHandler.getColumnName(resultSetMetaData, i);
-                Reflection.setFieldValue(object, columnName, rs.getObject(i));
+                Field field = Reflection.findFieldAccessible(clazz, columnName);
+                if (field == null) {
+                    throw new DataBaseAccessException("Not find field match for " + clazz);
+                }
+                TypeHandler typeHandler = TypeHandlerRegiatrar.getTypeHandler(field.getType());
+                if (typeHandler == null) {
+                    throw new DataBaseAccessException("Not find typehandler for " + field.getType());
+                }
+                Reflection.setFieldValue(entity, columnName, typeHandler.getResult(rs, i));
             }
-            return object;
+            return entity;
         }
 
     }

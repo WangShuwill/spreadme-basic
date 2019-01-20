@@ -21,22 +21,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StringTypeHandler extends AbstractTypeHandler<String> {
+public class ByteArrayTypeHandler extends AbstractTypeHandler<byte[]> {
 
     @Override
-    protected void setNonNullParameter(PreparedStatement ps, int index, String parameter, JDBCType jdbcType) throws SQLException {
-        ps.setString(index, parameter);
+    protected void setNonNullParameter(PreparedStatement ps, int index, byte[] parameter, JDBCType jdbcType) throws SQLException {
+        ps.setBytes(index, parameter);
     }
 
     @Override
-    protected String getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
-        String result = resultSet.getString(columnName);
-        return resultSet.wasNull() ? null : result;
+    protected byte[] getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
+        return resultSet.getBytes(columnName);
     }
 
     @Override
-    protected String getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
-        String result = resultSet.getString(columnIndex);
-        return resultSet.wasNull() ? null : result;
+    protected byte[] getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
+        return resultSet.getBytes(columnIndex);
     }
+
 }

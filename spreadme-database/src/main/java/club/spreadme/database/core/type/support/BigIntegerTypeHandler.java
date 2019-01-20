@@ -16,8 +16,6 @@
 
 package club.spreadme.database.core.type.support;
 
-import club.spreadme.database.core.type.AbstractTypeHandler;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.JDBCType;

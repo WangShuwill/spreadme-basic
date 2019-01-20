@@ -14,8 +14,9 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.core.type;
+package club.spreadme.database.core.type.support;
 
+import club.spreadme.database.core.type.TypeHandler;
 import club.spreadme.lang.Assert;
 import club.spreadme.lang.reflection.TypeReference;
 

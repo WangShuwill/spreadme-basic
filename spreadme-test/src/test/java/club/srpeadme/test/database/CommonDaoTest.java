@@ -58,6 +58,7 @@ public class CommonDaoTest {
     public void testCommonDAO() {
         List<Record> records = commonDao.query("select * from movies where id = ?", "tt0468569");
         LOGGER.info(records.toString());
+        LOGGER.info(commonDao.queryOne("select count(*) from movies", Long.class).toString());
     }
 
     @Test

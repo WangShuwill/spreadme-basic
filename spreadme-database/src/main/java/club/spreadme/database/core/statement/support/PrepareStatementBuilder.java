@@ -19,6 +19,9 @@ package club.spreadme.database.core.statement.support;
 import club.spreadme.database.core.cache.CacheKey;
 import club.spreadme.database.core.statement.WrappedStatement;
 import club.spreadme.database.core.statement.wrapper.PrepareWrappedStatement;
+import club.spreadme.database.core.type.TypeHandler;
+import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
+import club.spreadme.database.exception.DataBaseAccessException;
 import club.spreadme.database.metadata.ConcurMode;
 
 import java.sql.*;
@@ -51,11 +54,16 @@ public class PrepareStatementBuilder extends AbstractStatementBuilder {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Statement createStatement(Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, concurMode.getValue());
         int parameterIndex = 1;
         for (Object parameter : parameters) {
-            ps.setObject(parameterIndex, parameter);
+            TypeHandler typeHandler = TypeHandlerRegiatrar.getTypeHandler(parameter.getClass());
+            if (typeHandler == null) {
+                throw new DataBaseAccessException("Not find typehandler for " + parameter.getClass());
+            }
+            typeHandler.setParameter(ps, parameterIndex, parameter, JDBCType.NULL);
             parameterIndex++;
         }
         return ps;
