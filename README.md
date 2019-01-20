@@ -23,7 +23,7 @@ Install
 <dependency>
   <groupId>club.spreadme</groupId>
    <artifactId>spreadme-frame</artifactId>
-  <version>1.4.7</version>
+  <version>1.4.8</version>
 </dependency>
 ```
 Tutorials
