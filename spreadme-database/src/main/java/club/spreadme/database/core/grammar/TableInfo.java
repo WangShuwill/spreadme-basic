@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package club.spreadme.database.plugin.tableinfo;
+package club.spreadme.database.core.grammar;
 
 public class TableInfo {
 
@@ -24,6 +24,7 @@ public class TableInfo {
     private String column_name;
     private Integer data_type;
     private String type_name;
+    private Class<?> clazz;
     private Integer colunm_size;
     private Integer nullable;
 
@@ -75,6 +76,14 @@ public class TableInfo {
         this.type_name = type_name;
     }
 
+    public Class<?> getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class<?> clazz) {
+        this.clazz = clazz;
+    }
+
     public Integer getColunm_size() {
         return colunm_size;
     }
@@ -100,6 +109,7 @@ public class TableInfo {
                 ", column_name='" + column_name + '\'' +
                 ", data_type=" + data_type +
                 ", type_name='" + type_name + '\'' +
+                ", clazz=" + clazz +
                 ", colunm_size=" + colunm_size +
                 ", nullable=" + nullable +
                 '}';

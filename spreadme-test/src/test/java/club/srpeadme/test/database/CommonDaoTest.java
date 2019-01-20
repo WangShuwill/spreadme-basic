@@ -18,13 +18,11 @@ package club.srpeadme.test.database;
 
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
-import club.spreadme.database.core.type.AbstractTypeHandler;
-import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
 import club.spreadme.database.dao.support.CommonDao;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;
 import club.spreadme.database.plugin.paginator.dialect.MySQLPaginationDialect;
-import club.spreadme.database.plugin.tableinfo.TableInfoAcquirer;
+import club.spreadme.database.core.tableinfo.TableInfoAcquirer;
 import club.srpeadme.test.domain.Movie;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.JDBCType;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,9 +113,6 @@ public class CommonDaoTest {
     public void testTableinfoAcquirer() {
         TableInfoAcquirer tableInfoAcquirer = TableInfoAcquirer.getInstance().use(dataSource);
         tableInfoAcquirer.getTableInfo("", "", "movies", "%")
-                .forEach(tableInfo -> {
-                    AbstractTypeHandler<?> typeHandler = (AbstractTypeHandler<?>) TypeHandlerRegiatrar.getTypeReference(JDBCType.valueOf(tableInfo.getData_type()));
-                    System.out.println(tableInfo.getColumn_name() + " : " + typeHandler.getRawType());
-                });
+                .forEach(System.out::println);
     }
 }
