@@ -85,7 +85,6 @@ public class TableInfoAcquirer {
             throw new DataBaseAccessException(ex.getMessage());
         }
         finally {
-            ResourceHandler.closeResultSet(resultSet);
             ResourceHandler.closeConnection(connection, dataSource);
         }
     }
@@ -106,6 +105,7 @@ public class TableInfoAcquirer {
             return tableInfos;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             throw new DataBaseAccessException(ex.getMessage());
         }
         finally {

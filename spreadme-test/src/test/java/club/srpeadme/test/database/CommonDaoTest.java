@@ -22,14 +22,16 @@ import club.spreadme.database.dao.support.CommonDao;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;
 import club.spreadme.database.plugin.paginator.dialect.MySQLPaginationDialect;
-import club.spreadme.database.core.tableinfo.TableInfoAcquirer;
+import club.spreadme.util.codeutil.ModelGenerator;
 import club.srpeadme.test.domain.Movie;
+import freemarker.template.TemplateException;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -111,9 +113,13 @@ public class CommonDaoTest {
     }
 
     @Test
-    public void testTableinfoAcquirer() {
-        TableInfoAcquirer tableInfoAcquirer = TableInfoAcquirer.getInstance().use(dataSource);
-        tableInfoAcquirer.getTableInfo("", "", "movies", "%")
-                .forEach(System.out::println);
+    public void testTableinfoAcquirer() throws IOException, TemplateException {
+        ModelGenerator generator = new ModelGenerator.Builder()
+                .dataSource(dataSource).tableName("actors")
+                .primaryKey("id").packageName("club.srpeadme.test.domain")
+                .path("/home/wswei/Documents/Dev/Project/spreadme-frame/spreadme-test/src/test/java/club/srpeadme/test/domain")
+                .build();
+
+        generator.generate();
     }
 }

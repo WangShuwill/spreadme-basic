@@ -27,6 +27,12 @@
         </dependency>
 
         <dependency>
+            <groupId>club.spreadme</groupId>
+            <artifactId>spreadme-util</artifactId>
+            <version>1.4.8</version>
+        </dependency>
+
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.5</version>

@@ -62,15 +62,15 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             T entity = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = ResourceHandler.getColumnName(resultSetMetaData, i);
-                Field field = Reflection.findFieldAccessible(clazz, columnName);
-                if (field == null) {
-                    throw new DataBaseAccessException("Not find field match for " + clazz);
+                Field field = Reflection.findField(clazz, columnName);
+                if (field != null) {
+                    Reflection.makeAccessible(field, true);
+                    TypeHandler typeHandler = TypeHandlerRegiatrar.getTypeHandler(field.getType());
+                    if (typeHandler == null) {
+                        throw new DataBaseAccessException("Not find typehandler for " + field.getType());
+                    }
+                    Reflection.setFieldValue(entity, columnName, typeHandler.getResult(rs, i));
                 }
-                TypeHandler typeHandler = TypeHandlerRegiatrar.getTypeHandler(field.getType());
-                if (typeHandler == null) {
-                    throw new DataBaseAccessException("Not find typehandler for " + field.getType());
-                }
-                Reflection.setFieldValue(entity, columnName, typeHandler.getResult(rs, i));
             }
             return entity;
         }
