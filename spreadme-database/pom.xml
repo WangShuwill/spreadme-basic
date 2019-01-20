@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spreadme-frame</artifactId>
         <groupId>club.spreadme</groupId>
-        <version>1.4.7</version>
+        <version>1.4.8</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>club.spreadme</groupId>
             <artifactId>spreadme-lang</artifactId>
-            <version>1.4.7</version>
+            <version>1.4.8</version>
         </dependency>
 
         <dependency>

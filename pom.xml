@@ -4,10 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>club.spreadme</groupId>
     <artifactId>spreadme-frame</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.7</version>
+    <version>1.4.8</version>
     <modules>
         <module>spreadme-lang</module>
         <module>spreadme-test</module>
@@ -18,7 +24,7 @@
 
     <name>spreadme-frame</name>
     <url>https://github.com/WangShuwill/spread-frame</url>
-    <description>a quikly dev framework</description>
+    <description>a quikly development framework</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,7 +40,6 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
-        <mysql.version>6.0.5</mysql.version>
     </properties>
 
     <licenses>
@@ -108,12 +113,6 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
             </dependency>
 
             <dependency>
