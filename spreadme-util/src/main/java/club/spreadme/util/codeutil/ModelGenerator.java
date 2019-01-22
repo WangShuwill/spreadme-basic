@@ -27,10 +27,12 @@ import freemarker.template.TemplateException;
 
 import javax.sql.DataSource;
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModelGenerator {
 
@@ -111,12 +113,13 @@ public class ModelGenerator {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 
         InputStream is = ModelGenerator.class.getClassLoader().getResourceAsStream(TEMPLATE_FIELNAME);
-        byte[] bytes = new byte[is.available()];
-        is.read(bytes);
-        String str = new String(bytes);
+        String templateContent = new BufferedReader(new InputStreamReader(is))
+                .lines()
+                .parallel()
+                .collect(Collectors.joining(System.lineSeparator()));
 
         StringTemplateLoader templateLoader = new StringTemplateLoader();
-        templateLoader.putTemplate(TEMPLATENAME, str);
+        templateLoader.putTemplate(TEMPLATENAME, templateContent);
         configuration.setTemplateLoader(templateLoader);
         //获取模板
         Template template = configuration.getTemplate(TEMPLATENAME);

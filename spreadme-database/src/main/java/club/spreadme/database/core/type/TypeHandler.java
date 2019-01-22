@@ -16,6 +16,7 @@
 
 package club.spreadme.database.core.type;
 
+import java.lang.reflect.Type;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,4 +29,6 @@ public interface TypeHandler<T> {
     T getResult(ResultSet resultSet, String columnName) throws SQLException;
 
     T getResult(ResultSet resultSet, int columnIndex) throws SQLException;
+
+    Type getType();
 }

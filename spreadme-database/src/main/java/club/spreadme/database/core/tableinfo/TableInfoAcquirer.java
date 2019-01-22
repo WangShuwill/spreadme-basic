@@ -21,10 +21,11 @@ import club.spreadme.database.core.grammar.TableInfo;
 import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.database.core.resultset.support.BeanRowMapper;
 import club.spreadme.database.core.resultset.support.DefaultResultSetParser;
-import club.spreadme.database.core.type.support.AbstractTypeHandler;
+import club.spreadme.database.core.type.TypeHandler;
 import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
 import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.exception.DataBaseAccessException;
+import club.spreadme.lang.StringUtil;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Type;
@@ -75,9 +76,14 @@ public class TableInfoAcquirer {
 
     public List<TableInfo> getTableInfo(String catalog, String schema, String tableName, String columnName) {
         Connection connection = null;
-        ResultSet resultSet = null;
         try {
             connection = ResourceHandler.getConnection(dataSource);
+            if (StringUtil.isBlank(catalog)) {
+                catalog = connection.getCatalog();
+            }
+            if (StringUtil.isBlank(schema)) {
+                schema = connection.getSchema();
+            }
             DatabaseMetaData databaseMetaData = connection.getMetaData();
             return getTableInfo(databaseMetaData, catalog, schema, tableName, columnName);
         }
@@ -95,18 +101,17 @@ public class TableInfoAcquirer {
             resultSet = databaseMetaData.getColumns(catalog, schema, tableName, columnName);
             List<TableInfo> tableInfos = new DefaultResultSetParser<>(new BeanRowMapper<>(TableInfo.class)).parse(resultSet);
             tableInfos.forEach(tableInfo -> {
-                AbstractTypeHandler<?> typeHandler = (AbstractTypeHandler<?>) TypeHandlerRegiatrar.getTypeHandler(JDBCType.valueOf(tableInfo.getData_type()));
+                TypeHandler<?> typeHandler = TypeHandlerRegiatrar.getTypeHandler(JDBCType.valueOf(tableInfo.getData_type()));
                 if (typeHandler == null) {
                     throw new DAOMehtodException("The JDBCType " + tableInfo.getType_name() + "are not support handle");
                 }
-                Type rawType = typeHandler.getRawType();
+                Type rawType = typeHandler.getType();
                 tableInfo.setClazz((Class<?>) rawType);
             });
             return tableInfos;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new DataBaseAccessException(ex.getMessage());
+            throw new DataBaseAccessException(ex.getMessage(), ex);
         }
         finally {
             ResourceHandler.closeResultSet(resultSet);

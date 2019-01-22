@@ -20,6 +20,7 @@ import club.spreadme.database.core.type.TypeHandler;
 import club.spreadme.lang.Assert;
 import club.spreadme.lang.reflection.TypeReference;
 
+import java.lang.reflect.Type;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,6 +47,11 @@ public abstract class AbstractTypeHandler<T> extends TypeReference<T> implements
     @Override
     public T getResult(ResultSet resultSet, int columnIndex) throws SQLException {
         return getNullableResult(resultSet, columnIndex);
+    }
+
+    @Override
+    public Type getType() {
+        return getRawType();
     }
 
     protected abstract void setNonNullParameter(PreparedStatement ps, int index, T parameter, JDBCType jdbcType) throws SQLException;
