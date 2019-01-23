@@ -18,7 +18,6 @@ package club.spreadme.database.core.resultset.support;
 
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.core.resultset.RowMapper;
-import club.spreadme.database.core.resource.ResourceHandler;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -38,8 +37,8 @@ public class RecordRowMapper implements RowMapper<Record> {
         Record record = new Record(columnCount);
         record.setTableName(resultSetMetaData.getTableName(1));
         for (int i = 1; i <= columnCount; i++) {
-            String key = ResourceHandler.getColumnName(resultSetMetaData, i);
-            Object value = ResourceHandler.getResultSetValue(rs, i);
+            String key = resultSetMetaData.getColumnLabel(i);
+            Object value = rs.getObject(i);
             record.put(key.toLowerCase(), value);
         }
 

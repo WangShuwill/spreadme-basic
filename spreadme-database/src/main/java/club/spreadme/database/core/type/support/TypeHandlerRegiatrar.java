@@ -77,8 +77,8 @@ public final class TypeHandlerRegiatrar {
         ALL_TYPE_HANDLER_CACHE.put(Float.class, new FloatTypeHandler());
         ALL_TYPE_HANDLER_CACHE.put(float.class, new FloatTypeHandler());
 
-        ALL_TYPE_HANDLER_CACHE.put(Double.class, new DateTypeHandler());
-        ALL_TYPE_HANDLER_CACHE.put(double.class, new DateTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(Double.class, new DoubleTypeHandler());
+        ALL_TYPE_HANDLER_CACHE.put(double.class, new DoubleTypeHandler());
 
         ALL_TYPE_HANDLER_CACHE.put(String.class, new StringTypeHandler());
         ALL_TYPE_HANDLER_CACHE.put(BigInteger.class, new BigIntegerTypeHandler());

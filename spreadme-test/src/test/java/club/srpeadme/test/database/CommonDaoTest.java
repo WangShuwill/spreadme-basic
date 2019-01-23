@@ -19,6 +19,7 @@ package club.srpeadme.test.database;
 import club.spreadme.database.core.datasource.SpreadDataSource;
 import club.spreadme.database.core.grammar.Record;
 import club.spreadme.database.dao.support.CommonDao;
+import club.spreadme.database.plugin.Interceptor;
 import club.spreadme.database.plugin.paginator.Page;
 import club.spreadme.database.plugin.paginator.Paginator;
 import club.spreadme.database.plugin.paginator.dialect.MySQLPaginationDialect;
@@ -53,7 +54,7 @@ public class CommonDaoTest {
         commonDao = CommonDao.getInstance().use(dataSource);
         Paginator paginator = new Paginator();
         paginator.addDialect(MySQLPaginationDialect.class);
-        commonDao.addInterceptor(paginator);
+        commonDao.use(new Interceptor[]{paginator});
     }
 
     @Test
@@ -115,8 +116,10 @@ public class CommonDaoTest {
     @Test
     public void testTableinfoAcquirer() throws IOException, TemplateException {
         ModelGenerator generator = new ModelGenerator.Builder()
-                .dataSource(dataSource).tableName("actors")
-                .primaryKey("id").packageName("club.srpeadme.test.domain")
+                .dataSource(dataSource)
+                .tableName("actors")
+                .primaryKey("id")
+                .packageName("club.srpeadme.test.domain")
                 .path("/home/wswei/Documents/Dev/Project/spreadme-frame/spreadme-test/src/test/java/club/srpeadme/test/domain")
                 .build();
 

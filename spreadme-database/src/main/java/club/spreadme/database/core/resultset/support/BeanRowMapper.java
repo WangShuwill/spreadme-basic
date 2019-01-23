@@ -16,7 +16,6 @@
 
 package club.spreadme.database.core.resultset.support;
 
-import club.spreadme.database.core.resource.ResourceHandler;
 import club.spreadme.database.core.resultset.RowMapper;
 import club.spreadme.database.core.type.TypeHandler;
 import club.spreadme.database.core.type.support.TypeHandlerRegiatrar;
@@ -61,7 +60,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         else {
             T entity = clazz.newInstance();
             for (int i = 1; i <= columnCount; i++) {
-                String columnName = ResourceHandler.getColumnName(resultSetMetaData, i);
+                String columnName = resultSetMetaData.getColumnLabel(i);
                 Field field = Reflection.findField(clazz, columnName);
                 if (field != null) {
                     Reflection.makeAccessible(field, true);

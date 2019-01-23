@@ -21,15 +21,16 @@ import club.spreadme.database.exception.DataBaseAccessException;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Proxy;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @author Wangshuwei
  * @since 2018-6-21
  */
 public abstract class ResourceHandler {
-
-    private static DatabaseMetaData databaseMetaData;
 
     /**
      * Get a connection from datasource
@@ -42,13 +43,9 @@ public abstract class ResourceHandler {
             // Transaction support,the current operation has begined transaction
             ConnectionHolder connectionHolder = TransactionSynchronizationManager.getConnectionHolder();
             if (connectionHolder != null && connectionHolder.isTransactionActive()) {
-                Connection connection = connectionHolder.getConnection(dataSource);
-                databaseMetaData = connection.getMetaData();
-                return connection;
+                return connectionHolder.getConnection(dataSource);
             }
-            Connection connection = dataSource.getConnection();
-            databaseMetaData = connection.getMetaData();
-            return connection;
+            return dataSource.getConnection();
         }
         catch (SQLException e) {
             throw new DataBaseAccessException(e.getMessage());
@@ -137,47 +134,36 @@ public abstract class ResourceHandler {
         }
     }
 
-    /**
-     * get a column name from resultsetmetadata by index
-     *
-     * @param resultSetMetaData RsultsetMetaData
-     * @param columnIndex       Column index
-     * @return column name
-     */
-    public static String getColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) {
-        try {
-            return resultSetMetaData.getColumnLabel(columnIndex);
-        }
-        catch (SQLException ex) {
-            throw new DataBaseAccessException(ex.getMessage());
-        }
-    }
-
-    /**
-     * get value from resultset by index
-     *
-     * @param rs    Resultset
-     * @param index Index
-     * @return value
-     */
-    public static Object getResultSetValue(ResultSet rs, int index) {
-        try {
-            return rs.getObject(index);
-        }
-        catch (SQLException ex) {
-            throw new DataBaseAccessException(ex.getMessage());
-        }
-    }
-
-    public static DatabaseMetaData getDataBaseMeteData() {
-        return databaseMetaData;
-    }
-
     protected static boolean equals(Connection sourceConnection, Connection destinationConnection) {
         //compatible the proxy connection of embed spreaddatasource
         if (Proxy.isProxyClass(sourceConnection.getClass())) {
             return sourceConnection.hashCode() == destinationConnection.hashCode();
         }
         return sourceConnection.equals(destinationConnection);
+    }
+
+    /**
+     * do with connnection after get a connection from datasource
+     *
+     * @param dataSource        DataSource
+     * @param connectionHandler ConnectionHandler
+     */
+    public static void doWithDataSource(DataSource dataSource, ConnectionHandler connectionHandler) {
+        Connection connection = null;
+        try {
+            connection = getConnection(dataSource);
+            connectionHandler.handle(connection);
+        }
+        catch (Exception ex) {
+            throw new DataBaseAccessException(ex.getMessage(), ex);
+        }
+        finally {
+            closeConnection(connection, dataSource);
+        }
+    }
+
+    @FunctionalInterface
+    public interface ConnectionHandler {
+        void handle(Connection connection) throws Exception;
     }
 }

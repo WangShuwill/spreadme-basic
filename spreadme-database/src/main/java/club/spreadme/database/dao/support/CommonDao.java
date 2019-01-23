@@ -94,10 +94,6 @@ public class CommonDao extends AbstractDao {
         return DaoProxyFactory.get(clazz, this.executor);
     }
 
-    public void addInterceptor(Interceptor... interceptors) {
-
-    }
-
     public TransactionExecutor getTransactionExecutor() {
         if (transactionExecutor == null) {
             transactionExecutor = new TransactionExecutor(this.dataSource);
