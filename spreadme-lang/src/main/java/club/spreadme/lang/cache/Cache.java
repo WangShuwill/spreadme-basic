@@ -22,6 +22,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @param <K> key
+ * @param <V> value
+ * @author wswei
+ */
 public interface Cache<K, V> {
 
     Lock lock = new ReentrantLock();

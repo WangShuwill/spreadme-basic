@@ -81,10 +81,10 @@ public class SpreadDatabaseAutoConfigure {
         CommonDao commonDao = CommonDao.getInstance().use(dataSource);
         try {
             for (Class<? extends PaginationDialect> paginationdialect : properties.getPaginationDialects()) {
-                commonDao.addInterceptor(new Paginator().addDialect(paginationdialect));
+                commonDao.use(new Paginator[]{new Paginator().addDialect(paginationdialect)});
             }
             for (Class<? extends Interceptor> interceptor : properties.getInterceptors()) {
-                commonDao.addInterceptor(interceptor.newInstance());
+                commonDao.use(new Interceptor[]{interceptor.newInstance()});
             }
             for (Class<? extends Cache> cache : properties.getCaches()) {
                 commonDao.use(cache.newInstance());
