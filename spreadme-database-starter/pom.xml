@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spreadme-database-spring-boot-starter</artifactId>
+    <artifactId>spreadme-database-starter</artifactId>
 
-    <name>spreadme-database-spring-boot-starter</name>
+    <name>spreadme-database-starter</name>
 
     <properties>
         <druid.version>1.1.12</druid.version>
