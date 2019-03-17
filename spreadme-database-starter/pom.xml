@@ -32,7 +32,7 @@
         <dependency>
             <groupId>club.spreadme</groupId>
             <artifactId>spreadme-database</artifactId>
-            <version>1.4.8</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
