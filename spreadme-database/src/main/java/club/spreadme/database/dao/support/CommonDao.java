@@ -48,32 +48,23 @@ public class CommonDao extends AbstractDao {
 
     private TransactionExecutor transactionExecutor;
 
-    private volatile static CommonDao commonDao;
-
     private CommonDao() {
         super();
     }
 
     public static CommonDao getInstance() {
-        if (commonDao == null) {
-            synchronized (CommonDao.class) {
-                if (commonDao == null) {
-                    commonDao = new CommonDao();
-                }
-            }
-        }
-        return commonDao;
+        return new CommonDao();
     }
 
     public CommonDao use(DataSource dataSource) {
         this.dataSource = dataSource;
         this.executor = new SimplExecutor(this.dataSource);
-        return commonDao;
+        return this;
     }
 
     public CommonDao use(Executor executor) {
         this.executor = executor;
-        return commonDao;
+        return this;
     }
 
     @Override

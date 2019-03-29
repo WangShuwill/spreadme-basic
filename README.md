@@ -7,7 +7,6 @@ spreadme-frame是一套用于Java快捷开发的框架,集成了常用的工具�
 - spreadme-lang : 字符串操作,反射,事件驱动等通用组件.
 - spreadme-datase : 一套用于简化JDBC开发的工具.
 - spreadme-database-springboot : starter for springboot
-- spreadme-util : common utils for development
 
 Liense
 ------
@@ -19,17 +18,31 @@ Install
 -------
 - Maven
 - java1.8 +
-``` xml
-<dependency>
-  <groupId>club.spreadme</groupId>
-   <artifactId>spreadme-frame</artifactId>
-  <version>1.4.8</version>
-</dependency>
-```
+
 Tutorials
 -------
 
 - #### spread-lang
+``` xml
+<dependency>
+  <groupId>club.spreadme</groupId>
+   <artifactId>spreadme-lang</artifactId>
+  <version>1.4.8</version>
+</dependency>
+```
 - #### spread-database
+``` xml
+<dependency>
+  <groupId>club.spreadme</groupId>
+   <artifactId>spreadme-database</artifactId>
+  <version>1.4.8</version>
+</dependency>
+```
 - #### spread-database-springboot
-- #### spread-util
+``` xml
+<dependency>
+  <groupId>club.spreadme</groupId>
+   <artifactId>spread-database-springboot</artifactId>
+  <version>1.4.8</version>
+</dependency>
+```
