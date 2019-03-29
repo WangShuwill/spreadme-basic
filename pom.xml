@@ -13,12 +13,10 @@
     <groupId>club.spreadme</groupId>
     <artifactId>spreadme-frame</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
     <modules>
         <module>spreadme-lang</module>
-        <module>spreadme-test</module>
         <module>spreadme-database</module>
-        <module>spreadme-util</module>
         <module>spreadme-database-starter</module>
     </modules>
 
@@ -33,10 +31,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <cglib.version>3.2.10</cglib.version>
         <ehcache.version>2.10.4</ehcache.version>
-        <servlet.api.version>3.1.0</servlet.api.version>
-        <spring.version>5.1.4.RELEASE</spring.version>
-        <lettuce.version>5.1.3.RELEASE</lettuce.version>
-        <fastjson.version>1.2.54</fastjson.version>
         <freemarker.version>2.3.23</freemarker.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -73,35 +67,10 @@
                 <version>${cglib.version}</version>
             </dependency>
 
-            <!--Cache Util-->
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${ehcache.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${servlet.api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.lettuce</groupId>
-                <artifactId>lettuce-core</artifactId>
-                <version>${lettuce.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
             </dependency>
 
             <dependency>
