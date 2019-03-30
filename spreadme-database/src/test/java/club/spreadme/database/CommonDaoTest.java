@@ -41,9 +41,9 @@ public class CommonDaoTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonDaoTest.class);
 
-    private static final String URL = "jdbc:mysql://192.168.52.128:3306/imdb?autoReconnect=true&useSSL=false";
+    private static final String URL = "jdbc:mysql://192.168.2.128:3306/imdb?autoReconnect=true&useSSL=false";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "123456";
+    private static final String PASSWORD = "1234567";
 
     private CommonDao commonDao;
     private DataSource dataSource;

@@ -21,6 +21,8 @@ public abstract class StringUtil {
     public static final String EMPTY = "";
     public static final String LF = "\n";
     public static final String CR = "\r";
+    public static final String DOT = ".";
+    public static final String SLASH = "/";
 
     public static final int INDEX_NOT_FIND = -1;
 
