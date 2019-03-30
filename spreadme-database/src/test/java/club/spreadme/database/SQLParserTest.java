@@ -52,4 +52,8 @@ public class SQLParserTest {
         System.out.println(ClassUtil.getClassPath());
     }
 
+    @Test
+    public void testSQLTemplateParser(){
+
+    }
 }

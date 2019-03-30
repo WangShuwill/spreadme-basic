@@ -60,4 +60,24 @@ public abstract class ClassUtil {
         }
         return paths;
     }
+
+    /**
+     * 获取含有main方法的类
+     *
+     * @return main方法的类
+     */
+    public static Class<?> deduceMainClass() {
+        try {
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for (StackTraceElement traceElement : stackTrace) {
+                if ("main".equals(traceElement.getMethodName())) {
+                    return Class.forName(traceElement.getClassName());
+                }
+            }
+        }
+        catch (ClassNotFoundException ignored) {
+
+        }
+        return null;
+    }
 }

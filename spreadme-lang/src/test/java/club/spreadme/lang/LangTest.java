@@ -45,5 +45,6 @@ public class LangTest {
         System.out.println(classLoader);
         System.out.println(ClassUtil.getClassPaths("club.spreadme.lang", true));
         System.out.println(ClassUtil.getClassPath());
+        System.out.println(ClassUtil.deduceMainClass());
     }
 }
