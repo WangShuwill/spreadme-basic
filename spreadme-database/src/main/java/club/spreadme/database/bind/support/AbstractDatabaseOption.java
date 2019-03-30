@@ -53,10 +53,12 @@ public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser 
     public Object query(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor) {
         // First parse method and values of method parameters to SQLParameter, then parse sqlparameters to sqlstatement
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
-        //SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
-        SQLStatement sqlStatement = new RoutingSQLParser(
+        SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
+
+        /*SQLStatement sqlStatement = new RoutingSQLParser(
                 new TemplateSQLParser(String.valueOf(sqlCommand.getSql().hashCode()), sqlCommand.getSql(), sqlParameters))
                 .parse();
+        */
 
         // post process sqlstatement
         Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
