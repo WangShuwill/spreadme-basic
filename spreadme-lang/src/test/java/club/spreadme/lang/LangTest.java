@@ -39,4 +39,12 @@ public class LangTest {
         System.out.println(StringUtil.toUpper(target, 1, 2, 3));
     }
 
+    @Test
+    public void testClassUtil(){
+        ClassLoader classLoader = ClassUtil.getClassLoader();
+        System.out.println(classLoader);
+        System.out.println(ClassUtil.getClassPaths("club.spreadme.lang", true));
+        System.out.println(ClassUtil.getClassPath());
+        System.out.println(ClassUtil.deduceMainClass());
+    }
 }

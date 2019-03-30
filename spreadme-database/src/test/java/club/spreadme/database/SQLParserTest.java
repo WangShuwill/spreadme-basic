@@ -22,6 +22,7 @@ import club.spreadme.database.parser.grammar.SQLStatement;
 import club.spreadme.database.parser.support.BeanSQLParser;
 import club.spreadme.database.parser.support.RoutingSQLParser;
 import club.spreadme.domain.Person;
+import club.spreadme.lang.ClassUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -47,6 +48,12 @@ public class SQLParserTest {
         SQLStatement sqlStatement = sqlParser1.parse();
         System.out.println("SQL: " + sqlStatement.getSql());
         System.out.println("Values: " + Arrays.toString(sqlStatement.getValues()));
+
+        System.out.println(ClassUtil.getClassPath());
     }
 
+    @Test
+    public void testSQLTemplateParser(){
+
+    }
 }

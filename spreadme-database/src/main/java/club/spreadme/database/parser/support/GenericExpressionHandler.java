@@ -27,9 +27,12 @@ import java.util.stream.Collectors;
 
 public class GenericExpressionHandler implements ExpressionHandler {
 
-    private final SQLParameter[] sqlParameters;
+    private SQLParameter[] sqlParameters;
 
-    public GenericExpressionHandler(SQLParameter[] sqlParameters) {
+    public GenericExpressionHandler() {
+    }
+
+    public GenericExpressionHandler(final SQLParameter[] sqlParameters) {
         this.sqlParameters = sqlParameters;
     }
 

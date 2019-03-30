@@ -23,7 +23,6 @@ import club.spreadme.database.plugin.Interceptor;
 import club.spreadme.database.plugin.paginator.Paginator;
 import club.spreadme.database.plugin.paginator.dialect.PaginationDialect;
 import club.spreadme.lang.cache.Cache;
-import com.alibaba.druid.pool.DruidDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -33,7 +32,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
@@ -44,12 +47,14 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.StringUtils;
 
-import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.List;
 
 @Configuration
 @ConditionalOnClass(ICommonDao.class)
+@ConditionalOnSingleCandidate(DataSource.class)
 @EnableConfigurationProperties(SpreadDatabaseProperties.class)
+@AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class SpreadDatabaseAutoConfigure {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpreadDatabaseAutoConfigure.class);
@@ -57,27 +62,8 @@ public class SpreadDatabaseAutoConfigure {
     private SpreadDatabaseProperties properties;
 
     @Bean
-    ICommonDao commonDao() {
-        DruidDataSource dataSource = new DruidDataSource();
-        // datasource basic infomation
-        dataSource.setUrl(properties.getUrl());
-        dataSource.setUsername(properties.getUsername());
-        dataSource.setPassword(properties.getPassword());
-        // datasource extend infomation
-        dataSource.setInitialSize(properties.getInitialSize());
-        dataSource.setMinIdle(properties.getMinIdle());
-        dataSource.setMaxActive(properties.getMaxActive());
-        dataSource.setMaxWait(properties.getMaxWait());
-        dataSource.setLogAbandoned(properties.isLogAbandoned());
-        dataSource.setRemoveAbandoned(properties.isRemoveAbandoned());
-
-        try {
-            dataSource.setFilters(properties.getFilters());
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    @ConditionalOnMissingBean
+    ICommonDao commonDao(DataSource dataSource) {
         CommonDao commonDao = CommonDao.getInstance().use(dataSource);
         try {
             for (Class<? extends PaginationDialect> paginationdialect : properties.getPaginationDialects()) {

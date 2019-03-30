@@ -26,89 +26,10 @@ public class SpreadDatabaseProperties {
 
     public static final String SPREADDATABASE_PREFIX = "spreaddatabase";
 
-    // use druid as datasource, some settings of druid
-    private String url;
-    private String username;
-    private String password;
-
-    private int initialSize = 1;
-    private int minIdle = 1;
-    private int maxActive = 20;
-    private long maxWait = 6000;
-
-    private boolean logAbandoned = true;
-    private boolean removeAbandoned = true;
-
-    private String filters = "stat";
-
     // spreaddatabase settings
     private Class<? extends PaginationDialect>[] paginationDialects = new Class[]{};
     private Class<? extends Interceptor>[] interceptors = new Class[]{};
     private Class<? extends Cache>[] caches = new Class[]{};
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getInitialSize() {
-        return initialSize;
-    }
-
-    public void setInitialSize(int initialSize) {
-        this.initialSize = initialSize;
-    }
-
-    public int getMinIdle() {
-        return minIdle;
-    }
-
-    public void setMinIdle(int minIdle) {
-        this.minIdle = minIdle;
-    }
-
-    public int getMaxActive() {
-        return maxActive;
-    }
-
-    public void setMaxActive(int maxActive) {
-        this.maxActive = maxActive;
-    }
-
-    public long getMaxWait() {
-        return maxWait;
-    }
-
-    public void setMaxWait(long maxWait) {
-        this.maxWait = maxWait;
-    }
-
-    public String getFilters() {
-        return filters;
-    }
-
-    public void setFilters(String filters) {
-        this.filters = filters;
-    }
 
     public Class<? extends PaginationDialect>[] getPaginationDialects() {
         return paginationDialects;
@@ -132,22 +53,6 @@ public class SpreadDatabaseProperties {
 
     public void setCaches(Class<? extends Cache>[] caches) {
         this.caches = caches;
-    }
-
-    public boolean isLogAbandoned() {
-        return logAbandoned;
-    }
-
-    public void setLogAbandoned(boolean logAbandoned) {
-        this.logAbandoned = logAbandoned;
-    }
-
-    public boolean isRemoveAbandoned() {
-        return removeAbandoned;
-    }
-
-    public void setRemoveAbandoned(boolean removeAbandoned) {
-        this.removeAbandoned = removeAbandoned;
     }
 
 }

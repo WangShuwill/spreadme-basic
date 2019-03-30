@@ -32,10 +32,7 @@ import club.spreadme.database.exception.DAOMehtodException;
 import club.spreadme.database.metadata.ConcurMode;
 import club.spreadme.database.parser.grammar.SQLParameter;
 import club.spreadme.database.parser.grammar.SQLStatement;
-import club.spreadme.database.parser.support.AbstractSQLParameterParser;
-import club.spreadme.database.parser.support.BeanSQLParser;
-import club.spreadme.database.parser.support.RoutingSQLParser;
-import club.spreadme.database.parser.support.SimpleSQLParser;
+import club.spreadme.database.parser.support.*;
 import club.spreadme.database.plugin.PluginHandler;
 import club.spreadme.lang.StringUtil;
 import org.slf4j.Logger;
@@ -57,6 +54,11 @@ public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser 
         // First parse method and values of method parameters to SQLParameter, then parse sqlparameters to sqlstatement
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
         SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
+
+        /*SQLStatement sqlStatement = new RoutingSQLParser(
+                new TemplateSQLParser(String.valueOf(sqlCommand.getSql().hashCode()), sqlCommand.getSql(), sqlParameters))
+                .parse();
+        */
 
         // post process sqlstatement
         Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
@@ -104,35 +106,28 @@ public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser 
                     sqlCommand.getSqlOptionType())).parse();
 
             // post process sqlstatement
-            Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
-            sqlStatement = postProcessSQLStatement(sqlStatement, processorClass);
-
-            if (StringUtil.isBlank(sqlStatement.getSql())) {
-                throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
-            }
-            StatementBuilder statementBuilder = getStatementBuilder(sqlStatement.getSql(), sqlStatement.getValues(), ConcurMode.UPDATABLE);
-            return update(statementBuilder, executor);
+            return doUpdate(methodSignature, sqlCommand, executor, sqlStatement);
         }
         else {
             // post process sqlstatement
-            Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
-            preSqlStatement = postProcessSQLStatement(preSqlStatement, processorClass);
-
-            if (StringUtil.isBlank(preSqlStatement.getSql())) {
-                throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("parse sql {}, values {}", preSqlStatement.getSql(), Arrays.toString(preSqlStatement.getValues()));
-            }
-            StatementBuilder statementBuilder = getStatementBuilder(preSqlStatement.getSql(), preSqlStatement.getValues(), ConcurMode.UPDATABLE);
-            return update(statementBuilder, executor);
+            return doUpdate(methodSignature, sqlCommand, executor, preSqlStatement);
         }
 
+    }
+
+    private Object doUpdate(MethodSignature methodSignature, SQLCommand sqlCommand, Executor executor, SQLStatement sqlStatement) {
+        Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
+        sqlStatement = postProcessSQLStatement(sqlStatement, processorClass);
+
+        if (StringUtil.isBlank(sqlStatement.getSql())) {
+            throw new DAOMehtodException("There no sql statement for the method " + methodSignature.getMethodName());
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("parse sql {}, values {}", sqlStatement.getSql(), Arrays.toString(sqlStatement.getValues()));
+        }
+        StatementBuilder statementBuilder = getStatementBuilder(sqlStatement.getSql(), sqlStatement.getValues(), ConcurMode.UPDATABLE);
+        return update(statementBuilder, executor);
     }
 
     protected SQLStatement postProcessSQLStatement(SQLStatement sqlStatement, Class<? extends PostProcessor> processorClass) {

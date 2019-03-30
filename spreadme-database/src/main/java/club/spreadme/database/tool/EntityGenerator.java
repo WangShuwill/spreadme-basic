@@ -112,6 +112,7 @@ public class EntityGenerator {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 
         InputStream is = EntityGenerator.class.getClassLoader().getResourceAsStream(TEMPLATE_FIELNAME);
+        assert is != null;
         String templateContent = new BufferedReader(new InputStreamReader(is))
                 .lines()
                 .parallel()

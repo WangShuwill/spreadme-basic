@@ -16,10 +16,68 @@
 
 package club.spreadme.lang;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 public abstract class ClassUtil {
 
-    public static String getClassPath() {
-        return ClassUtil.class.getResource("/").getPath();
+    public static ClassLoader getContextClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
     }
 
+    public static ClassLoader getClassLoader() {
+        ClassLoader classLoader = getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = ClassUtil.class.getClassLoader();
+            if (classLoader == null) {
+                classLoader = ClassLoader.getSystemClassLoader();
+            }
+        }
+        return classLoader;
+    }
+
+    public static String getClassPath() {
+        return Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath();
+    }
+
+    public static Set<String> getClassPaths(String packageName, boolean isDecode) {
+        String packagePath = packageName.replace(StringUtil.DOT, StringUtil.SLASH);
+        final Set<String> paths = new HashSet<>();
+        try {
+            Enumeration<URL> resources = getClassLoader().getResources(packagePath);
+            while (resources.hasMoreElements()) {
+                String path = resources.nextElement().getPath();
+                paths.add(isDecode ? URLDecoder.decode(path, "utf-8") : path);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return paths;
+    }
+
+    /**
+     * 获取含有main方法的类
+     *
+     * @return main方法的类
+     */
+    public static Class<?> deduceMainClass() {
+        try {
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for (StackTraceElement traceElement : stackTrace) {
+                if ("main".equals(traceElement.getMethodName())) {
+                    return Class.forName(traceElement.getClassName());
+                }
+            }
+        }
+        catch (ClassNotFoundException ignored) {
+
+        }
+        return null;
+    }
 }
