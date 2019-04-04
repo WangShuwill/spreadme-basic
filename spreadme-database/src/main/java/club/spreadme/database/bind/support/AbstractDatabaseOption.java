@@ -44,6 +44,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * common database option
+ *
+ * @see club.spreadme.database.parser.SQLParameterParser
+ * @see club.spreadme.database.bind.DatabaseOption
+ * @see club.spreadme.database.plugin.PluginHandler
+ *
+ * @author wangshuwei
+ * @since 1.4.1
+ */
 public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser implements DatabaseOption, PluginHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDatabaseOption.class);
@@ -54,11 +64,6 @@ public abstract class AbstractDatabaseOption extends AbstractSQLParameterParser 
         // First parse method and values of method parameters to SQLParameter, then parse sqlparameters to sqlstatement
         SQLParameter[] sqlParameters = parse(methodSignature.getMethod(), methodSignature.getValues());
         SQLStatement sqlStatement = new RoutingSQLParser(new SimpleSQLParser(sqlCommand.getSql(), sqlParameters)).parse();
-
-        /*SQLStatement sqlStatement = new RoutingSQLParser(
-                new TemplateSQLParser(String.valueOf(sqlCommand.getSql().hashCode()), sqlCommand.getSql(), sqlParameters))
-                .parse();
-        */
 
         // post process sqlstatement
         Class<? extends PostProcessor> processorClass = sqlCommand.getPostProcessor();
