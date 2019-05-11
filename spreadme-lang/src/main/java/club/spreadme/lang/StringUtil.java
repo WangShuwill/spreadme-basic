@@ -15,6 +15,8 @@
  */
 package club.spreadme.lang;
 
+import java.util.Random;
+
 public abstract class StringUtil {
 
     public static final String SPACE = " ";
@@ -25,6 +27,8 @@ public abstract class StringUtil {
     public static final String SLASH = "/";
 
     public static final int INDEX_NOT_FIND = -1;
+
+    public static String STRINGS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public static boolean isNotBlank(final CharSequence charSequence) {
         return !isBlank(charSequence);
@@ -142,5 +146,18 @@ public abstract class StringUtil {
             chars[index] -= 32;
         }
         return new String(chars);
+    }
+
+    public static String randomString(int length){
+        if(length<1){
+            return null;
+        }
+        Random random = new Random();
+        StringBuilder strings = new StringBuilder();
+        for(int i=0; i<length; i++){
+            int index = random.nextInt(STRINGS.length());
+            strings.append(STRINGS.charAt(index));
+        }
+        return strings.toString();
     }
 }
