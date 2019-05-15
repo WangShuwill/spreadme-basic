@@ -1,5 +1,6 @@
 package club.spreadme.lang.io;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,5 +42,15 @@ public class IOUtil {
             count += n;
         }
         return count;
+    }
+
+    public static void closeQuietly(final Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (final IOException ioe) {
+            // ignore
+        }
     }
 }
