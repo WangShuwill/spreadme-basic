@@ -18,7 +18,7 @@
         <module>spreadme-lang</module>
         <module>spreadme-database</module>
         <module>spreadme-database-starter</module>
-    </modules>
+	</modules>
 
     <name>spreadme-frame</name>
     <url>https://github.com/WangShuwill/spread-frame</url>
