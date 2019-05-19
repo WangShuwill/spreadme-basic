@@ -16,16 +16,24 @@
 
 package club.spreadme.lang.properties;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+
 import club.spreadme.lang.ClassUtil;
 import club.spreadme.lang.StringUtil;
 import club.spreadme.lang.cache.Cache;
 import club.spreadme.lang.cache.support.ConcurrentMapCache;
-
-import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
 
 public abstract class PropertyUtil {
 
@@ -65,7 +73,7 @@ public abstract class PropertyUtil {
         }
     }
 
-    protected static Map<Object, Object> loadProperties(InputStream is) {
+    public static Map<Object, Object> loadProperties(InputStream is) {
         Properties properties = new Properties();
         Map<Object, Object> propertyMap = new HashMap<>();
         try {
