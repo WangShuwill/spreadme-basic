@@ -16,9 +16,6 @@
 
 package club.spreadme.lang.cache;
 
-import club.spreadme.lang.serializer.Serializer;
-
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -49,21 +46,7 @@ public interface Cache<K, V> {
 
     V putIfAbsent(K key, V value);
 
-    void setSerializer(Serializer<V> serializer);
-
-    void put(K key, V value, int expiredtime, TimeUnit timeUnit);
-
-    void put(K key, V value, int expiredtime, TimeUnit timeUnit, Serializer<V> serializer);
-
-    V get(K key, Serializer<V> serializer);
-
-    void put(K key, V value, Serializer<V> serializer);
-
     V get(K key, Cache<K, V> cache, ValueLoader<V> valueLoader);
-
-    V get(K key, Cache<K, V> cache, int expiredtime, TimeUnit timeUnit, ValueLoader<V> valueLoader, Serializer<V> serializer);
-
-    V get(K key, Cache<K, V> cache, ValueLoader<V> valueLoader, Serializer<V> serializer);
 
     void remove(K key);
 

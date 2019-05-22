@@ -17,10 +17,13 @@
 package club.spreadme.lang.cache.support;
 
 import club.spreadme.lang.Assert;
+import club.spreadme.lang.cache.Cache;
+import club.spreadme.lang.cache.ValueLoader;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentMapCache<K, V> extends AbstractCache<K, V> {
+public class ConcurrentMapCache<K, V> implements Cache<K, V> {
 
     private final String name;
     private final ConcurrentHashMap<K, V> store;
@@ -70,5 +73,15 @@ public class ConcurrentMapCache<K, V> extends AbstractCache<K, V> {
     @Override
     public void clear() {
         this.store.clear();
+    }
+
+    @Override
+    public V get(K key, Cache<K, V> cache, ValueLoader<V> valueLoader) {
+        V value = cache.get(key);
+        if (Objects.isNull(value)) {
+            value = valueLoader.load();
+            cache.put(key, value);
+        }
+        return value;
     }
 }
