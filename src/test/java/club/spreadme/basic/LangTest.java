@@ -18,7 +18,9 @@ package club.spreadme.basic;
 
 import club.spreadme.basic.code.IdGenerator;
 import club.spreadme.basic.code.support.TwitterLongIdGenerator;
-import club.spreadme.basic.properties.PropertyUtil;
+import club.spreadme.basic.properties.PropertyManager;
+import club.spreadme.basic.utils.ClassUtil;
+import club.spreadme.basic.utils.StringUtil;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -59,7 +61,7 @@ public class LangTest {
 
     @Test
     public void testPropertiesUtil() {
-        PropertyUtil.loadProperties();
+        PropertyManager.loadProperties();
         try {
             Enumeration<URL> urls = ClassLoader.getSystemResources("model.ftl");
             while (urls.hasMoreElements()) {

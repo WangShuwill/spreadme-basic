@@ -16,16 +16,16 @@
 
 package club.spreadme.basic.reflection;
 
-import club.spreadme.basic.Reflection;
-
 import java.lang.annotation.Annotation;
 import java.util.Map;
+
+import club.spreadme.basic.utils.ReflectionUtil;
 
 /**
  * the definition of annotation
  *
  * @author wswei
- * @see Reflection
+ * @see ReflectionUtil
  * @since 2018
  */
 public class AnnotationDefinition {

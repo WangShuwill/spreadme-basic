@@ -30,12 +30,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
-import club.spreadme.basic.ClassUtil;
-import club.spreadme.basic.StringUtil;
+import club.spreadme.basic.utils.ClassUtil;
+import club.spreadme.basic.utils.StringUtil;
 import club.spreadme.basic.cache.Cache;
 import club.spreadme.basic.cache.support.ConcurrentMapCache;
 
-public abstract class PropertyUtil {
+public abstract class PropertyManager {
 
     public static Cache<String, Map<Object, Object>> propertiesCache = new ConcurrentMapCache<>("PROPERTIES_CACHE");
     public static final String PROPERTIES_EXT = ".properties";
