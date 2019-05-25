@@ -16,16 +16,18 @@
 
 package club.spreadme.basic;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
+
 import club.spreadme.basic.code.IdGenerator;
 import club.spreadme.basic.code.support.TwitterLongIdGenerator;
 import club.spreadme.basic.properties.PropertyManager;
 import club.spreadme.basic.utils.ClassUtil;
+import club.spreadme.basic.utils.IOUtil;
 import club.spreadme.basic.utils.StringUtil;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
 
 public class LangTest {
 
@@ -79,5 +81,29 @@ public class LangTest {
         IdGenerator<Long> idGenerator = new TwitterLongIdGenerator();
         for (int i = 0; i < 100; i++)
             System.out.println(idGenerator.generate());
+    }
+
+    @Test
+    public void testZip(){
+        String targetPath = "/Users/wangshuwei/Downloads/notes";
+        String newZip = "/Users/wangshuwei/Downloads/notes.zip";
+        try {
+            IOUtil.compress(new File(targetPath), new File(newZip));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testDecompress(){
+        String zipPath = "/Users/wangshuwei/Downloads/notes.zip";
+        String dstPath = "/Users/wangshuwei/Downloads/";
+        try {
+            IOUtil.decompress(new File(zipPath), new File(dstPath));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
