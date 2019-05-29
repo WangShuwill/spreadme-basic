@@ -2,7 +2,6 @@ package club.spreadme.basic.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 
 public abstract class FileUtil {
 
@@ -42,29 +41,16 @@ public abstract class FileUtil {
         return path.substring(extIndex + 1);
     }
 
-    public static String getFileDirectory(String path){
-        if (path == null) {
-            return null;
-        }
-        int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
-
-        return "";
-    }
-
     public static File createFile(String path, boolean isFile) throws IOException {
         path = path.replaceAll("\\*", "/");
         File file = new File(path);
-        if(!file.exists()){
-            if(isFile){
-                String directoryPath = path.substring(0, path.lastIndexOf(FileSystems.getDefault().getSeparator()));
-                File directoryFile = new File(directoryPath);
-                if(!directoryFile.exists()){
-                    directoryFile.mkdirs();
-                }
+        if (!file.exists()) {
+            if (isFile) {
+                file.getParentFile().mkdirs();
                 file.createNewFile();
                 return file;
             }
-            else{
+            else {
                 file.mkdirs();
                 return file;
             }

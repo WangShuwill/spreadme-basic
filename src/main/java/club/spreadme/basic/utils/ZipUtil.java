@@ -1,6 +1,7 @@
 package club.spreadme.basic.utils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.zip.*;
 
@@ -22,7 +23,8 @@ public abstract class ZipUtil {
         if (!dstFile.exists()) {
             dstFile.mkdirs();
         }
-        try (ZipFile zip = new ZipFile(zipFile)) {
+        //TODO 编码格式
+        try (ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"))) {
             Enumeration enumeration = zip.entries();
             while (enumeration.hasMoreElements()) {
                 ZipEntry zipEntry = (ZipEntry) enumeration.nextElement();
