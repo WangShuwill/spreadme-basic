@@ -1,79 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>spreadme-core</module>
+        <module>spreadme-cache</module>
+        <module>spreadme-security</module>
+    </modules>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
-	<groupId>club.spreadme</groupId>
-	<artifactId>spreadme-basic</artifactId>
-	<packaging>jar</packaging>
-	<version>1.5.0</version>
+    <groupId>club.spreadme</groupId>
+    <artifactId>spreadme-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.5.0</version>
 
-	<name>spreadme-basic</name>
-	<url>https://github.com/WangShuwill/spreadme-basic</url>
-	<description>a quikly development framework</description>
+    <name>spreadme-parent</name>
+    <url>https://github.com/WangShuwill/spreadme-frame</url>
+    <description>a quikly development framework</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<cglib.version>3.2.10</cglib.version>
-		<ehcache.version>2.10.4</ehcache.version>
-		<freemarker.version>2.3.23</freemarker.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<logback.version>1.2.3</logback.version>
-		<junit.version>4.12</junit.version>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <cglib.version>3.2.10</cglib.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <junit.version>4.12</junit.version>
+    </properties>
 
-	<licenses>
-		<license>
-			<name>Apache License</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Apache License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<url>https://github.com/WangShuwill/spreadme-basic</url>
-		<connection>https://github.com/WangShuwill/spreadme-basic.git</connection>
-		<developerConnection>https://github.com/WangShuwill/spreadme-basic</developerConnection>
-	</scm>
+    <scm>
+        <url>https://github.com/WangShuwill/spreadme-frame</url>
+        <connection>https://github.com/WangShuwill/spreadme-frame.git</connection>
+        <developerConnection>https://github.com/WangShuwill/spreadme-frame</developerConnection>
+    </scm>
 
-	<developers>
-		<developer>
-			<name>WangShuwei</name>
-			<email>wangshuwei6@gmail.com</email>
-			<url>https://github.com/WangShuwill</url>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>WangShuwei</name>
+            <email>wangshuwei6@gmail.com</email>
+            <url>https://github.com/WangShuwill</url>
+        </developer>
+    </developers>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin-version}</version>
-				<configuration>
-					<source>${maven.compiler.source}</source>
-					<target>${maven.compiler.target}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin-version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
