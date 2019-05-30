@@ -1,4 +1,4 @@
-<h1 align="center">spreadme basic</h1>
+<h1 align="center">spreadme frame</h1>
 
 <p align="center">
     <a href="#Apahce"><img src="https://img.shields.io/badge/License-Apache-brightgreen.svg" alt="Apache"></a>
@@ -6,7 +6,7 @@
     <a href="#Java"><img src="https://img.shields.io/badge/Programma-Java8+-important.svg" alt="Java8+"></a>
 </p>
 
-spreadme-basic是一套用于Java开发的基础工具框架,集成了常用的工具类,让Java开发
+spreadme-frame是一套用于Java开发的基础工具框架,集成了常用的工具类,让Java开发
 变得更加简单高效.
 
 Liense
@@ -19,11 +19,27 @@ Install
 -------
 - #### Maven
 - #### java1.8+
-- #### spread-lang
-``` xml
-<dependency>
-  <groupId>club.spreadme</groupId>
-   <artifactId>spreadme-basic</artifactId>
-  <version>1.5.0</version>
-</dependency>
-```
+- #### spread-core
+    ``` xml
+    <dependency>
+        <groupId>club.spreadme</groupId>
+        <artifactId>spreadme-core</artifactId>
+        <version>1.5.0</version>
+    </dependency>
+    ```
+- #### spread-cache
+    ``` xml
+    <dependency>
+        <groupId>club.spreadme</groupId>
+        <artifactId>spreadme-core</artifactId>
+        <version>1.5.0</version>
+    </dependency>
+     ```
+- #### spread-security
+    ``` xml
+    <dependency>
+        <groupId>club.spreadme</groupId>
+        <artifactId>spreadme-core</artifactId>
+        <version>1.5.0</version>
+    </dependency>
+     ```
