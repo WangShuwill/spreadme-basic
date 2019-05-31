@@ -31,7 +31,7 @@ Install
     ``` xml
     <dependency>
         <groupId>club.spreadme</groupId>
-        <artifactId>spreadme-core</artifactId>
+        <artifactId>spreadme-cache</artifactId>
         <version>1.5.0</version>
     </dependency>
      ```
@@ -39,7 +39,7 @@ Install
     ``` xml
     <dependency>
         <groupId>club.spreadme</groupId>
-        <artifactId>spreadme-core</artifactId>
+        <artifactId>spreadme-security</artifactId>
         <version>1.5.0</version>
     </dependency>
      ```
