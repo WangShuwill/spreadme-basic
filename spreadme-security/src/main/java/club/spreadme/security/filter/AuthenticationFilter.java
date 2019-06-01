@@ -11,7 +11,7 @@ import club.spreadme.security.auth.CredentialsToken;
 
 public interface AuthenticationFilter {
 
-	default void filter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	default void authFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
 		if (!requiresAuthentication(request)) {
