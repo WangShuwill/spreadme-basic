@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import club.spreadme.learn.auth.AuthenticatedToken;
+import club.spreadme.security.auth.AuthenticatedToken;
+import club.spreadme.security.context.SecurityContextHolder;
+import club.spreadme.security.session.SessionManager;
 
 public interface SecurityContextFilter {
 

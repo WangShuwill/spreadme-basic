@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import club.spreadme.learn.auth.CredentialsToken;
+import club.spreadme.security.auth.CredentialsToken;
 
 public interface AuthenticationFilter {
 
