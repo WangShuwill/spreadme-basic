@@ -16,23 +16,24 @@
 
 package club.spreadme.security.session.support;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import club.spreadme.core.utils.StringUtil;
 import club.spreadme.security.auth.AuthenticatedToken;
 import club.spreadme.security.cookie.CookieUtil;
 import club.spreadme.security.session.SessionManager;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class CookieSessionManager implements SessionManager {
 
     private static final Map<String, AuthenticatedToken<?>> TOKEN_CACHE = new ConcurrentHashMap<>(256);
 
-    private static final String SESSION_ID_NAME = "LEARN";
+    private static final String SESSION_ID_NAME = "SPREADME-ID";
 
     @Override
     public void add(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token) {

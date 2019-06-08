@@ -16,15 +16,15 @@
 
 package club.spreadme.core;
 
+import java.io.File;
+import java.io.IOException;
+
 import club.spreadme.core.codec.Id;
 import club.spreadme.core.codec.support.Snowflake;
 import club.spreadme.core.utils.ClassUtil;
 import club.spreadme.core.utils.StringUtil;
 import club.spreadme.core.utils.ZipUtil;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
 
 public class LangTest {
 
@@ -46,7 +46,7 @@ public class LangTest {
         System.out.println(StringUtil.trimEnd(target, "t,"));
         System.out.println(StringUtil.toUpper(target, 1, 2, 3));
 
-        System.out.println(StringUtil.randomString(6));
+        System.out.println(StringUtil.randomString(12));
     }
 
     @Test
@@ -67,8 +67,8 @@ public class LangTest {
 
     @Test
     public void testZip(){
-        String targetPath = "/Users/wangshuwei/Downloads/notes";
-        String newZip = "/Users/wangshuwei/Downloads/notes.zip";
+        String targetPath = "/Users/wangshuwei/Downloads/rabbitmq";
+        String newZip = "/Users/wangshuwei/Downloads/rabbitmq.zip";
         try {
             ZipUtil.compress(new File(targetPath), new File(newZip));
         }

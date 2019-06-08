@@ -16,21 +16,22 @@
 
 package club.spreadme.security.cookie;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import static club.spreadme.security.session.SessionManager.DEFAULT_SESSION_TIMEOUT;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static club.spreadme.security.session.SessionManager.DEFAULT_SESSION_TIMEOUT;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public abstract class CookieUtil {
 
     public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value) {
         Cookie cookie = new Cookie(name, value);
-        cookie.setPath(request.getContextPath());
+        cookie.setPath("/");
         //TODO 其他属性
         cookie.setMaxAge(DEFAULT_SESSION_TIMEOUT);
         response.addCookie(cookie);

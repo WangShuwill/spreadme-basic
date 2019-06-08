@@ -16,13 +16,14 @@
 
 package club.spreadme.security.context;
 
+import java.security.Principal;
+
 import club.spreadme.security.auth.AuthenticatedToken;
 import club.spreadme.security.auth.AuthenticationToken;
-import club.spreadme.security.auth.support.UserPrincipal;
 
 public class SecurityUtils {
 
-	public static <U extends UserPrincipal> U getPrincipal() {
+	public static <U extends Principal> U getPrincipal() {
 		AuthenticationToken<?> token = SecurityContextHolder.getContext().getAuthenticationToken();
 
 		if ((token != null)) {

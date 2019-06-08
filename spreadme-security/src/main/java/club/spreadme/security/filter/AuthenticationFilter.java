@@ -17,8 +17,7 @@ public interface AuthenticationFilter {
 		if (!requiresAuthentication(request)) {
 			filterChain.doFilter(request, response);
 		}
-
-		if (executeAuth(request, response)) {
+		else if (executeAuth(request, response)) {
 			filterChain.doFilter(request, response);
 		}
 	}
