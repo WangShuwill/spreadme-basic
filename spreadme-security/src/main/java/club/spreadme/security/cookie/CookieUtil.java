@@ -29,34 +29,37 @@ import javax.servlet.http.HttpServletResponse;
 
 public abstract class CookieUtil {
 
-    public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        //TODO 其他属性
-        cookie.setMaxAge(DEFAULT_SESSION_TIMEOUT);
-        response.addCookie(cookie);
-    }
+	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setPath("/");
+		//TODO 其他属性
+		cookie.setMaxAge(DEFAULT_SESSION_TIMEOUT);
+		response.addCookie(cookie);
+	}
 
-    public static  Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
-        List<Cookie> needCookies = Arrays.stream(cookies)
-                .filter(cookie -> Objects.equals(cookie.getName(), name))
-                .collect(Collectors.toList());
+	public static Cookie getCookie(HttpServletRequest request, String name) {
+		Cookie[] cookies = request.getCookies();
+		if (Objects.isNull(cookies)) {
+			return null;
+		}
+		List<Cookie> needCookies = Arrays.stream(cookies)
+				.filter(cookie -> Objects.equals(cookie.getName(), name))
+				.collect(Collectors.toList());
 
-        if (!needCookies.isEmpty() && needCookies.get(0) != null) {
-            return needCookies.get(0);
-        }
+		if (!needCookies.isEmpty() && needCookies.get(0) != null) {
+			return needCookies.get(0);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public static  void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie cookie = getCookie(request, name);
-        if (cookie != null) {
-            cookie.setMaxAge(0);
-            cookie.setValue(null);
-            response.addCookie(cookie);
-        }
-    }
+	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+		Cookie cookie = getCookie(request, name);
+		if (cookie != null) {
+			cookie.setMaxAge(0);
+			cookie.setValue(null);
+			response.addCookie(cookie);
+		}
+	}
 
 }
