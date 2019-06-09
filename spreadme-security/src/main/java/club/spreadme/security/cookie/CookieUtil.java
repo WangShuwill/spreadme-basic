@@ -16,8 +16,6 @@
 
 package club.spreadme.security.cookie;
 
-import static club.spreadme.security.session.SessionManager.DEFAULT_SESSION_TIMEOUT;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -27,13 +25,25 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import club.spreadme.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class CookieUtil {
 
-	public static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value) {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CookieUtil.class);
+
+	public static void addCookie(HttpServletResponse response, String domain, String name, String value, boolean secure) {
 		Cookie cookie = new Cookie(name, value);
 		cookie.setPath("/");
-		//TODO 其他属性
-		cookie.setMaxAge(DEFAULT_SESSION_TIMEOUT);
+		if (StringUtil.isNotBlank(domain)) {
+			cookie.setDomain(domain);
+		}
+		cookie.setHttpOnly(true);
+		if (secure) {
+			cookie.setSecure(true);
+		}
+		LOGGER.info(cookie.toString());
 		response.addCookie(cookie);
 	}
 

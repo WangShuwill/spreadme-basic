@@ -17,13 +17,13 @@
 package club.spreadme.security.session.support;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import club.spreadme.core.codec.Id;
 import club.spreadme.core.utils.StringUtil;
 import club.spreadme.security.auth.AuthenticatedToken;
 import club.spreadme.security.cookie.CookieUtil;
@@ -31,36 +31,35 @@ import club.spreadme.security.session.SessionManager;
 
 public class CookieSessionManager implements SessionManager {
 
-    private static final Map<String, AuthenticatedToken<?>> TOKEN_CACHE = new ConcurrentHashMap<>(256);
+	private static final Map<String, AuthenticatedToken<?>> TOKEN_CACHE = new ConcurrentHashMap<>(256);
 
-    private static final String SESSION_ID_NAME = "SPREADME-ID";
+	private static final String SESSION_ID_NAME = "SPREADME-ID";
 
-    @Override
-    public void add(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token) {
-        String sessionId = UUID.randomUUID().toString().replaceAll("-", "");
-        token.setToken(sessionId);
-        if (request.isSecure()) {
-            //TODO SSL加密
-        }
-        else {
-            CookieUtil.addCookie(request, response, SESSION_ID_NAME, sessionId);
-        }
-        TOKEN_CACHE.put(sessionId, token);
-    }
+	@Override
+	public void add(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token) {
+		String sessionId = Id.UUID.generate();
+		token.setToken(sessionId);
+		if (request.isSecure()) {
+			CookieUtil.addCookie(response, null, SESSION_ID_NAME, sessionId, true);
+		}
+		else {
+			CookieUtil.addCookie(response, null, SESSION_ID_NAME, sessionId, false);
+		}
+		TOKEN_CACHE.put(sessionId, token);
+	}
 
-    @Override
-    public AuthenticatedToken<?> load(HttpServletRequest request) {
-        Cookie cookie = CookieUtil.getCookie(request, SESSION_ID_NAME);
-        if (cookie == null || StringUtil.isBlank(cookie.getValue())) {
-            return null;
-        }
-        return TOKEN_CACHE.get(cookie.getValue());
-    }
+	@Override
+	public AuthenticatedToken<?> load(HttpServletRequest request) {
+		Cookie cookie = CookieUtil.getCookie(request, SESSION_ID_NAME);
+		if (cookie == null || StringUtil.isBlank(cookie.getValue())) {
+			return null;
+		}
+		return TOKEN_CACHE.get(cookie.getValue());
+	}
 
-    @Override
-    public void remove(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token) {
-        CookieUtil.deleteCookie(request, response, SESSION_ID_NAME);
-    }
-
+	@Override
+	public void remove(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token) {
+		CookieUtil.deleteCookie(request, response, SESSION_ID_NAME);
+	}
 
 }
