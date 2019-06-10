@@ -16,18 +16,17 @@
 
 package club.spreadme.security.cookie;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import club.spreadme.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import club.spreadme.core.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class CookieUtil {
 
@@ -43,7 +42,6 @@ public abstract class CookieUtil {
 		if (secure) {
 			cookie.setSecure(true);
 		}
-		LOGGER.info(cookie.toString());
 		response.addCookie(cookie);
 	}
 

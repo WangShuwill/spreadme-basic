@@ -22,6 +22,7 @@ import club.spreadme.core.utils.Assert;
 public class SecurityContextHolder {
 
     private static final ThreadLocal<SecurityContext> contextHolder = new ThreadLocal<>();
+    private static final ThreadLocal<String> authUrlContext = new ThreadLocal<>();
 
     public static SecurityContext getContext() {
         SecurityContext ctx = contextHolder.get();
@@ -45,5 +46,17 @@ public class SecurityContextHolder {
 
     public static SecurityContext createEmptyContext() {
         return new SecurityContext();
+    }
+
+    public static String getAuthUrlContext() {
+        return authUrlContext.get();
+    }
+
+    public static void setAuthUrlContext(String url) {
+        authUrlContext.set(url);
+    }
+
+    public static void clearAuthUrlContext() {
+        authUrlContext.remove();
     }
 }
