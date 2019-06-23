@@ -30,7 +30,7 @@ public abstract class IOUtil {
 	 * @return byte array
 	 * @throws IOException IOException
 	 */
-	private static byte[] toByteArray(InputStream input) throws IOException {
+	public static byte[] toByteArray(InputStream input) throws IOException {
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		copy(input, bos);
 		return bos.toByteArray();
