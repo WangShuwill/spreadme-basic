@@ -15,7 +15,11 @@
  */
 package club.spreadme.core.utils;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public abstract class StringUtil {
 
@@ -159,5 +163,12 @@ public abstract class StringUtil {
             strings.append(STRINGS.charAt(index));
         }
         return strings.toString();
+    }
+
+    public static String read(InputStream input) {
+        return new BufferedReader(new InputStreamReader(input))
+                .lines()
+                .parallel()
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 }
