@@ -57,14 +57,19 @@ public abstract class FileUtil {
         return path.substring(extIndex + 1);
     }
 
-    public static File createFile(String path, boolean isFile) throws IOException {
+    public static File createFile(String path, boolean isFile){
         path = path.replaceAll("\\*", "/");
         File file = new File(path);
         if (!file.exists()) {
             if (isFile) {
                 file.getParentFile().mkdirs();
-                file.createNewFile();
-                return file;
+                try {
+                    file.createNewFile();
+                    return file;
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else {
                 file.mkdirs();
