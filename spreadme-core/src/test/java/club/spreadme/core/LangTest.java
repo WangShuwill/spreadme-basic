@@ -67,8 +67,8 @@ public class LangTest {
 
     @Test
     public void testZip(){
-        String targetPath = "/Users/wangshuwei/Downloads/rabbitmq";
-        String newZip = "/Users/wangshuwei/Downloads/rabbitmq.zip";
+        String targetPath = "/Users/wangshuwei/Downloads/CAPTAIN_AMERICA";
+        String newZip = "/Users/wangshuwei/Downloads/CAPTAIN_AMERICA.zip";
         try {
             ZipUtil.compress(new File(targetPath), new File(newZip));
         }
