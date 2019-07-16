@@ -14,32 +14,14 @@
  * limitations under the License
  */
 
-package club.spreadme.core.io;
+package club.spreadme.core.exception;
 
-import java.io.File;
+public class ConvertException extends RuntimeException {
 
-public interface Resources {
+    private static final long serialVersionUID = 7139902903254474364L;
 
-	String TEMP_PATH = System.getProperty("java.io.tmpdir");
-	String USER_PATH = System.getProperty("user.home");
+    public ConvertException(String message) {
+        super(message);
+    }
 
-	boolean exists();
-
-	ResourceMetadata getMetadate();
-
-	static String getTempPath() {
-		return TEMP_PATH;
-	}
-
-	static File getTempFile(){
-		return new File(getTempPath());
-	}
-
-	static  String getUserPath(){
-		return USER_PATH;
-	}
-
-	static File getUserFile(){
-		return new File(getUserPath());
-	}
 }

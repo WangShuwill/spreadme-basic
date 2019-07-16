@@ -14,19 +14,11 @@
  * limitations under the License
  */
 
-package club.spreadme.security.session;
+package club.spreadme.core.cache;
 
-import club.spreadme.security.auth.AuthenticatedToken;
+@FunctionalInterface
+public interface ValueLoader<T> {
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-public interface SessionManager {
-
-	void add(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token);
-
-	AuthenticatedToken<?> load(HttpServletRequest request);
-
-	void remove(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token);
+    T load();
 
 }

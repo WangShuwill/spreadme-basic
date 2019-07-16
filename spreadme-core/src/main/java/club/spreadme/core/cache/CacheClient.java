@@ -14,14 +14,23 @@
  * limitations under the License
  */
 
-package club.spreadme.core.utils;
+package club.spreadme.core.cache;
 
-public class ConvertException extends RuntimeException {
+import java.util.concurrent.TimeUnit;
 
-    private static final long serialVersionUID = 7139902903254474364L;
+public interface CacheClient<K, V> {
 
-    public ConvertException(String message) {
-        super(message);
-    }
+    void put(K key, V value);
 
+    void put(K key, V value, int expiredtime, TimeUnit timeUnit);
+
+    V get(K key);
+
+    V get(K key, Class<V> type);
+
+    V get(K key, Class<V> type, ValueLoader<V> valueLoader);
+
+    void remove(K key);
+
+    void clear();
 }

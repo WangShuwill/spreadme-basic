@@ -16,6 +16,8 @@
 
 package club.spreadme.core.utils;
 
+import club.spreadme.core.exception.ConvertException;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;

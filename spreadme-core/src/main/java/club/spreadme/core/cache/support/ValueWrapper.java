@@ -14,19 +14,32 @@
  * limitations under the License
  */
 
-package club.spreadme.security.session;
+package club.spreadme.core.cache.support;
 
-import club.spreadme.security.auth.AuthenticatedToken;
+public class ValueWrapper<V> {
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+    private final V value;
+    private final long timestamp;
+    private long expiredtime;
 
-public interface SessionManager {
+    public ValueWrapper(V value, long timestamp) {
+        this.value = value;
+        this.timestamp = timestamp;
+    }
 
-	void add(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token);
+    public V getValue() {
+        return value;
+    }
 
-	AuthenticatedToken<?> load(HttpServletRequest request);
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-	void remove(HttpServletRequest request, HttpServletResponse response, AuthenticatedToken<?> token);
+    public long getExpiredtime() {
+        return expiredtime;
+    }
 
+    public void setExpiredtime(long expiredtime) {
+        this.expiredtime = expiredtime;
+    }
 }

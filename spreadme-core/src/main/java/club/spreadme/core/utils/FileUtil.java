@@ -31,6 +31,25 @@ public abstract class FileUtil {
 
     private static final char EXTENSION_SEPARATOR = '.';
 
+    private static final String TEMP_PATH = System.getProperty("java.io.tmpdir");
+    private static final String USER_PATH = System.getProperty("user.home");
+
+    public static String getTempPath() {
+        return TEMP_PATH;
+    }
+
+    public static File getTempFile() {
+        return new File(getTempPath());
+    }
+
+    public static String getUserPath() {
+        return USER_PATH;
+    }
+
+    public static File getUserFile() {
+        return new File(getUserPath());
+    }
+
     public static String getFilename(String path) {
         if (path == null) {
             return null;
@@ -57,23 +76,22 @@ public abstract class FileUtil {
         return path.substring(extIndex + 1);
     }
 
-    public static File createFile(String path, boolean isFile){
+    public static File createFile(String path, boolean isFile) {
         path = path.replaceAll("\\*", "/");
         File file = new File(path);
         if (!file.exists()) {
-            if (isFile) {
-                file.getParentFile().mkdirs();
-                try {
+            try {
+                if (isFile) {
+                    file.getParentFile().mkdirs();
                     file.createNewFile();
                     return file;
                 }
-                catch (IOException e) {
-                    throw new RuntimeException(e);
+                else if (file.mkdirs()) {
+                    return file;
                 }
             }
-            else {
-                file.mkdirs();
-                return file;
+            catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         return file;
