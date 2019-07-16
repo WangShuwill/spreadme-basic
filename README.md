@@ -27,14 +27,7 @@ Install
         <version>1.5.0</version>
     </dependency>
     ```
-- #### spread-cache
-    ``` xml
-    <dependency>
-        <groupId>club.spreadme</groupId>
-        <artifactId>spreadme-cache</artifactId>
-        <version>1.5.0</version>
-    </dependency>
-     ```
+
 - #### spread-security
     ``` xml
     <dependency>
