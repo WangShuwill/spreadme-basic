@@ -20,6 +20,7 @@ import club.spreadme.core.cache.CacheClient;
 import club.spreadme.core.cache.ValueLoader;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -34,10 +35,7 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 
     @Override
     public void put(K key, V value, int expiredtime, TimeUnit timeUnit) {
-        long timemills = timeUnit.toMillis(expiredtime);
-        ValueWrapper<Object> valueWrapper = new ValueWrapper<>(value, System.currentTimeMillis());
-        valueWrapper.setExpiredtime(timemills);
-        CACHE.put(key, valueWrapper);
+        CACHE.put(key, getValueWraper(value, expiredtime, timeUnit));
     }
 
     @Override
@@ -62,6 +60,26 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
     }
 
     @Override
+    public V get(K key, ValueLoader<V> valueLoader) {
+        V value = get(key);
+        if (value == null) {
+            value = valueLoader.load();
+            CACHE.put(key, new ValueWrapper<>(value, System.currentTimeMillis()));
+        }
+        return value;
+    }
+
+    @Override
+    public V get(K key, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit) {
+        V value = get(key);
+        if (value == null) {
+            value = valueLoader.load();
+            CACHE.put(key, getValueWraper(value, expiretime, timeUnit));
+        }
+        return value;
+    }
+
+    @Override
     public V get(K key, Class<V> type) {
         V value = get(key);
         if (value != null && type != null && !type.isInstance(value)) {
@@ -81,12 +99,30 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
     }
 
     @Override
-    public void remove(K key) {
-        CACHE.remove(key);
+    public V get(K key, Class<V> type, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit) {
+        V value = get(key, type);
+        if (value == null) {
+            value = valueLoader.load();
+            CACHE.put(key, getValueWraper(value, expiretime, timeUnit));
+        }
+        return value;
+    }
+
+    @Override
+    public boolean remove(K key) {
+        Object value = CACHE.remove(key);
+        return Objects.isNull(value);
     }
 
     @Override
     public void clear() {
         CACHE.clear();
+    }
+
+    private ValueWrapper<Object> getValueWraper(V value, int expiretime, TimeUnit timeUnit) {
+        long timemills = timeUnit.toMillis(expiretime);
+        ValueWrapper<Object> valueWrapper = new ValueWrapper<>(value, System.currentTimeMillis());
+        valueWrapper.setExpiredtime(timemills);
+        return valueWrapper;
     }
 }

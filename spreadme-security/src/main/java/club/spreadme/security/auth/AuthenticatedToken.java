@@ -27,6 +27,10 @@ public class AuthenticatedToken<P extends Principal> extends CredentialsToken<Pr
 
     private P principal;
 
+    public AuthenticatedToken() {
+        super(null);
+    }
+
     public AuthenticatedToken(P principal, Object credentials) {
         super(credentials);
         this.principal = principal;
@@ -35,12 +39,15 @@ public class AuthenticatedToken<P extends Principal> extends CredentialsToken<Pr
     @Override
     public P getPrincipal() {
         return this.principal;
-
     }
 
     @Override
     public boolean isAuthenticated() {
         return true;
+    }
+
+    public void setPrincipal(P principal) {
+        this.principal = principal;
     }
 
     public String getToken() {
