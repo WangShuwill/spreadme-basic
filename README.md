@@ -1,4 +1,4 @@
-<h1 align="center">spreadme frame</h1>
+<h1 align="center">spreadme commons</h1>
 
 <p align="center">
     <a href="#Apahce"><img src="https://img.shields.io/badge/License-Apache-brightgreen.svg" alt="Apache"></a>
@@ -19,20 +19,11 @@ Install
 -------
 - #### Maven
 - #### java1.8+
-- #### spread-core
+- #### spread-commons
     ``` xml
     <dependency>
-        <groupId>club.spreadme</groupId>
-        <artifactId>spreadme-core</artifactId>
-        <version>1.4.8</version>
+        <groupId>org.spreadme</groupId>
+        <artifactId>spreadme-commons</artifactId>
+        <version>1.5.0</version>
     </dependency>
     ```
-
-- #### spread-security
-    ``` xml
-    <dependency>
-        <groupId>club.spreadme</groupId>
-        <artifactId>spreadme-security</artifactId>
-        <version>1.4.8</version>
-    </dependency>
-     ```
