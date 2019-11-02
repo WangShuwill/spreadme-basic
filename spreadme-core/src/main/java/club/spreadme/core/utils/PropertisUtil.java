@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class PropertisUtil {
 
     public static Map<String, Map<Object, Object>> propertiesCache = new ConcurrentHashMap<>(256);
-    public static final String PROPERTIES_EXT = ".properties";
+    public static final String PROPERTIES_EXT = ".config";
 
     public static void loadProperties() {
         String classPath = ClassUtil.getClassPath();

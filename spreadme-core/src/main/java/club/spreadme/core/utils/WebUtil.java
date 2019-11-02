@@ -16,17 +16,23 @@
 
 package club.spreadme.core.utils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public abstract class WebUtil {
 
     public static String getHost(HttpServletRequest request){
         int endIndex = request.getRequestURL().length() - request.getRequestURI().length();
         return request.getRequestURL().substring(0, endIndex);
+    }
+
+    //TODO get real remote ip from request
+    public static String getRemoteIp(HttpServletRequest request){
+        return request.getRemoteAddr();
     }
 
     public static void flush(byte[] bytes, HttpServletResponse response) throws IOException {

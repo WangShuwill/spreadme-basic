@@ -16,14 +16,16 @@
 
 package club.spreadme.core.codec;
 
-import club.spreadme.core.codec.support.Snowflake;
-import club.spreadme.core.codec.support.UUID;
-
 import java.io.Serializable;
+
+import club.spreadme.core.codec.support.Snowflake;
+import club.spreadme.core.codec.support.UID;
+import club.spreadme.core.codec.support.UUID;
 
 public interface Id<S extends Serializable> {
 
     Id<Long> SNOWFLAKE = new Snowflake();
+    Id<Long> UID = new UID(1);
     Id<String> UUID = new UUID();
 
     S generate();

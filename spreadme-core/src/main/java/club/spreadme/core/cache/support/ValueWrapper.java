@@ -16,30 +16,17 @@
 
 package club.spreadme.core.cache.support;
 
-public class ValueWrapper<V> {
+import java.util.Timer;
+
+public class ValueWrapper<V> extends Timer {
 
     private final V value;
-    private final long timestamp;
-    private long expiredtime;
 
-    public ValueWrapper(V value, long timestamp) {
+    public ValueWrapper(V value) {
         this.value = value;
-        this.timestamp = timestamp;
     }
 
     public V getValue() {
         return value;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public long getExpiredtime() {
-        return expiredtime;
-    }
-
-    public void setExpiredtime(long expiredtime) {
-        this.expiredtime = expiredtime;
     }
 }

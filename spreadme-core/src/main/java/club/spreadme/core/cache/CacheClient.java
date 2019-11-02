@@ -22,19 +22,19 @@ public interface CacheClient<K, V> {
 
     void put(K key, V value);
 
-    void put(K key, V value, int expiretime, TimeUnit timeUnit);
+    void put(K key, V value, int timeout, TimeUnit timeUnit);
 
     V get(K key);
 
     V get(K key, ValueLoader<V> valueLoader);
 
-    V get(K key, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit);
+    V get(K key, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
 
     V get(K key, Class<V> type);
 
     V get(K key, Class<V> type, ValueLoader<V> valueLoader);
 
-    V get(K key, Class<V> type, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit);
+    V get(K key, Class<V> type, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
 
     boolean remove(K key);
 

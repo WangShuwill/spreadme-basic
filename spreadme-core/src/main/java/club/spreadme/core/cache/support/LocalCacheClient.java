@@ -16,113 +16,105 @@
 
 package club.spreadme.core.cache.support;
 
-import club.spreadme.core.cache.CacheClient;
-import club.spreadme.core.cache.ValueLoader;
-
 import java.util.Map;
 import java.util.Objects;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import club.spreadme.core.cache.CacheClient;
+import club.spreadme.core.cache.ValueLoader;
+
 public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 
-    private static final Map<Object, ValueWrapper<Object>> CACHE = new ConcurrentHashMap<>(256);
+	private static final Map<Object, ValueWrapper<Object>> CACHE_MAP = new ConcurrentHashMap<>(256);
 
-    @Override
-    public void put(K key, V value) {
-        CACHE.put(key, new ValueWrapper<>(value, System.currentTimeMillis()));
-    }
+	@Override
+	public void put(K key, V value) {
+		CACHE_MAP.put(key, new ValueWrapper<>(value));
+	}
 
-    @Override
-    public void put(K key, V value, int expiredtime, TimeUnit timeUnit) {
-        CACHE.put(key, getValueWraper(value, expiredtime, timeUnit));
-    }
+	@Override
+	public void put(K key, V value, int timeout, TimeUnit timeUnit) {
+		ValueWrapper<Object> valueWrapper = new ValueWrapper<>(value);
+		CACHE_MAP.put(key, valueWrapper);
+		valueWrapper.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				CACHE_MAP.remove(key);
+			}
+		}, timeUnit.toMillis(timeout));
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public V get(K key) {
-        ValueWrapper<Object> valueWrapper = CACHE.get(key);
-        if (valueWrapper == null) {
-            return null;
-        }
-        if (valueWrapper.getExpiredtime() == 0L) {
-            return (V) valueWrapper.getValue();
-        }
-        else {
-            long expiredtime = valueWrapper.getExpiredtime();
-            long expiredTimestamp = valueWrapper.getTimestamp() + expiredtime;
-            if (expiredTimestamp < System.currentTimeMillis()) {
-                CACHE.remove(key);
-                return null;
-            }
-        }
-        return (V) valueWrapper.getValue();
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public V get(K key) {
+		if (key == null) {
+			return null;
+		}
+		ValueWrapper<V> valueWrapper = (ValueWrapper<V>) CACHE_MAP.get(key);
+		return valueWrapper != null ? valueWrapper.getValue() : null;
+	}
 
-    @Override
-    public V get(K key, ValueLoader<V> valueLoader) {
-        V value = get(key);
-        if (value == null) {
-            value = valueLoader.load();
-            CACHE.put(key, new ValueWrapper<>(value, System.currentTimeMillis()));
-        }
-        return value;
-    }
+	@Override
+	public V get(K key, ValueLoader<V> valueLoader) {
+		V value = get(key);
+		if (value == null) {
+			value = valueLoader.load();
+			CACHE_MAP.put(key, new ValueWrapper<>(value));
+		}
+		return value;
+	}
 
-    @Override
-    public V get(K key, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit) {
-        V value = get(key);
-        if (value == null) {
-            value = valueLoader.load();
-            CACHE.put(key, getValueWraper(value, expiretime, timeUnit));
-        }
-        return value;
-    }
+	@Override
+	public V get(K key, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit) {
+		V value = get(key);
+		if (value == null) {
+			value = valueLoader.load();
+			this.put(key, value, timeout, timeUnit);
+		}
+		return value;
+	}
 
-    @Override
-    public V get(K key, Class<V> type) {
-        V value = get(key);
-        if (value != null && type != null && !type.isInstance(value)) {
-            throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
-        }
-        return value;
-    }
+	@Override
+	public V get(K key, Class<V> type) {
+		V value = get(key);
+		if (value != null && type != null && !type.isInstance(value)) {
+			throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
+		}
+		return value;
+	}
 
-    @Override
-    public V get(K key, Class<V> type, ValueLoader<V> valueLoader) {
-        V value = get(key, type);
-        if (value == null) {
-            value = valueLoader.load();
-            CACHE.put(key, new ValueWrapper<>(value, System.currentTimeMillis()));
-        }
-        return value;
-    }
+	@Override
+	public V get(K key, Class<V> type, ValueLoader<V> valueLoader) {
+		V value = get(key, type);
+		if (value == null) {
+			value = valueLoader.load();
+			this.put(key, value);
 
-    @Override
-    public V get(K key, Class<V> type, ValueLoader<V> valueLoader, int expiretime, TimeUnit timeUnit) {
-        V value = get(key, type);
-        if (value == null) {
-            value = valueLoader.load();
-            CACHE.put(key, getValueWraper(value, expiretime, timeUnit));
-        }
-        return value;
-    }
+		}
+		return value;
+	}
 
-    @Override
-    public boolean remove(K key) {
-        Object value = CACHE.remove(key);
-        return Objects.isNull(value);
-    }
+	@Override
+	public V get(K key, Class<V> type, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit) {
+		V value = get(key, type);
+		if (value == null) {
+			value = valueLoader.load();
+			this.put(key, value, timeout, timeUnit);
+		}
+		return value;
+	}
 
-    @Override
-    public void clear() {
-        CACHE.clear();
-    }
+	@Override
+	public boolean remove(K key) {
+		Object value = CACHE_MAP.remove(key);
+		return Objects.isNull(value);
+	}
 
-    private ValueWrapper<Object> getValueWraper(V value, int expiretime, TimeUnit timeUnit) {
-        long timemills = timeUnit.toMillis(expiretime);
-        ValueWrapper<Object> valueWrapper = new ValueWrapper<>(value, System.currentTimeMillis());
-        valueWrapper.setExpiredtime(timemills);
-        return valueWrapper;
-    }
+	@Override
+	public void clear() {
+		CACHE_MAP.clear();
+	}
+
 }
