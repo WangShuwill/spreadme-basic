@@ -199,16 +199,30 @@ public abstract class StringUtil {
 	}
 
 	public static String randomString(int length) {
-		if (length < 1) {
+		return randomString(STRINGS, length);
+	}
+
+	public static String randomString(String base, int length) {
+		if (isBlank(base) || length < 1 || base.length() < length) {
 			return null;
 		}
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		StringBuilder strings = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			int index = random.nextInt(STRINGS.length());
-			strings.append(STRINGS.charAt(index));
+			int index = random.nextInt(base.length());
+			strings.append(base.charAt(index));
 		}
 		return strings.toString();
 	}
 
+	public static String repeat(char c, int length) {
+		StringBuilder builder = new StringBuilder();
+		if (length < 1) {
+			return builder.append(c).toString();
+		}
+		for (int i = 0; i < length; i++) {
+			builder.append(c);
+		}
+		return builder.toString();
+	}
 }
