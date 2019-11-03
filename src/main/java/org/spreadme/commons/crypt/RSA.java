@@ -36,7 +36,7 @@ import org.spreadme.commons.codec.Base64;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public class RSA {
+public abstract class RSA {
 
 	private static final int MAX_ENCRYPT_BLOCK = 117; //RSA最大加密明文大小
 

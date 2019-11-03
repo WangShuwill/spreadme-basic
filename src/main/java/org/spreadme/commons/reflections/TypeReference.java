@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.util;
+package org.spreadme.commons.reflections;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

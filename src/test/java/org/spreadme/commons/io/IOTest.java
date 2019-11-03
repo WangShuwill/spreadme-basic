@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.MessageDigest;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
 import org.spreadme.commons.crypt.Hash;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.FileUtil;
 import org.spreadme.commons.util.IOUtil;
 
 /**
@@ -55,6 +57,14 @@ public class IOTest {
 			IOUtil.copy(digestInput, out);
 			System.out.println(Hex.toHexString(digest.digest()));
 			System.out.println(Hash.toHashString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+		}
+	}
+
+	@Test
+	public void testFiles() {
+		List<File> files = FileUtil.getFiles(ClassUtil.getClassPath());
+		for (File file : files) {
+			System.out.println(file);
 		}
 	}
 }

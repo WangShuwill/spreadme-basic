@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.util;
+package org.spreadme.commons.reflections.model;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;

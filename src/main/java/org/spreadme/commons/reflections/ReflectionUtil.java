@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.util;
+package org.spreadme.commons.reflections;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -24,13 +24,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.spreadme.commons.reflections.model.AnnotationDefinition;
+import org.spreadme.commons.util.Assert;
+import org.spreadme.commons.util.FileUtil;
 
 /**
  * ReflectionUtil
@@ -39,11 +41,29 @@ import java.util.Map;
  */
 public abstract class ReflectionUtil {
 
-	public static final List<?> PRIMARYTYPE = Arrays.asList(
-			Byte.class, Short.class, Integer.class,
-			Long.class, Double.class, Float.class,
-			BigDecimal.class, BigInteger.class, String.class, Date.class
-	);
+	private static List<String> primitiveNames;
+
+	private static List<Class> primitiveTypes;
+
+	private static List<String> primitiveDescriptors;
+
+	static {
+		primitiveNames = Arrays.asList("boolean", "char", "byte", "short", "int", "long", "float", "double", "void");
+		primitiveTypes = Arrays.asList(boolean.class, char.class, byte.class, short.class, int.class, long.class, float.class, double.class, void.class);
+		primitiveDescriptors = Arrays.asList("Z", "C", "B", "S", "I", "J", "F", "D", "V");
+	}
+
+	public static List<String> getPrimitiveNames() {
+		return primitiveNames;
+	}
+
+	public static List<Class> getPrimitiveTypes() {
+		return primitiveTypes;
+	}
+
+	public static List<String> getPrimitiveDescriptors() {
+		return primitiveDescriptors;
+	}
 
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = findField(obj.getClass(), fieldName);
@@ -91,7 +111,7 @@ public abstract class ReflectionUtil {
 	}
 
 	public static boolean isPrimaryType(Class<?> type) {
-		return PRIMARYTYPE.contains(type);
+		return primitiveTypes.contains(type);
 	}
 
 	public static Map<String, Object> parseBeanToMap(Object bean) {
@@ -308,5 +328,51 @@ public abstract class ReflectionUtil {
 			return Object.class;
 		}
 		return (Class) params[index];
+	}
+
+	public static Class<?> forName(String typeName, ClassLoader... classLoaders) {
+		if (primitiveNames.contains(typeName)) {
+			return primitiveTypes.get(primitiveNames.indexOf(typeName));
+		}
+		String type;
+		if (typeName.contains("[")) {
+			int i = typeName.indexOf("[");
+			type = typeName.substring(0, i);
+			String array = typeName.substring(i).replace("]", "");
+			if (getPrimitiveNames().contains(type)) {
+				type = getPrimitiveDescriptors().get(getPrimitiveNames().indexOf(type));
+			}
+			else {
+				type = "L" + type + ";";
+			}
+			type = array + type;
+		}
+		else {
+			type = typeName;
+		}
+		for (ClassLoader classLoader : classLoaders) {
+			if (type.contains("[")) {
+				try {
+					return Class.forName(type, false, classLoader);
+				}
+				catch (ClassNotFoundException e) {
+					throw new IllegalStateException(e.getMessage(), e);
+				}
+			}
+			try {
+				return classLoader.loadClass(type);
+			}
+			catch (ClassNotFoundException e) {
+				throw new IllegalStateException(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
+
+	public static List<String> scanTypeNames(String path) {
+		return FileUtil.getFiles(path, file -> file.getName().endsWith(".class"))
+				.stream()
+				.map(item -> FileUtil.getRelativePath(path, item).replace("/", "."))
+				.collect(Collectors.toList());
 	}
 }
