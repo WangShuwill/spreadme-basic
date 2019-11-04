@@ -17,11 +17,17 @@
 package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.CaptchaCode;
 import org.spreadme.commons.captcha.CodeGenerator;
 import org.spreadme.commons.captcha.generator.RandomCodeGenerator;
+import org.spreadme.commons.util.ImageUtil;
 
 /**
  * abstract captcha
@@ -29,52 +35,94 @@ import org.spreadme.commons.captcha.generator.RandomCodeGenerator;
  */
 public abstract class AbstractCaptcha implements Captcha {
 
+	private static final String CAPTCHA_IMAGE_TYPE = "png";
+
 	protected int width; // 图片的宽度
 
 	protected int height; // 图片的高度
-
-	protected int interfereCount; // 验证码干扰元素个数
 
 	protected Font font; // 字体
 
 	protected CaptchaCode code; // 验证码
 
-	protected byte[] imageBytes; // 验证码图片
-
 	protected CodeGenerator generator; // 验证码生成器
 
-	protected Color background; // 背景色
-
-	protected AlphaComposite textAlpha; //文字透明度
-
-	public AbstractCaptcha(int width, int height, CodeGenerator generator, int interfereCount) {
+	public AbstractCaptcha(int width, int height, CodeGenerator generator) {
 		this.width = width;
 		this.height = height;
 		this.generator = generator;
-		this.interfereCount = interfereCount;
-		// 字体高度设为验证码高度-2，留边距
 		this.font = new Font(Font.SANS_SERIF, Font.PLAIN, (int) (this.height * 0.75));
 	}
 
-	public AbstractCaptcha(int width, int height, int codeCount, int interfereCount) {
-		this(width, height, new RandomCodeGenerator(codeCount), interfereCount);
+	public AbstractCaptcha(int width, int height, int length) {
+		this(width, height, new RandomCodeGenerator(length));
 	}
 
 	@Override
 	public byte[] create() {
+		// 生成验证码
 		this.code = this.generator.generate();
-		return createImage(this.code.getCode());
+		// 绘制图像
+		BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics = image.createGraphics();
+		image = graphics.getDeviceConfiguration().createCompatibleImage(this.width, this.height, Transparency.TRANSLUCENT);
+		graphics = image.createGraphics();
+		drawText(code.getCode(), graphics, Color.BLUE);
+		// 混淆图像
+		confuseImage(graphics);
+		graphics.dispose();
+		return toBytes(image);
 	}
 
-	protected abstract byte[] createImage(String code);
+	protected abstract void confuseImage(Graphics2D graphics);
+
+	private Graphics2D drawText(String code, Graphics2D graphics, Color color) {
+		graphics.setFont(this.font);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		FontMetrics metrics = graphics.getFontMetrics();
+		int midY = (height - metrics.getHeight()) / 2 + metrics.getAscent();
+
+		final int len = code.length();
+		int charWidth = width / len;
+		for (int i = 0; i < len; i++) {
+			if (color == null) {
+				graphics.setColor(ImageUtil.randomColor());
+			}
+			graphics.setColor(color);
+			if (i == 0) {
+				graphics.drawString(String.valueOf(code.charAt(i)), charWidth / 2, midY);
+			}
+			else {
+				graphics.drawString(String.valueOf(code.charAt(i)), i * charWidth + (charWidth / 2), midY);
+			}
+		}
+		return graphics;
+	}
+
+	private byte[] toBytes(BufferedImage image) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(image, CAPTCHA_IMAGE_TYPE, out);
+		}
+		catch (IOException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+		return out.toByteArray();
+	}
 
 	@Override
-	public String getCode() {
-		return this.code.getCode();
+	public CaptchaCode getCode() {
+		return this.code;
 	}
 
 	@Override
 	public boolean verify(String input) {
 		return generator.verify(this.code, input);
+	}
+
+	@Override
+	public void setGenerator(CodeGenerator generator) {
+		this.generator = generator;
 	}
 }

@@ -24,8 +24,9 @@ public interface Captcha {
 
 	byte[] create();
 
-	String getCode();
+	CaptchaCode getCode();
 
 	boolean verify(String input);
 
+	void setGenerator(CodeGenerator generator);
 }

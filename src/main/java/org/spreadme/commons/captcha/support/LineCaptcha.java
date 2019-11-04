@@ -17,12 +17,7 @@
 package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.imageio.ImageIO;
 
 import org.spreadme.commons.util.ImageUtil;
 
@@ -32,39 +27,27 @@ import org.spreadme.commons.util.ImageUtil;
  */
 public class LineCaptcha extends AbstractCaptcha {
 
-	public LineCaptcha(int width, int height, int codeCount, int lineCount) {
-		super(width, height, codeCount, lineCount);
+	private int lineCount;
+
+	public LineCaptcha(int width, int height, int length, int lineCount) {
+		super(width, height, length);
+		this.lineCount = lineCount;
 	}
 
 	public LineCaptcha(int width, int height) {
-		this(width, height, 5, 100);
+		this(width, height, 5, 50);
 	}
 
 	@Override
-	protected byte[] createImage(String code) {
-		// 图像buffer
-		BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = image.createGraphics();
-		image = g.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-		g = image.createGraphics();
-		ImageUtil.drawText(code, g, this.width, this.height, this.font, Color.BLUE);
+	protected void confuseImage(Graphics2D graphics) {
 		// 干扰线
-		drawInterfere(g);
-		g.dispose();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(image, "png", out);
-		}
-		catch (IOException e) {
-			throw new IllegalStateException(e.getMessage(), e);
-		}
-		return out.toByteArray();
+		drawInterfere(graphics);
 	}
 
 	private void drawInterfere(Graphics2D g) {
 		final ThreadLocalRandom random = ThreadLocalRandom.current();
 		// 干扰线
-		for (int i = 0; i < this.interfereCount; i++) {
+		for (int i = 0; i < this.lineCount; i++) {
 			int xs = random.nextInt(width);
 			int ys = random.nextInt(height);
 			int xe = xs + random.nextInt(width / 8);

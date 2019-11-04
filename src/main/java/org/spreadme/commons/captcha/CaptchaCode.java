@@ -16,6 +16,8 @@
 
 package org.spreadme.commons.captcha;
 
+import java.util.Objects;
+
 /**
  * captcha code
  * @author shuwei.wang
@@ -45,5 +47,19 @@ public class CaptchaCode {
 				"code='" + code + '\'' +
 				", value='" + value + '\'' +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CaptchaCode that = (CaptchaCode) o;
+		return Objects.equals(code, that.code) &&
+				Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(code, value);
 	}
 }

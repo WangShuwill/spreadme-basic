@@ -41,7 +41,7 @@ public class CodeGeneratorTest {
 		System.out.println(code);
 		generator.verify(code, "100");
 
-		Captcha captcha = new LineCaptcha(200, 50);
+		Captcha captcha = new LineCaptcha(200, 50, 5, 20);
 		byte[] image = captcha.create();
 
 		try (ByteArrayInputStream in = new ByteArrayInputStream(image);

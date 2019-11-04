@@ -49,11 +49,8 @@ public class MathCodeGenerator implements CodeGenerator {
 		String operator = StringUtil.randomString(operators, 1);
 		StringBuilder builder = new StringBuilder()
 				.append(n1)
-				.append(StringUtil.repeat(' ', 1))
 				.append(operator)
-				.append(StringUtil.repeat(' ', 1))
 				.append(n2)
-				.append(StringUtil.repeat(' ', 1))
 				.append("=");
 		return new CaptchaCode(builder.toString(), String.valueOf(calcu(operator, n1, n2)));
 	}
