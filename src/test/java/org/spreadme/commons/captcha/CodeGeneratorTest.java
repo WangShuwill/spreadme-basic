@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.spreadme.commons.captcha.generator.MathCodeGenerator;
-import org.spreadme.commons.captcha.support.LineCaptcha;
+import org.spreadme.commons.captcha.support.CurvesCaptcha;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.IOUtil;
 
@@ -41,7 +41,7 @@ public class CodeGeneratorTest {
 		System.out.println(code);
 		generator.verify(code, "100");
 
-		Captcha captcha = new LineCaptcha(200, 50, 5, 20);
+		Captcha captcha = new CurvesCaptcha(200, 50);
 		byte[] image = captcha.create();
 
 		try (ByteArrayInputStream in = new ByteArrayInputStream(image);

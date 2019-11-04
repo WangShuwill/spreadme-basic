@@ -29,4 +29,6 @@ public interface Captcha {
 	boolean verify(String input);
 
 	void setGenerator(CodeGenerator generator);
+
+	void setColor(String hexColor);
 }

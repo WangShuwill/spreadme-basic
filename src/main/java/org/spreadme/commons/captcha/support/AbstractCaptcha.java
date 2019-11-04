@@ -27,6 +27,7 @@ import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.CaptchaCode;
 import org.spreadme.commons.captcha.CodeGenerator;
 import org.spreadme.commons.captcha.generator.RandomCodeGenerator;
+import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.ImageUtil;
 
 /**
@@ -37,11 +38,15 @@ public abstract class AbstractCaptcha implements Captcha {
 
 	private static final String CAPTCHA_IMAGE_TYPE = "png";
 
+	private static final String FONT_PATH = ClassUtil.getClassPath() + "Glober.otf";
+
 	protected int width; // 图片的宽度
 
 	protected int height; // 图片的高度
 
 	protected Font font; // 字体
+
+	protected Color color = Color.BLUE; //颜色
 
 	protected CaptchaCode code; // 验证码
 
@@ -67,7 +72,7 @@ public abstract class AbstractCaptcha implements Captcha {
 		Graphics2D graphics = image.createGraphics();
 		image = graphics.getDeviceConfiguration().createCompatibleImage(this.width, this.height, Transparency.TRANSLUCENT);
 		graphics = image.createGraphics();
-		drawText(code.getCode(), graphics, Color.BLUE);
+		drawText(code.getCode(), graphics, this.color);
 		// 混淆图像
 		confuseImage(graphics);
 		graphics.dispose();
@@ -125,4 +130,10 @@ public abstract class AbstractCaptcha implements Captcha {
 	public void setGenerator(CodeGenerator generator) {
 		this.generator = generator;
 	}
+
+	@Override
+	public void setColor(String hexColor) {
+		this.color = ImageUtil.hexToColor(hexColor);
+	}
+
 }
