@@ -14,15 +14,21 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.cache;
+package org.spreadme.commons.http;
 
 /**
- * 值加载器
+ * ContentType
  * @author shuwei.wang
- * @since 1.0.0
  */
-@FunctionalInterface
-public interface ValueLoader<V> {
+public final class ContentType {
 
-	V load();
+	public static final String FORM_URLENCODED = "application/x-www-form-urlencoded";
+
+	public static final String MULTIPART = "multipart/form-data";
+
+	public static final String JSON = "application/json";
+
+	public static final String XML = "application/xml";
+
+	public static final String TEXT_XML = "text/xml";
 }

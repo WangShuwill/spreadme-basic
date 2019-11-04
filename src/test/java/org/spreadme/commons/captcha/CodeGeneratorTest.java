@@ -16,10 +16,14 @@
 
 package org.spreadme.commons.captcha;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.junit.Test;
 import org.spreadme.commons.captcha.generator.MathCodeGenerator;
@@ -42,9 +46,11 @@ public class CodeGeneratorTest {
 		generator.verify(code, "100");
 
 		Captcha captcha = new CurvesCaptcha(200, 50);
-		byte[] image = captcha.create();
+		BufferedImage image = captcha.create();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ImageIO.write(image, "png", bos);
 
-		try (ByteArrayInputStream in = new ByteArrayInputStream(image);
+		try (ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
 			 FileOutputStream out = new FileOutputStream(new File(ClassUtil.getClassPath() + FILE_NAME))) {
 			IOUtil.copy(in, out);
 		}

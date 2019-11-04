@@ -14,19 +14,12 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.sys;
+package org.spreadme.commons.reflect.scanners;
 
 /**
- * arch type
+ * scanner
  * @author shuwei.wang
- * @since 1.0.0
  */
-public enum ArchType {
-	X32,
-	X64,
-	PPC,
-	PPC64,
-	ARM,
-	ARM64,
-	UNKNOWN
+public interface Scanner {
+
 }

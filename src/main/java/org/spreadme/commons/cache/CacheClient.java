@@ -19,29 +19,99 @@ package org.spreadme.commons.cache;
 import java.util.concurrent.TimeUnit;
 
 /**
- * cache client
+ * 缓存客户端
  * @author shuwei.wang
  * @since 1.0.0
  */
 public interface CacheClient<K, V> {
 
+	/**
+	 * 放置缓存对象
+	 *
+	 * @param key 键
+	 * @param value 值
+	 */
 	void put(K key, V value);
 
+	/**
+	 * 放置缓存对象，并且设置过期时间
+	 *
+	 * @param key 键
+	 * @param value 值
+	 * @param timeout 过期时间
+	 * @param timeUnit 时间单位 {@link TimeUnit}
+	 */
 	void put(K key, V value, int timeout, TimeUnit timeUnit);
 
+	/**
+	 * 获取缓存对象
+	 *
+	 * @param key 键
+	 * @return value
+	 */
 	V get(K key);
 
+	/**
+	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象
+	 *
+	 * @param key 键
+	 * @param valueLoader 值加载器 {@link ValueLoader}
+	 * @return 值
+	 */
 	V get(K key, ValueLoader<V> valueLoader);
 
+	/**
+	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象，并且设置过期时间
+	 *
+	 * @param key 键
+	 * @param valueLoader 值加载器 {@link ValueLoader}
+	 * @param timeout 过期时间
+	 * @param timeUnit 时间单位 {@link TimeUnit}
+	 * @return 值
+	 */
 	V get(K key, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
 
+	/**
+	 * 获取缓存对象，并且转化为对应的类型
+	 *
+	 * @param key 键
+	 * @param type 类型
+	 * @return 值
+	 */
 	V get(K key, Class<V> type);
 
+	/**
+	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象
+	 *
+	 * @param key 键
+	 * @param type 类型
+	 * @param valueLoader 值加载器 {@link ValueLoader}
+	 * @return 值
+	 */
 	V get(K key, Class<V> type, ValueLoader<V> valueLoader);
 
+	/**
+	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象，并且设置过期时间
+	 *
+	 * @param key 键
+	 * @param type 类型
+	 * @param valueLoader 值加载器 {@link ValueLoader}
+	 * @param timeout 超时时间
+	 * @param timeUnit 时间单位 {@link TimeUnit}
+	 * @return 值
+	 */
 	V get(K key, Class<V> type, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
 
+	/**
+	 * 移除缓存对象
+	 *
+	 * @param key 键
+	 * @return 是否移除成功
+	 */
 	boolean remove(K key);
 
+	/**
+	 * 清除缓存
+	 */
 	void clear();
 }

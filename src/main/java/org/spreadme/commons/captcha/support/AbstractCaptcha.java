@@ -18,10 +18,6 @@ package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.CaptchaCode;
@@ -35,8 +31,6 @@ import org.spreadme.commons.util.ImageUtil;
  * @author shuwei.wang
  */
 public abstract class AbstractCaptcha implements Captcha {
-
-	private static final String CAPTCHA_IMAGE_TYPE = "png";
 
 	private static final String FONT_PATH = ClassUtil.getClassPath() + "Glober.otf";
 
@@ -64,7 +58,7 @@ public abstract class AbstractCaptcha implements Captcha {
 	}
 
 	@Override
-	public byte[] create() {
+	public BufferedImage create() {
 		// 生成验证码
 		this.code = this.generator.generate();
 		// 绘制图像
@@ -76,7 +70,7 @@ public abstract class AbstractCaptcha implements Captcha {
 		// 混淆图像
 		confuseImage(graphics);
 		graphics.dispose();
-		return toBytes(image);
+		return image;
 	}
 
 	protected abstract void confuseImage(Graphics2D graphics);
@@ -103,17 +97,6 @@ public abstract class AbstractCaptcha implements Captcha {
 			}
 		}
 		return graphics;
-	}
-
-	private byte[] toBytes(BufferedImage image) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(image, CAPTCHA_IMAGE_TYPE, out);
-		}
-		catch (IOException e) {
-			throw new IllegalStateException(e.getMessage(), e);
-		}
-		return out.toByteArray();
 	}
 
 	@Override

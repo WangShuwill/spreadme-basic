@@ -26,7 +26,7 @@ import org.spreadme.commons.cache.CacheClient;
 import org.spreadme.commons.cache.ValueLoader;
 
 /**
- * local cache client by map
+ * 通过ConcurrentHashMap实现的本地缓存
  * @author shuwei.wang
  */
 public class LocalCacheClient<K, V> implements CacheClient<K, V> {

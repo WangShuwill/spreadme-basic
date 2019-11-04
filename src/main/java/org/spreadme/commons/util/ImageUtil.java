@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * image util
  * @author shuwei.wang
  */
-public class ImageUtil {
+public abstract class ImageUtil {
 
 	private static final String FORMAT_NAME = "png";
 

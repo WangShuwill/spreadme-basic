@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflections;
+package org.spreadme.commons.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.spreadme.commons.reflections.model.AnnotationDefinition;
+import org.spreadme.commons.reflect.model.AnnotationDefinition;
 import org.spreadme.commons.util.Assert;
 import org.spreadme.commons.util.FileUtil;
 

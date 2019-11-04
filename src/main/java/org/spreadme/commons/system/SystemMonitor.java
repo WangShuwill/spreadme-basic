@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.sys;
+package org.spreadme.commons.system;
 
 import java.lang.management.ManagementFactory;
 

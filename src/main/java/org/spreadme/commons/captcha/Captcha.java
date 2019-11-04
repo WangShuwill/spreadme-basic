@@ -16,19 +16,47 @@
 
 package org.spreadme.commons.captcha;
 
+import java.awt.image.BufferedImage;
+
 /**
- * captcha generator
+ * 验证码
  * @author shuwei.wang
  */
 public interface Captcha {
 
-	byte[] create();
+	/**
+	 * 创建验证码图像
+	 *
+	 * @return captcha image {@link BufferedImage}
+	 */
+	BufferedImage create();
 
+	/**
+	 * 获取验证码
+	 *
+	 * @return captcha code {@link CaptchaCode}
+	 */
 	CaptchaCode getCode();
 
+	/**
+	 * 校验验证码
+	 *
+	 * @param input 输入
+	 * @return 校验是否成功
+	 */
 	boolean verify(String input);
 
+	/**
+	 * 设置验证码生成器
+	 *
+	 * @param generator 验证码生成器 {@link CodeGenerator}
+	 */
 	void setGenerator(CodeGenerator generator);
 
+	/**
+	 * 设置颜色
+	 *
+	 * @param hexColor 十六进制颜色值
+	 */
 	void setColor(String hexColor);
 }

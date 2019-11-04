@@ -14,25 +14,19 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflections;
-
-import org.junit.Test;
-import org.spreadme.commons.util.ClassUtil;
+package org.spreadme.commons.system;
 
 /**
+ * arch type
  * @author shuwei.wang
+ * @since 1.0.0
  */
-public class ReflectionTest {
-
-	@Test
-	public void testForName() {
-		String typeName = this.getClass().getTypeName();
-		Class<?> clazz = ReflectionUtil.forName(typeName, ClassUtil.getClassLoader());
-		System.out.println(clazz);
-	}
-
-	@Test
-	public void testGetClasses() {
-		ReflectionUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(System.out::println);
-	}
+public enum ArchType {
+	X32,
+	X64,
+	PPC,
+	PPC64,
+	ARM,
+	ARM64,
+	UNKNOWN
 }

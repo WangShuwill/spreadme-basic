@@ -20,7 +20,7 @@ package org.spreadme.commons.http;
  * http headers const
  * @author shuwei.wang
  */
-public final class HttpHeaders {
+public final class HeaderType {
 
 	/** The HTTP {@code Cache-Control} header field name. */
 	public static final String CACHE_CONTROL = "Cache-Control";
