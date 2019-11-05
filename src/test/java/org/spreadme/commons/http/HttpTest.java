@@ -17,6 +17,7 @@
 package org.spreadme.commons.http;
 
 import org.junit.Test;
+import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
 
@@ -27,9 +28,13 @@ public class HttpTest {
 
 	@Test
 	public void testUserAgent() {
-		final String useragent = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
+		final String useragent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0";
 		Platform platform = UserAgent.getPlatform(useragent);
 		System.out.println("IsMobile: " + platform.isMobile());
 		System.out.println("Platfrom: " + platform.getName());
+
+		Browser browser = UserAgent.getBrowser(useragent);
+		System.out.println("Browswe Name: " + browser.getName());
+		System.out.println("Browser Version: " + browser.getVersion());
 	}
 }

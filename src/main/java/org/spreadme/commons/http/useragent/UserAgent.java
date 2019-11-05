@@ -22,12 +22,22 @@ package org.spreadme.commons.http.useragent;
  */
 public abstract class UserAgent {
 
-	public static Platform getPlatform(String useragent) {
+	public static Platform getPlatform(String userAgent) {
 		for (Platform platform : Platform.platforms) {
-			if (platform.isMatch(useragent)) {
+			if (platform.isMatch(userAgent)) {
 				return platform;
 			}
 		}
 		return Platform.UNKOWN;
+	}
+
+	public static Browser getBrowser(String userAgent) {
+		for (Browser browser : Browser.browers) {
+			if (browser.isMatch(userAgent)) {
+				browser.setVersion(userAgent);
+				return browser;
+			}
+		}
+		return Browser.UNKOWN;
 	}
 }

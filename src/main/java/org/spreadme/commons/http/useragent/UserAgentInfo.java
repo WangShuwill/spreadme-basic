@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class UserAgentInfo {
 
-	protected static final String unkownInfo = "UNKOWN";
+	protected static final String NAME_UNKOWN = "UNKOWN";
 
 	private final String name;
 
@@ -35,8 +35,8 @@ public class UserAgentInfo {
 		this.pattern = pattern;
 	}
 
-	public UserAgentInfo(String info, String regex) {
-		this(info, regex == null ? null : Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
+	public UserAgentInfo(String name, String regex) {
+		this(name, regex == null ? null : Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
 	}
 
 	public boolean isMatch(String content) {

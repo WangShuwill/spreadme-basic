@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Platform extends UserAgentInfo {
 
-	public static final Platform UNKOWN = new Platform(unkownInfo, null);
+	public static final Platform UNKOWN = new Platform(NAME_UNKOWN, null);
 
 	// 支持的移动平台类型
 	private static final List<Platform> mobilePlatforms = new ArrayList<>(Arrays.asList(

@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * InputStream Obsercer
+ * InputStream Observer
  * @author shuwei.wang
  * @since 1.0.0
  */
