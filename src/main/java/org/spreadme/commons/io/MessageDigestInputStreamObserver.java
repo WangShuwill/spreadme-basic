@@ -16,7 +16,6 @@
 
 package org.spreadme.commons.io;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 
 /**
@@ -33,12 +32,12 @@ public class MessageDigestInputStreamObserver extends AbstractInputStreamObserve
 	}
 
 	@Override
-	public void data(final int pByte) throws IOException {
+	public void data(final int pByte) {
 		digest.update((byte) pByte);
 	}
 
 	@Override
-	public void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
+	public void data(final byte[] pBuffer, final int pOffset, final int pLength) {
 		digest.update(pBuffer, pOffset, pLength);
 	}
 }
