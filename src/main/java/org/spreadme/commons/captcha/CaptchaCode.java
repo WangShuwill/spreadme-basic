@@ -18,11 +18,15 @@ package org.spreadme.commons.captcha;
 
 import java.util.Objects;
 
+import org.spreadme.commons.cache.Cacheable;
+
 /**
  * captcha code
  * @author shuwei.wang
  */
-public class CaptchaCode {
+public class CaptchaCode implements Cacheable {
+
+	private static final long serialVersionUID = 8913251841658989029L;
 
 	private final String code;
 
@@ -39,6 +43,11 @@ public class CaptchaCode {
 
 	public String getValue() {
 		return value;
+	}
+
+	@Override
+	public String toCacheKey() {
+		return String.valueOf(this.hashCode());
 	}
 
 	@Override

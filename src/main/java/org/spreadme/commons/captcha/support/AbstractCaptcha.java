@@ -23,7 +23,6 @@ import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.CaptchaCode;
 import org.spreadme.commons.captcha.CodeGenerator;
 import org.spreadme.commons.captcha.generator.RandomCodeGenerator;
-import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.ImageUtil;
 
 /**
@@ -32,15 +31,13 @@ import org.spreadme.commons.util.ImageUtil;
  */
 public abstract class AbstractCaptcha implements Captcha {
 
-	private static final String FONT_PATH = ClassUtil.getClassPath() + "Glober.otf";
-
 	protected int width; // 图片的宽度
 
 	protected int height; // 图片的高度
 
 	protected Font font; // 字体
 
-	protected Color color = Color.BLUE; //颜色
+	protected Color color = ImageUtil.hexToColor("#293a80"); //颜色
 
 	protected CaptchaCode code; // 验证码
 
