@@ -20,6 +20,12 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<groupId>org.spreadme</groupId>
 	<artifactId>spreadme-commons</artifactId>
 	<version>1.5.0</version>
@@ -27,7 +33,7 @@
 	<name>Spreadme Mapper</name>
 	<inceptionYear>2018</inceptionYear>
 	<description>
-		The Mybatis Rapid development tool
+		A set of frameworks for Java rapid development that integrates common tool libs
 	</description>
 	<url>https://github.com/shuwill/spreadme-mapper</url>
 
@@ -77,6 +83,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>

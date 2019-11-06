@@ -160,7 +160,7 @@ public abstract class ObservableInputStream extends InputStream {
 	}
 
 	/**
-	 * Notifies the observers by invoking {@link InputStreamObserver#data(int) with the given arguments
+	 * Notifies the observers by invoking
 	 *
 	 * @param pDataByte Passed to the observers.
 	 * @throws IOException Some observer has thrown an exception, which is being passed down.

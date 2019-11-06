@@ -26,11 +26,11 @@ import java.util.UUID;
  */
 public interface Id<S extends Serializable> {
 
-	Id<String> Default = new UUID_id();
+	Id<String> Default = new UUIDS();
 
 	S generate();
 
-	class UUID_id implements Id<String> {
+	class UUIDS implements Id<String> {
 
 		@Override
 		public String generate() {

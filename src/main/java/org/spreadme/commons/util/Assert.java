@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @description: Assert
+ * Assert
  * @author shuwei.wang
  * @since 1.0.0
  */

@@ -28,6 +28,8 @@ public interface InputStreamObserver {
 
 	/**
 	 * Called to indicate, that {@link InputStream#read()} has been invoked
+	 * @param pByte byte
+	 * @throws IOException IOException
 	 */
 	void data(final int pByte) throws IOException;
 
@@ -35,16 +37,26 @@ public interface InputStreamObserver {
 	 * Called to indicate, that {@link InputStream#read(byte[])}, or
 	 * {@link InputStream#read(byte[], int, int)} have been called, and are about to
 	 * invoke data.
+	 *
+	 * @param pBuffer buffer
+	 * @param pOffset offset
+	 * @param pLength lenght
+	 * @throws IOException IOException
 	 */
 	void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException;
 
 	/**
 	 * Called to indicate, that EOF has been seen on the underlying stream.
+	 *
+	 * @throws IOException IOException
 	 */
 	void finished() throws IOException;
 
 	/**
 	 * Called to indicate, that an error occurred on the underlying stream.
+	 *
+	 * @param pException IOException
+	 * @throws IOException IOException
 	 */
 	void error(final IOException pException) throws IOException;
 }
