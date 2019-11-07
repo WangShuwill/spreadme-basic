@@ -216,7 +216,7 @@ public abstract class IOUtil {
 	 *
 	 * @param zip zip file
 	 * @param files files
-	 * @throws IOException
+	 * @throws IOException IOException
 	 */
 	public static void zipFiles(File zip, List<File> files) throws IOException {
 		try (WritableByteChannel writableChann = Channels.newChannel(new FileOutputStream(zip))) {
