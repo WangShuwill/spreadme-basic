@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.io;
+package org.spreadme.commons.lang;
 
 import java.util.HashMap;
 import java.util.Map;

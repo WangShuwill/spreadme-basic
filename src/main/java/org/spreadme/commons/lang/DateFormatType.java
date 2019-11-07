@@ -14,12 +14,25 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflect.scanners;
+package org.spreadme.commons.lang;
 
 /**
- * scanner
+ * DateFormat Type
  * @author shuwei.wang
+ * @since 1.0.0
  */
-public interface Scanner {
+public enum DateFormatType {
 
-}
+	DEFAULT_PATTERN("yyyy-MM-dd"),
+	STANDARD_PATTERN("yyyy-MM-dd HH:mm:ss"),
+	COMPACT_PATTERN("yyyyMMddHHmmss");
+
+	private String format;
+
+	DateFormatType(String format){
+		this.format = format;
+	}
+
+	public String getFormat() {
+		return format;
+	}}
