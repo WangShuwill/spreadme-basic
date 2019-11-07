@@ -88,4 +88,11 @@ public class CryptTest {
 		byte[] rawData = RSA.decryptByPrivateKey(encryptData, privateKey);
 		System.out.println(new String(rawData));
 	}
+
+	@Test
+	public void testBCrypt(){
+		final String pwd = "1234";
+		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
+		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
+	}
 }
