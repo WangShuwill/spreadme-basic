@@ -20,6 +20,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -28,7 +30,9 @@ import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
 import org.spreadme.commons.crypt.Hash;
+import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.CollectionUtil;
 import org.spreadme.commons.util.FileUtil;
 import org.spreadme.commons.util.IOUtil;
 
@@ -61,10 +65,45 @@ public class IOTest {
 	}
 
 	@Test
-	public void testFiles() {
+	public void testFiles() throws IOException {
 		List<File> files = FileUtil.getFiles(ClassUtil.getClassPath());
 		for (File file : files) {
 			System.out.println(file);
 		}
+	}
+
+	@Test
+	public void testToFile() throws IOException {
+		final String text = "wswei1\nwswei2\nwswei3";
+		final String filePath = ClassUtil.getClassPath() + "/file/test.txt";
+		IOUtil.toFile(new ByteArrayInputStream(text.getBytes()), filePath);
+		final String destPath = ClassUtil.getClassPath() + "/cfile/test.txt";
+		IOUtil.copyFile(filePath, destPath);
+		try (FileInputStream in = new FileInputStream(new File(destPath))) {
+			System.out.println(IOUtil.readLines(in, StandardCharsets.UTF_8));
+		}
+	}
+
+	@Test
+	public void testLineIterator() throws IOException {
+		final String text = "wswei1\nwswei2\nwswei3";
+		final String filePath = ClassUtil.getClassPath() + "/file/test.txt";
+		IOUtil.toFile(new ByteArrayInputStream(text.getBytes()), filePath);
+		try (FileInputStream in = new FileInputStream(new File(filePath))) {
+			LineIterator iterator = IOUtil.lineIterator(in, StandardCharsets.UTF_8);
+			while (iterator.hasNext()) {
+				System.out.println(iterator.next());
+			}
+		}
+	}
+
+	@Test
+	public void testZipFiles() throws IOException {
+		File f1 = new File("/Users/wangshuwei/Downloads/jre/jre6");
+		File f2 = new File("/Users/wangshuwei/Downloads/jre/jre7");
+		File f3 = new File("/Users/wangshuwei/Downloads/jre/jre8");
+		List<File> files = CollectionUtil.toList(f1, f2, f3);
+		File zipFile = new File(ClassUtil.getClassPath() + "text.zip");
+		IOUtil.zipFiles(zipFile, files);
 	}
 }

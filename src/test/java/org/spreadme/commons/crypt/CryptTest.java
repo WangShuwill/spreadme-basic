@@ -95,5 +95,6 @@ public class CryptTest {
 		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
 		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
 		System.out.println(BCrypt.checkpw(pwd, "$2a$10$bA2.WOmsYX/9To0w5BkaueORBgQPTuvS8MxR6YKTbTk948/5GlfkS"));
+		System.out.println(XOR.encrypt(pwd));
 	}
 }

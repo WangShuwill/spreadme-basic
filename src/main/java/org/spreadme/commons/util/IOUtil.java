@@ -16,10 +16,13 @@
 
 package org.spreadme.commons.util;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,11 +30,21 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.Pipe;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.spreadme.commons.lang.LineIterator;
 
 /**
  * io util
@@ -78,6 +91,37 @@ public abstract class IOUtil {
 	}
 
 	/**
+	 * copy file
+	 *
+	 * @param srcPath src path
+	 * @param destPath dest path
+	 * @throws IOException IOException
+	 */
+	public static void copyFile(final String srcPath, final String destPath) throws IOException {
+		File dest = new File(destPath);
+		if (!dest.exists()) {
+			dest = FileUtil.createFile(destPath, true);
+		}
+		copyFile(new File(srcPath), dest);
+	}
+
+	/**
+	 * copy file
+	 *
+	 * @param src src file
+	 * @param dest dest file
+	 * @throws IOException IOException
+	 */
+	public static void copyFile(final File src, final File dest) throws IOException {
+		if (dest.exists() && dest.isDirectory()) {
+			throw new IOException("Destination '" + dest + "' exists but is a directory");
+		}
+		Path srcPath = src.toPath();
+		Path destPath = dest.toPath();
+		Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	/**
 	 * intputstream to byte array
 	 *
 	 * @param input InputStream
@@ -88,6 +132,31 @@ public abstract class IOUtil {
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		copy(input, bos);
 		return bos.toByteArray();
+	}
+
+	/**
+	 * intputstream to file
+	 *
+	 * @param in InputStream
+	 * @param file File
+	 * @throws IOException IOException
+	 */
+	public static void toFile(InputStream in, File file) throws IOException {
+		try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+			copy(in, out);
+		}
+	}
+
+	/**
+	 * intputstream to file
+	 *
+	 * @param in InputStream
+	 * @param path file path
+	 * @throws IOException IOException
+	 */
+	public static void toFile(InputStream in, String path) throws IOException {
+		File file = FileUtil.createFile(path, true);
+		toFile(in, file);
 	}
 
 	/**
@@ -112,7 +181,7 @@ public abstract class IOUtil {
 	 * read lines from reader
 	 *
 	 * @param input InputStream
-	 * @param charset Charset
+	 * @param charset Charset {@link java.nio.charset.StandardCharsets}
 	 * @return lines
 	 * @throws IOException IOException
 	 */
@@ -122,11 +191,83 @@ public abstract class IOUtil {
 	}
 
 	/**
+	 * line iterator
+	 *
+	 * @param input InputStream
+	 * @param charset Charset {@link java.nio.charset.StandardCharsets}
+	 * @return LineIterator {@link LineIterator}
+	 */
+	public static LineIterator lineIterator(final InputStream input, final Charset charset) {
+		return new LineIterator(new InputStreamReader(input, charset));
+	}
+
+	/**
+	 * line iterator
+	 *
+	 * @param reader Reader
+	 * @return LineIterator {@link LineIterator}
+	 */
+	public static LineIterator lineIterator(final Reader reader) {
+		return new LineIterator(reader);
+	}
+
+	/**
+	 * zip files
+	 *
+	 * @param zip zip file
+	 * @param files files
+	 * @throws IOException
+	 */
+	public static void zipFiles(File zip, List<File> files) throws IOException {
+		try (WritableByteChannel writableChann = Channels.newChannel(new FileOutputStream(zip))) {
+			Pipe pipe = Pipe.open();
+			CompletableFuture.runAsync(() -> zipTask(pipe, files));
+			ReadableByteChannel readableChann = pipe.source();
+			copy(readableChann, writableChann);
+		}
+	}
+
+	private static void zipTask(Pipe pipe, List<File> files) {
+		try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
+			 WritableByteChannel writableChann = Channels.newChannel(zos)) {
+
+			for (File file : files) {
+				doZip(zos, file, writableChann, StringUtil.EMPTY);
+			}
+		}
+		catch (IOException ex) {
+			throw new IllegalStateException(ex.getMessage(), ex);
+		}
+	}
+
+	private static void doZip(ZipOutputStream zos, File file, WritableByteChannel writableChann, String base) throws IOException {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			base = StringUtil.isBlank(base) ? file.getName() + File.separator : base + File.separator;
+			if (files != null) {
+				for (File item : files) {
+					doZip(zos, item, writableChann, base + item.getName());
+				}
+			}
+		}
+		else {
+			base = StringUtil.isBlank(base) ? file.getName() : base;
+			zos.putNextEntry(new ZipEntry(base));
+			FileChannel fileChann = new FileInputStream(new File(file.getAbsolutePath())).getChannel();
+			fileChann.transferTo(0, fileChann.size(), writableChann);
+			fileChann.close();
+		}
+	}
+
+	/**
 	 * close closeable resource
 	 *
 	 * @param resources Closeable resource
 	 */
 	public static void close(Closeable... resources) {
+		if (resources == null) {
+			return;
+		}
 		try {
 			for (Closeable resource : resources) {
 				if (resource != null) {
@@ -137,15 +278,6 @@ public abstract class IOUtil {
 		catch (IOException ignore) {
 
 		}
-	}
-
-	/**
-	 * get temp dir
-	 *
-	 * @return temp dir
-	 */
-	public static File getTempDir() {
-		return new File(System.getProperty("java.io.tmpdir"));
 	}
 
 }

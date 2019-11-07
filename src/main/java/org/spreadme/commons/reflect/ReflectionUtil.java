@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.reflect;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -370,9 +371,14 @@ public abstract class ReflectionUtil {
 	}
 
 	public static List<String> scanTypeNames(String path) {
-		return FileUtil.getFiles(path, file -> file.getName().endsWith(".class"))
-				.stream()
-				.map(item -> FileUtil.getRelativePath(path, item).replace("/", "."))
-				.collect(Collectors.toList());
+		try {
+			return FileUtil.getFiles(path, file -> file.getName().endsWith(".class"))
+					.stream()
+					.map(item -> FileUtil.getRelativePath(path, item).replace("/", "."))
+					.collect(Collectors.toList());
+		}
+		catch (IOException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
 	}
 }
