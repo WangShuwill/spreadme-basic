@@ -19,8 +19,9 @@ package org.spreadme.commons.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+import org.spreadme.commons.lang.Randoms;
 
 /**
  * string util
@@ -41,7 +42,7 @@ public abstract class StringUtil {
 
 	public static final String SLASH = "/";
 
-	public static String STRINGS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	public static final String STRINGS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 	/**
 	 * Convert an array of 8 bit characters into a string.
@@ -80,10 +81,22 @@ public abstract class StringUtil {
 		return chars;
 	}
 
+	/**
+	 * is it not empty
+	 *
+	 * @param charSequence charSequence
+	 * @return is it not empty?
+	 */
 	public static boolean isNotBlank(final CharSequence charSequence) {
 		return !isBlank(charSequence);
 	}
 
+	/**
+	 * is it empty
+	 *
+	 * @param charSequence charSequence
+	 * @return is it empty
+	 */
 	public static boolean isBlank(final CharSequence charSequence) {
 		int len;
 		if (charSequence == null || (len = charSequence.length()) == 0) {
@@ -97,6 +110,12 @@ public abstract class StringUtil {
 		return true;
 	}
 
+	/**
+	 * trim all whitespace
+	 *
+	 * @param source source
+	 * @return trim all result
+	 */
 	public static String trimAll(final String source) {
 		if (isBlank(source)) {
 			return source;
@@ -206,10 +225,9 @@ public abstract class StringUtil {
 		if (isBlank(base) || length < 1 || base.length() < length) {
 			return null;
 		}
-		ThreadLocalRandom random = ThreadLocalRandom.current();
 		StringBuilder strings = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			int index = random.nextInt(base.length());
+			int index = Randoms.nextInt(base.length());
 			strings.append(base.charAt(index));
 		}
 		return strings.toString();

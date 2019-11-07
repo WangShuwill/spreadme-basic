@@ -17,8 +17,8 @@
 package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
 
+import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.ImageUtil;
 
 /**
@@ -45,13 +45,12 @@ public class LineCaptcha extends AbstractCaptcha {
 	}
 
 	private void drawInterfere(Graphics2D g) {
-		final ThreadLocalRandom random = ThreadLocalRandom.current();
 		// 干扰线
 		for (int i = 0; i < this.lineCount; i++) {
-			int xs = random.nextInt(width);
-			int ys = random.nextInt(height);
-			int xe = xs + random.nextInt(width / 8);
-			int ye = ys + random.nextInt(height / 8);
+			int xs = Randoms.nextInt(width);
+			int ys = Randoms.nextInt(height);
+			int xe = xs + Randoms.nextInt(width / 8);
+			int ye = ys + Randoms.nextInt(height / 8);
 			g.setColor(ImageUtil.randomColor());
 			g.drawLine(xs, ys, xe, ye);
 		}

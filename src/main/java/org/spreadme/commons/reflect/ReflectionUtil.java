@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.spreadme.commons.reflect.model.AnnotationDefinition;
-import org.spreadme.commons.util.Assert;
+import org.spreadme.commons.lang.Assert;
 import org.spreadme.commons.util.FileUtil;
 
 /**

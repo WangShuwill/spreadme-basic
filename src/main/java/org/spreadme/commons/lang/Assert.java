@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.util;
+package org.spreadme.commons.lang;
 
 import java.util.Collection;
 import java.util.Map;
@@ -26,14 +26,14 @@ import java.util.Map;
  */
 public abstract class Assert {
 
-	public static void state(boolean expression, String message) {
+	public static void isTrue(boolean expression, String message) {
 		if (!expression) {
-			throw new IllegalStateException(message);
+			throw new IllegalArgumentException(message);
 		}
 	}
 
-	public static void isTrue(boolean expression, String message) {
-		if (!expression) {
+	public static void isNotTrue(boolean expression, String message) {
+		if (expression) {
 			throw new IllegalArgumentException(message);
 		}
 	}
@@ -51,14 +51,27 @@ public abstract class Assert {
 	}
 
 	public static void notEmpty(Collection<?> collection, String message) {
-		if (collection.size() < 1) {
+		if (collection != null && !collection.isEmpty()) {
 			throw new IllegalArgumentException(message);
 		}
 	}
 
 	public static void notEmpty(Map<?, ?> map, String message) {
-		if (map.size() < 1) {
+		if (map != null && !map.isEmpty()) {
 			throw new IllegalArgumentException(message);
 		}
 	}
+
+	public static void isEmpty(Collection<?> collection, String message) {
+		if (collection == null || collection.isEmpty()) {
+			throw new IllegalArgumentException(message);
+		}
+	}
+
+	public static void isEmpty(Map<?, ?> map, String message) {
+		if (map == null || map.isEmpty()) {
+			throw new IllegalArgumentException(message);
+		}
+	}
+
 }

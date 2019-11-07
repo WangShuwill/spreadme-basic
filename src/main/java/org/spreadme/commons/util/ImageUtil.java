@@ -17,7 +17,8 @@
 package org.spreadme.commons.util;
 
 import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
+
+import org.spreadme.commons.lang.Randoms;
 
 /**
  * image util
@@ -33,8 +34,7 @@ public abstract class ImageUtil {
 	 * @return Color
 	 */
 	public static Color randomColor() {
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		return new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
+		return new Color(Randoms.nextInt(255), Randoms.nextInt(255), Randoms.nextInt(255));
 	}
 
 	/**

@@ -16,10 +16,9 @@
 
 package org.spreadme.commons.captcha.generator;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.spreadme.commons.captcha.CaptchaCode;
 import org.spreadme.commons.captcha.CodeGenerator;
+import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -43,9 +42,8 @@ public class MathCodeGenerator implements CodeGenerator {
 	@Override
 	public CaptchaCode generate() {
 		final int limit = getLimit();
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		int n1 = random.nextInt(limit);
-		int n2 = random.nextInt(limit);
+		int n1 = Randoms.nextInt(limit);
+		int n2 = Randoms.nextInt(limit);
 		String operator = StringUtil.randomString(operators, 1);
 		StringBuilder builder = new StringBuilder()
 				.append(n1)

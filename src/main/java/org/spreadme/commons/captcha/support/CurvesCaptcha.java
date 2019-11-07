@@ -17,7 +17,8 @@
 package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
-import java.util.Random;
+
+import org.spreadme.commons.lang.Randoms;
 
 /**
  * Shear Captcha
@@ -49,14 +50,13 @@ public class CurvesCaptcha extends AbstractCaptcha {
 	private void curve(Graphics g, int w1, int h1, Color color) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
-		Random r = new Random();
-		int cp = 4 + r.nextInt(3);
+		int cp = 4 + Randoms.nextInt(3);
 		int[] xPoints = new int[cp];
 		int[] yPoints = new int[cp];
 		width -= 10;
 		for (int i = 0; i < cp; i++) {
 			xPoints[i] = 5 + (i * width) / (cp - 1);
-			yPoints[i] = (int) (height * (r.nextDouble() * 0.5 + 0.2));
+			yPoints[i] = (int) (height * (Randoms.nextDouble() * 0.5 + 0.2));
 		}
 		int subsections = 6;
 		int[] xPointsSpline = new int[(cp - 1) * subsections];
@@ -79,7 +79,7 @@ public class CurvesCaptcha extends AbstractCaptcha {
 			g2.setColor(color);
 			float strokeMin = 2;
 			float strokeMax = 4;
-			g2.setStroke(new BasicStroke(strokeMin + (strokeMax - strokeMin) * r.nextFloat()));
+			g2.setStroke(new BasicStroke(strokeMin + (strokeMax - strokeMin) * Randoms.nextFloat()));
 			g2.drawLine(xPointsSpline[i], yPointsSpline[i], xPointsSpline[i + 1], yPointsSpline[i + 1]);
 		}
 	}
