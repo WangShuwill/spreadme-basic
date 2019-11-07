@@ -23,61 +23,39 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.spreadme.commons.cache.CacheClient;
-import org.spreadme.commons.cache.ValueLoader;
 
 /**
- * 通过ConcurrentHashMap实现的本地缓存
+ * 通过ConcurrentHashMap实现的本地缓存 Simple
  * @author shuwei.wang
  */
 public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 
-	private static final Map<Object, ValueWrapper<Object>> CACHE_MAP = new ConcurrentHashMap<>(256);
+	private final Map<K, ValueWrapper<V>> POOL = new ConcurrentHashMap<>(256);
 
 	@Override
 	public void put(K key, V value) {
-		CACHE_MAP.put(key, new ValueWrapper<>(value));
+		POOL.put(key, new ValueWrapper<>(value));
 	}
 
 	@Override
 	public void put(K key, V value, int timeout, TimeUnit timeUnit) {
-		ValueWrapper<Object> valueWrapper = new ValueWrapper<>(value);
-		CACHE_MAP.put(key, valueWrapper);
+		ValueWrapper<V> valueWrapper = new ValueWrapper<>(value);
+		POOL.put(key, valueWrapper);
 		valueWrapper.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				CACHE_MAP.remove(key);
+				POOL.remove(key);
 			}
 		}, timeUnit.toMillis(timeout));
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public V get(K key) {
 		if (key == null) {
 			return null;
 		}
-		ValueWrapper<V> valueWrapper = (ValueWrapper<V>) CACHE_MAP.get(key);
+		ValueWrapper<V> valueWrapper = POOL.get(key);
 		return valueWrapper != null ? valueWrapper.getValue() : null;
-	}
-
-	@Override
-	public V get(K key, ValueLoader<V> valueLoader) {
-		V value = get(key);
-		if (value == null) {
-			value = valueLoader.load();
-			CACHE_MAP.put(key, new ValueWrapper<>(value));
-		}
-		return value;
-	}
-
-	@Override
-	public V get(K key, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit) {
-		V value = get(key);
-		if (value == null) {
-			value = valueLoader.load();
-			this.put(key, value, timeout, timeUnit);
-		}
-		return value;
 	}
 
 	@Override
@@ -89,36 +67,16 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 		return value;
 	}
 
-	@Override
-	public V get(K key, Class<V> type, ValueLoader<V> valueLoader) {
-		V value = get(key, type);
-		if (value == null) {
-			value = valueLoader.load();
-			this.put(key, value);
-
-		}
-		return value;
-	}
-
-	@Override
-	public V get(K key, Class<V> type, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit) {
-		V value = get(key, type);
-		if (value == null) {
-			value = valueLoader.load();
-			this.put(key, value, timeout, timeUnit);
-		}
-		return value;
-	}
 
 	@Override
 	public boolean remove(K key) {
-		Object value = CACHE_MAP.remove(key);
+		Object value = POOL.remove(key);
 		return Objects.isNull(value);
 	}
 
 	@Override
 	public void clear() {
-		CACHE_MAP.clear();
+		POOL.clear();
 	}
 
 }

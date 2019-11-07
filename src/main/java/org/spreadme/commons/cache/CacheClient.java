@@ -52,26 +52,6 @@ public interface CacheClient<K, V> {
 	V get(K key);
 
 	/**
-	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象
-	 *
-	 * @param key 键
-	 * @param valueLoader 值加载器 {@link ValueLoader}
-	 * @return 值
-	 */
-	V get(K key, ValueLoader<V> valueLoader);
-
-	/**
-	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象，并且设置过期时间
-	 *
-	 * @param key 键
-	 * @param valueLoader 值加载器 {@link ValueLoader}
-	 * @param timeout 过期时间
-	 * @param timeUnit 时间单位 {@link TimeUnit}
-	 * @return 值
-	 */
-	V get(K key, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
-
-	/**
 	 * 获取缓存对象，并且转化为对应的类型
 	 *
 	 * @param key 键
@@ -80,27 +60,6 @@ public interface CacheClient<K, V> {
 	 */
 	V get(K key, Class<V> type);
 
-	/**
-	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象
-	 *
-	 * @param key 键
-	 * @param type 类型
-	 * @param valueLoader 值加载器 {@link ValueLoader}
-	 * @return 值
-	 */
-	V get(K key, Class<V> type, ValueLoader<V> valueLoader);
-
-	/**
-	 * 获取缓存对象，如果对象不存在则通过ValueLoader加载对象，并且设置过期时间
-	 *
-	 * @param key 键
-	 * @param type 类型
-	 * @param valueLoader 值加载器 {@link ValueLoader}
-	 * @param timeout 超时时间
-	 * @param timeUnit 时间单位 {@link TimeUnit}
-	 * @return 值
-	 */
-	V get(K key, Class<V> type, ValueLoader<V> valueLoader, int timeout, TimeUnit timeUnit);
 
 	/**
 	 * 移除缓存对象

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.cache;
+package org.spreadme.commons.func;
 
 /**
  * 值加载器
@@ -22,7 +22,7 @@ package org.spreadme.commons.cache;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface ValueLoader<V> {
+public interface Loader<V> {
 
 	V load();
 }
