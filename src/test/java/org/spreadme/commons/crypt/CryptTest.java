@@ -19,6 +19,7 @@ package org.spreadme.commons.crypt;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.Base64;
@@ -64,7 +65,7 @@ public class CryptTest {
 	}
 
 	@Test
-	public void md5Test() {
+	public void md5Test() throws IOException {
 		final String data = "test";
 		System.out.println(Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5)));
 	}
@@ -90,7 +91,7 @@ public class CryptTest {
 	}
 
 	@Test
-	public void testBCrypt(){
+	public void testBCrypt() {
 		final String pwd = "1234";
 		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
 		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));

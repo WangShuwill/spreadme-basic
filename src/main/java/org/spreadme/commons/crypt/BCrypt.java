@@ -387,8 +387,7 @@ public class BCrypt {
 	 * @return base64-encoded string
 	 * @exception IllegalArgumentException if the length is invalid
 	 */
-	private static String encode_base64(byte[] d, int len)
-			throws IllegalArgumentException {
+	private static String encode_base64(byte[] d, int len) throws IllegalArgumentException {
 		int off = 0;
 		StringBuilder rs = new StringBuilder();
 		int c1, c2;
@@ -441,8 +440,7 @@ public class BCrypt {
 	 * @return an array containing the decoded bytes
 	 * @throws IllegalArgumentException if maxolen is invalid
 	 */
-	private static byte[] decode_base64(String s, int maxolen)
-			throws IllegalArgumentException {
+	private static byte[] decode_base64(String s, int maxolen) throws IllegalArgumentException {
 		StringBuilder rs = new StringBuilder();
 		int off = 0, slen = s.length(), olen = 0;
 		byte[] ret;
@@ -610,8 +608,7 @@ public class BCrypt {
 	 * @param cdata         the plaintext to encrypt
 	 * @return an array containing the binary hashed password
 	 */
-	public byte[] crypt_raw(byte[] password, byte[] salt, int log_rounds,
-			int[] cdata) {
+	public byte[] crypt_raw(byte[] password, byte[] salt, int log_rounds, int[] cdata) {
 		int rounds, i, j;
 		int clen = cdata.length;
 		byte[] ret;
@@ -683,8 +680,7 @@ public class BCrypt {
 		saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
 
 		B = new BCrypt();
-		hashed = B.crypt_raw(passwordb, saltb, rounds,
-				bf_crypt_ciphertext.clone());
+		hashed = B.crypt_raw(passwordb, saltb, rounds, bf_crypt_ciphertext.clone());
 
 		rs.append("$2");
 		if (minor >= 'a')
@@ -693,14 +689,12 @@ public class BCrypt {
 		if (rounds < 10)
 			rs.append("0");
 		if (rounds > 30) {
-			throw new IllegalArgumentException(
-					"rounds exceeds maximum (30)");
+			throw new IllegalArgumentException("rounds exceeds maximum (30)");
 		}
 		rs.append(rounds);
 		rs.append("$");
 		rs.append(encode_base64(saltb, saltb.length));
-		rs.append(encode_base64(hashed,
-				bf_crypt_ciphertext.length * 4 - 1));
+		rs.append(encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1));
 		return rs.toString();
 	}
 
@@ -722,8 +716,7 @@ public class BCrypt {
 		if (log_rounds < 10)
 			rs.append("0");
 		if (log_rounds > 30) {
-			throw new IllegalArgumentException(
-					"log_rounds exceeds maximum (30)");
+			throw new IllegalArgumentException("log_rounds exceeds maximum (30)");
 		}
 		rs.append(log_rounds);
 		rs.append("$");

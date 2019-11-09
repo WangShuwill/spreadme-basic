@@ -68,7 +68,7 @@ public class IOTest {
 
 			IOUtil.copy(digestInput, out);
 			System.out.println(Hex.toHexString(digest.digest()));
-			System.out.println(Hash.toHashString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+			System.out.println(Hash.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
 		}
 	}
 
