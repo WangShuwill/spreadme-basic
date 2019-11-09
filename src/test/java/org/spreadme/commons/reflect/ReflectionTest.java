@@ -18,6 +18,7 @@ package org.spreadme.commons.reflect;
 
 import org.junit.Test;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.ReflectUtil;
 
 /**
  * @author shuwei.wang
@@ -25,14 +26,7 @@ import org.spreadme.commons.util.ClassUtil;
 public class ReflectionTest {
 
 	@Test
-	public void testForName() {
-		String typeName = this.getClass().getTypeName();
-		Class<?> clazz = ReflectionUtil.forName(typeName, ClassUtil.getClassLoader());
-		System.out.println(clazz);
-	}
-
-	@Test
 	public void testGetClasses() {
-		ReflectionUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(System.out::println);
+		ReflectUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(System.out::println);
 	}
 }

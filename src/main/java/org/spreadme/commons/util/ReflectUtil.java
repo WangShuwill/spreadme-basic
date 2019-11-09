@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflect;
+package org.spreadme.commons.util;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -29,18 +29,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.spreadme.commons.reflect.model.AnnotationDefinition;
 import org.spreadme.commons.lang.Assert;
-import org.spreadme.commons.util.FileUtil;
 
 /**
- * ReflectionUtil
+ * ReflectUtil
  * @author shuwei.wang
  * @since 1.0.0
  */
-public abstract class ReflectionUtil {
+public abstract class ReflectUtil {
 
 	private static List<String> primitiveNames;
 
@@ -75,11 +74,11 @@ public abstract class ReflectionUtil {
 
 	public static void setFieldValue(Field field, Object obj, Object value) {
 		try {
-			makeAccessible(field, true);
+			field.setAccessible(true);
 			field.set(obj, value);
 		}
 		catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e.getMessage(), e);
 		}
 	}
 
@@ -93,18 +92,12 @@ public abstract class ReflectionUtil {
 			return field.get(obj);
 		}
 		catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e.getMessage(), e);
 		}
-		return null;
 	}
 
 	public static String getFieldName(Field field) {
 		return field.getName();
-	}
-
-	public static void makeAccessible(Field field, boolean isAccessible) {
-		Assert.notNull(field, "field is not null");
-		field.setAccessible(isAccessible);
 	}
 
 	public static boolean isPrimaryField(Field field) {
@@ -119,7 +112,7 @@ public abstract class ReflectionUtil {
 		Map<String, Object> properties = new HashMap<>();
 		for (Field field : getDeclareFields(bean.getClass())) {
 			if (isPrimaryField(field)) {
-				makeAccessible(field, true);
+				field.setAccessible(true);
 				String name = getFieldName(field);
 				Object value = getFieldValue(bean, field);
 				properties.put(name, value);
@@ -128,44 +121,22 @@ public abstract class ReflectionUtil {
 		return properties;
 	}
 
-	public static Field findFieldAccessible(Class<?> clazz, String name) {
-		return findField(clazz, name, true);
-	}
-
-	public static Field findField(Class<?> clazz, String name, boolean isAccessible) {
-		Field field = findField(clazz, name);
-		makeAccessible(field, isAccessible);
-		return field;
-	}
-
-	/**
-	 * get field from class
-	 *
-	 * @param clazz the Class
-	 * @param name  name of field
-	 * @return Field
-	 */
-	public static Field findField(Class<?> clazz, String name) {
-		return findField(clazz, name, null);
-	}
-
 	/**
 	 * get filed from Class
 	 *
-	 * @param clazz the Class
+	 * @param type the Class
 	 * @param name  Name of field
-	 * @param type  Class type of field
 	 * @return Field
 	 */
-	public static Field findField(Class<?> clazz, String name, Class<?> type) {
-		Assert.notNull(clazz, "Class must be not null");
-		Field[] fields = getDeclareFields(clazz);
-		for (Field field : fields) {
-			if (name.equalsIgnoreCase(field.getName()) && (type == null || type.equals(field.getType()))) {
-				return field;
-			}
+	public static Field findField(Class<?> type, String name) {
+		try {
+			Field field = type.getDeclaredField(name);
+			field.setAccessible(true);
+			return field;
 		}
-		return null;
+		catch (NoSuchFieldException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -177,28 +148,16 @@ public abstract class ReflectionUtil {
 		return clazz.getDeclaredFields();
 	}
 
-	public static void doWithField(Class<?> clazz, FieldHandler fieldHandler) {
-		doWithField(clazz, fieldHandler, null);
-	}
-
-	public static void doWithField(Class<?> clazz, FieldHandler fieldHandler, FieldFilter fieldFilter) {
-		Field[] fields = getDeclareFields(clazz);
-		for (Field field : fields) {
-			if (fieldFilter != null && !fieldFilter.match(field)) {
-				continue;
-			}
-			try {
-				fieldHandler.handle(field);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+	public static void doWithField(Class<?> clazz, FieldHandler handler, FieldFilter filter) {
+		Assert.notNull(handler, "MethodHandler is null");
+		Assert.notNull(filter, "MethodFilter is null");
+		Field[] fields = clazz.getDeclaredFields();
+		CollectionUtil.toList(fields).stream().filter(filter::match).forEach(handler::handle);
 	}
 
 	@FunctionalInterface
 	public interface FieldHandler {
-		void handle(Field field) throws Exception;
+		void handle(Field field);
 	}
 
 	@FunctionalInterface
@@ -206,28 +165,13 @@ public abstract class ReflectionUtil {
 		boolean match(Field field);
 	}
 
-	public static Method findMethod(Class<?> clazz, String name) {
-		return findMethod(clazz, name, new Class<?>[0]);
-	}
-
-	public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
-		Assert.notNull(clazz, "Class must be not null");
-		Method[] methods = clazz.isInterface() ? clazz.getMethods() : getDeclareMethods(clazz);
-		for (Method method : methods) {
-			if (name.equals(method.getName()) &&
-					(paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
-				return method;
-			}
+	public static Method findMethod(Class<?> type, String name, Class<?>... paramTypes) {
+		try {
+			return type.getDeclaredMethod(name, paramTypes);
 		}
-		return null;
-	}
-
-	public static Method[] getDeclareMethods(Class<?> clazz) {
-		return clazz.getDeclaredMethods();
-	}
-
-	public static Object invokeMethod(Method method, Object target) {
-		return invokeMethod(method, target, new Object[0]);
+		catch (NoSuchMethodException e) {
+			throw new IllegalArgumentException(e.getMessage(), e);
+		}
 	}
 
 	public static Object invokeMethod(Method method, Object target, Object... args) {
@@ -235,29 +179,20 @@ public abstract class ReflectionUtil {
 			return method.invoke(target, args);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e.getMessage(), e);
 		}
-		return null;
 	}
 
-	public static void doWithMethod(Class<?> clazz, MethodHandler methodHandler, MethodFilter methodFilter) {
-		Method[] methods = getDeclareMethods(clazz);
-		for (Method method : methods) {
-			if (methodFilter != null && !methodFilter.match(method)) {
-				continue;
-			}
-			try {
-				methodHandler.handle(method);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+	public static void doWithMethod(Class<?> type, MethodHandler handler, MethodFilter filter) {
+		Assert.notNull(handler, "MethodHandler is null");
+		Assert.notNull(filter, "MethodFilter is null");
+		Method[] methods = type.getMethods();
+		CollectionUtil.toList(methods).stream().filter(filter::match).forEach(handler::handle);
 	}
 
 	@FunctionalInterface
 	public interface MethodHandler {
-		void handle(Method method) throws Exception;
+		void handle(Method method);
 	}
 
 	@FunctionalInterface
@@ -288,12 +223,12 @@ public abstract class ReflectionUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static AnnotationDefinition getAnnotationDefinition(Annotation annotation) {
+	private static AnnotationDefinition getAnnotationDefinition(Annotation annotation) {
 		AnnotationDefinition annotationDefinition = new AnnotationDefinition();
 		InvocationHandler invocationHandler = Proxy.getInvocationHandler(annotation);
 		Field[] fields = getDeclareFields(invocationHandler.getClass());
 		for (Field field : fields) {
-			makeAccessible(field, true);
+			field.setAccessible(true);
 			if (field.getType().equals(Class.class)) {
 				annotationDefinition.setType((Class) getFieldValue(invocationHandler, field));
 			}
@@ -331,7 +266,7 @@ public abstract class ReflectionUtil {
 		return (Class) params[index];
 	}
 
-	public static Class<?> forName(String typeName, ClassLoader... classLoaders) {
+	public static Class<?> forName(String typeName, ClassLoader[] classLoaders) {
 		if (primitiveNames.contains(typeName)) {
 			return primitiveTypes.get(primitiveNames.indexOf(typeName));
 		}
@@ -374,11 +309,43 @@ public abstract class ReflectionUtil {
 		try {
 			return FileUtil.getFiles(path, file -> file.getName().endsWith(".class"))
 					.stream()
-					.map(item -> FileUtil.getRelativePath(path, item).replace("/", "."))
+					.map(item -> Objects.requireNonNull(FileUtil.getRelativePath(path, item)).replace("/", "."))
 					.collect(Collectors.toList());
 		}
 		catch (IOException e) {
 			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}
+
+	static class AnnotationDefinition {
+
+		private Class<? extends Annotation> type;
+
+		private Map<String, Object> attributes;
+
+		public AnnotationDefinition() {
+
+		}
+
+		public AnnotationDefinition(Class<? extends Annotation> type, Map<String, Object> attributes) {
+			this.type = type;
+			this.attributes = attributes;
+		}
+
+		public Class<? extends Annotation> getType() {
+			return type;
+		}
+
+		public void setType(Class<? extends Annotation> type) {
+			this.type = type;
+		}
+
+		public Map<String, Object> getAttributes() {
+			return attributes;
+		}
+
+		public void setAttributes(Map<String, Object> attributes) {
+			this.attributes = attributes;
 		}
 	}
 }

@@ -14,25 +14,15 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.func;
 
 /**
- * DateFormat Type
+ * Initializer
  * @author shuwei.wang
- * @since 1.0.0
  */
-public enum DateFormatType {
+@FunctionalInterface
+public interface Initializer<T> {
 
-	DEFAULT_PATTERN("yyyy-MM-dd"),
-	STANDARD_PATTERN("yyyy-MM-dd HH:mm:ss"),
-	COMPACT_PATTERN("yyyyMMddHHmmss");
+	T init();
 
-	private String format;
-
-	DateFormatType(String format){
-		this.format = format;
-	}
-
-	public String getFormat() {
-		return format;
-	}}
+}
