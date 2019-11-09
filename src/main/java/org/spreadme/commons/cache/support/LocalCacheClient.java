@@ -38,6 +38,12 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 	}
 
 	@Override
+	public V putIfAbsent(K key, V value) {
+		final ValueWrapper valueWrapper = POOL.putIfAbsent(key, new ValueWrapper<>(value));
+		return valueWrapper == null ? null : value;
+	}
+
+	@Override
 	public void put(K key, V value, int timeout, TimeUnit timeUnit) {
 		ValueWrapper<V> valueWrapper = new ValueWrapper<>(value);
 		POOL.put(key, valueWrapper);

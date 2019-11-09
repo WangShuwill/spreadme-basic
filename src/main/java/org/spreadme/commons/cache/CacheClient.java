@@ -34,6 +34,14 @@ public interface CacheClient<K, V> {
 	void put(K key, V value);
 
 	/**
+	 * 如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
+	 *
+	 * @param key 键
+	 * @param value 值
+	 */
+	V putIfAbsent(K key, V value);
+
+	/**
 	 * 放置缓存对象，并且设置过期时间
 	 *
 	 * @param key 键
