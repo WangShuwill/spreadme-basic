@@ -24,6 +24,6 @@ Install
     <dependency>
         <groupId>org.spreadme</groupId>
         <artifactId>spreadme-commons</artifactId>
-        <version>1.5.0</version>
+        <version>1.5.1</version>
     </dependency>
     ```
