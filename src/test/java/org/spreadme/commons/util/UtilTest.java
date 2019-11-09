@@ -17,12 +17,14 @@
 package org.spreadme.commons.util;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.junit.Test;
 import org.spreadme.commons.id.IdentifierGenerator;
 import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
 import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
+import org.spreadme.commons.lang.Dates;
 import org.spreadme.commons.lang.Randoms;
 
 /**
@@ -48,6 +50,13 @@ public class UtilTest {
 			System.out.println(timeBasedGenerator.nextIdentifier());
 			System.out.println(leftNumericGenerator.nextIdentifier());
 			System.out.println(longIdentifierGenerator.nextIdentifier());
+		}
+	}
+
+	@Test
+	public void testDates() {
+		for (int i = 0; i < 10; i++) {
+			System.out.println(Dates.format(new Date(), Dates.DateFormatType.NORM_DATETIME_PATTERN));
 		}
 	}
 }
