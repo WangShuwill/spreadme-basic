@@ -63,9 +63,6 @@ public class SystemMonitor {
 		systemInfo.setOsName(osName);
 		systemInfo.setOsType(osType);
 		systemInfo.setArch(osmxbean.getArch());
-		systemInfo.setVersion(osmxbean.getVersion());
-		systemInfo.setCpuLoad(osmxbean.getProcessCpuLoad());
-		systemInfo.setCpuTime(osmxbean.getProcessCpuTime());
 		return systemInfo;
 	}
 }

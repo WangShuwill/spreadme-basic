@@ -32,6 +32,16 @@ public enum OSType {
 	WINDOWS("windows"),
 	LINUX("linux"),
 	MAXOS("macos"),
+	AIX("AIX"),
+	HPUX("HP-UX"),
+	OS400("OS/400"),
+	IRIX("Irix"),
+	FreeBSD("FreeBSD"),
+	OpenBSD("OpenBSD"),
+	NetBSD("NetBSD"),
+	OS2("OS/2"),
+	SOLARIS("Solaris"),
+	SUNOS("SunOS"),
 	UNKNOWN("UNKNOW");
 
 	private static Map<String, OSType> types = new HashMap<>(4);

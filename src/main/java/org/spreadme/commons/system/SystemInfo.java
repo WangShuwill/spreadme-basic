@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.system;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -26,6 +27,24 @@ import java.io.Serializable;
 public class SystemInfo implements Serializable {
 
 	private static final long serialVersionUID = 3798488087128864675L;
+
+	// 文件路径分隔符
+	public static final String FILE_PATH_SEPARATOR = File.separator;
+
+	// 换行符
+	public static final String LINE_SEPARATOR = System.lineSeparator();
+
+	// 临时目录
+	public static final String TMP_DIR = System.getProperty("java.io.tmpdir");
+
+	// 应用的工作目录
+	public static final String USER_DIR = System.getProperty("user.dir");
+
+	// 用户 HOME目录
+	public static final String USER_HOME = System.getProperty("user.home");
+
+	// Java HOME目录
+	public static final String JAVA_HOME = System.getProperty("java.home");
 
 	private String osName;
 
@@ -58,12 +77,6 @@ public class SystemInfo implements Serializable {
 	private long usedMemory;
 
 	private String usedMemoryUnit;
-
-	private String version;
-
-	private long cpuTime;
-
-	private double cpuLoad;
 
 	public String getOsName() {
 		return osName;
@@ -145,30 +158,6 @@ public class SystemInfo implements Serializable {
 		this.usedMemory = usedMemory;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public long getCpuTime() {
-		return cpuTime;
-	}
-
-	public void setCpuTime(long cpuTime) {
-		this.cpuTime = cpuTime;
-	}
-
-	public double getCpuLoad() {
-		return cpuLoad;
-	}
-
-	public void setCpuLoad(double cpuLoad) {
-		this.cpuLoad = cpuLoad;
-	}
-
 	public String getTotalJvmMemoryUnit() {
 		return totalJvmMemoryUnit;
 	}
@@ -236,9 +225,6 @@ public class SystemInfo implements Serializable {
 				", freeMemoryUnit='" + freeMemoryUnit + '\'' +
 				", usedMemory=" + usedMemory +
 				", usedMemoryUnit='" + usedMemoryUnit + '\'' +
-				", version='" + version + '\'' +
-				", cpuTime=" + cpuTime +
-				", cpuLoad=" + cpuLoad +
 				'}';
 	}
 }
