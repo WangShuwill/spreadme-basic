@@ -31,6 +31,10 @@ public abstract class XOR {
 
 	private static byte[] keyBytes = {'(', 'X', 'O', 'R', '!', '@', '#', '$', 'K', 'E', 'Y', '%', '^', '&', '*', ')'};
 
+	private XOR() {
+
+	}
+
 	/**
 	 * @param data data
 	 * @return result

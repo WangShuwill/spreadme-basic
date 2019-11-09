@@ -33,13 +33,13 @@ public enum Algorithm {
 	AES("AES"),
 	RSA("RSA");
 
-	private final String name;
+	private final String value;
 
-	Algorithm(final String name) {
-		this.name = name;
+	Algorithm(final String value) {
+		this.value = value;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getValue() {
+		return this.value;
 	}
 }

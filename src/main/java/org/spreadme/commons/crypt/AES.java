@@ -16,8 +16,8 @@
 
 package org.spreadme.commons.crypt;
 
-import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -32,28 +32,32 @@ import org.spreadme.commons.id.support.UUIDGenerator;
  */
 public abstract class AES {
 
+	private AES() {
+
+	}
+
 	public static String generateKey() {
-		IdentifierGenerator<String> uuidGenerator = new UUIDGenerator();
-		String uuid = uuidGenerator.nextIdentifier();
+		IdentifierGenerator<UUID> uuidGenerator = new UUIDGenerator();
+		String uuid = uuidGenerator.nextIdentifier().toString();
 		return uuid.substring(0, uuid.indexOf("-"));
 	}
 
 	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {
-		Cipher cipher = Cipher.getInstance(Algorithm.AES.getName());
+		Cipher cipher = Cipher.getInstance(Algorithm.AES.getValue());
 		key = extendKey(key);
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getName()));
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getValue()));
 		return cipher.doFinal(rawData);
 	}
 
 	public static byte[] decrypt(byte[] cipherData, byte[] key) throws Exception {
-		Cipher cipher = Cipher.getInstance(Algorithm.AES.getName());
+		Cipher cipher = Cipher.getInstance(Algorithm.AES.getValue());
 		key = extendKey(key);
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getName()));
+		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getValue()));
 		return cipher.doFinal(cipherData);
 	}
 
 	private static byte[] extendKey(byte[] key) {
-		key = Hash.toHashString(new ByteArrayInputStream(key), Algorithm.MD5).getBytes();
+		key = Hash.toHexString(key, null, 0, Algorithm.MD5).getBytes();
 		key = Arrays.copyOf(key, key.length / 2);
 		return key;
 	}

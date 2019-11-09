@@ -42,6 +42,10 @@ public abstract class RSA {
 
 	private static final int MAX_DECRYPT_BLOCK = 128; //RSA最大解密密文大小
 
+	private RSA() {
+
+	}
+
 	/**
 	 * 生成密钥对
 	 *
@@ -49,7 +53,7 @@ public abstract class RSA {
 	 * @throws NoSuchAlgorithmException {@link NoSuchAlgorithmException} NoSuchAlgorithmException
 	 */
 	public static KeyPair getKeyPair() throws NoSuchAlgorithmException {
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Algorithm.RSA.getName());
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Algorithm.RSA.getValue());
 		keyGen.initialize(1024);
 		return keyGen.generateKeyPair();
 	}
@@ -87,7 +91,7 @@ public abstract class RSA {
 	public static byte[] encryptByPublicKey(byte[] data, String publicKey) throws Exception {
 		byte[] keybytes = Base64.decode(publicKey);
 		X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keybytes);
-		KeyFactory keyFactory = KeyFactory.getInstance(Algorithm.RSA.getName());
+		KeyFactory keyFactory = KeyFactory.getInstance(Algorithm.RSA.getValue());
 		Key publicK = keyFactory.generatePublic(x509KeySpec);
 		Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
 		cipher.init(Cipher.ENCRYPT_MODE, publicK);
@@ -105,7 +109,7 @@ public abstract class RSA {
 	public static byte[] decryptByPrivateKey(byte[] cipherData, String privateKey) throws Exception {
 		byte[] keyBytes = Base64.decode(privateKey);
 		PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
-		KeyFactory keyFactory = KeyFactory.getInstance(Algorithm.RSA.getName());
+		KeyFactory keyFactory = KeyFactory.getInstance(Algorithm.RSA.getValue());
 		Key privateK = keyFactory.generatePrivate(pkcs8KeySpec);
 		Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
 		cipher.init(Cipher.DECRYPT_MODE, privateK);
