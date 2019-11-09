@@ -14,15 +14,21 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.func;
+package org.spreadme.commons.id.support;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
- * Initializer
+ * uuid generator
  * @author shuwei.wang
  */
-@FunctionalInterface
-public interface Initializer<T> {
+public class UUIDGenerator extends AbstractStringIdentifierGenerator implements Serializable {
 
-	T init(T t);
+	private static final long serialVersionUID = -7456823675132108898L;
 
+	@Override
+	public String nextStringIdentifier() {
+		return UUID.randomUUID().toString();
+	}
 }
