@@ -16,19 +16,21 @@
 
 package org.spreadme.commons.id.support;
 
-import java.io.Serializable;
 import java.util.UUID;
+
+import org.spreadme.commons.id.IdentifierGenerator;
+import org.spreadme.commons.lang.Randoms;
 
 /**
  * uuid generator
  * @author shuwei.wang
  */
-public class UUIDGenerator extends AbstractStringIdentifierGenerator implements Serializable {
+public class UUIDGenerator implements IdentifierGenerator<UUID> {
 
 	private static final long serialVersionUID = -7456823675132108898L;
 
 	@Override
-	public String nextStringIdentifier() {
-		return UUID.randomUUID().toString();
+	public UUID nextIdentifier() {
+		return new UUID(Randoms.nextLong(), Randoms.nextLong());
 	}
 }
