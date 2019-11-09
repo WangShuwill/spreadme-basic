@@ -19,6 +19,7 @@ package org.spreadme.commons.util;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,6 +31,8 @@ import java.util.Set;
  * @since 1.0.0
  */
 public abstract class ClassUtil {
+
+	private static final String MAIN_METHOD_NAME = "main";
 
 	public static ClassLoader getContextClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
@@ -57,7 +60,7 @@ public abstract class ClassUtil {
 			Enumeration<URL> resources = getClassLoader().getResources(packagePath);
 			while (resources.hasMoreElements()) {
 				String path = resources.nextElement().getPath();
-				paths.add(isDecode ? URLDecoder.decode(path, "utf-8") : path);
+				paths.add(isDecode ? URLDecoder.decode(path, StandardCharsets.UTF_8.name()) : path);
 			}
 		}
 		catch (IOException e) {
@@ -75,7 +78,7 @@ public abstract class ClassUtil {
 		try {
 			StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
 			for (StackTraceElement traceElement : stackTrace) {
-				if ("main".equals(traceElement.getMethodName())) {
+				if (MAIN_METHOD_NAME.equals(traceElement.getMethodName())) {
 					return Class.forName(traceElement.getClassName());
 				}
 			}
