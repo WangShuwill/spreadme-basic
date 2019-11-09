@@ -36,7 +36,12 @@ public abstract class CollectionUtil {
 	}
 
 	@SafeVarargs
-	public static <T> List<T> toList(T... data) {
+	public static <E> List<E> toList(E... data) {
 		return new ArrayList<>(Arrays.asList(data));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <E> E[] toArray(Collection<E> collection) {
+		return collection.toArray((E[]) new Object[0]);
 	}
 }

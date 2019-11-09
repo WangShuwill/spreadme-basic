@@ -18,11 +18,13 @@ package org.spreadme.commons.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,6 +46,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.spreadme.commons.lang.FileWriteMode;
 import org.spreadme.commons.lang.LineIterator;
 
 /**
@@ -256,6 +259,22 @@ public abstract class IOUtil {
 			FileChannel fileChann = new FileInputStream(new File(file.getAbsolutePath())).getChannel();
 			fileChann.transferTo(0, fileChann.size(), writableChann);
 			fileChann.close();
+		}
+	}
+
+	/**
+	 * append text to file
+	 *
+	 * @param text text
+	 * @param file file
+	 * @param mode file write mode {@link FileWriteMode}
+	 * @throws IOException IOException
+	 */
+	public static void append(CharSequence text, File file, FileWriteMode mode) throws IOException {
+		boolean append = mode == FileWriteMode.APPEND;
+		try (FileWriter writer = new FileWriter(file, append);
+			 BufferedWriter bWriter = new BufferedWriter(writer)) {
+			bWriter.append(text);
 		}
 	}
 

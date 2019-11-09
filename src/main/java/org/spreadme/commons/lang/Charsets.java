@@ -14,34 +14,26 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.io;
+package org.spreadme.commons.lang;
 
-import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
- * Abstract InputStream Observer
+ * Charsets
  * @author shuwei.wang
- * @since 1.0.0
  */
-public abstract class AbstractInputStreamObserver implements InputStreamObserver {
+public final class Charsets {
 
-	@Override
-	public void data(int pByte) {
+	public static final Charset US_ASCII = Charset.forName("US-ASCII");
 
-	}
+	public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
 
-	@Override
-	public void data(byte[] pBuffer, int pOffset, int pLength) {
+	public static final Charset UTF_8 = Charset.forName("UTF-8");
 
-	}
+	public static final Charset UTF_16BE = Charset.forName("UTF-16BE");
 
-	@Override
-	public void finished() {
+	public static final Charset UTF_16LE = Charset.forName("UTF-16LE");
 
-	}
+	public static final Charset UTF_16 = Charset.forName("UTF-16");
 
-	@Override
-	public void error(IOException pException) {
-
-	}
 }

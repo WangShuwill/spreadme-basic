@@ -14,34 +14,15 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.io;
-
-import java.io.IOException;
+package org.spreadme.commons.lang;
 
 /**
- * Abstract InputStream Observer
+ * FileWrite Mode
  * @author shuwei.wang
  * @since 1.0.0
  */
-public abstract class AbstractInputStreamObserver implements InputStreamObserver {
+public enum FileWriteMode {
 
-	@Override
-	public void data(int pByte) {
-
-	}
-
-	@Override
-	public void data(byte[] pBuffer, int pOffset, int pLength) {
-
-	}
-
-	@Override
-	public void finished() {
-
-	}
-
-	@Override
-	public void error(IOException pException) {
-
-	}
+	APPEND,
+	OVERWRITE
 }

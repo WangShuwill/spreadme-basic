@@ -24,7 +24,11 @@ import java.util.Map;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public abstract class Assert {
+public final class Assert {
+
+	private Assert() {
+
+	}
 
 	public static void isTrue(boolean expression, String message) {
 		if (!expression) {

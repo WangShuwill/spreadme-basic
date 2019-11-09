@@ -14,34 +14,20 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.io;
+package org.spreadme.commons.lang;
 
-import java.io.IOException;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Abstract InputStream Observer
+ * Nullable
  * @author shuwei.wang
- * @since 1.0.0
  */
-public abstract class AbstractInputStreamObserver implements InputStreamObserver {
-
-	@Override
-	public void data(int pByte) {
-
-	}
-
-	@Override
-	public void data(byte[] pBuffer, int pOffset, int pLength) {
-
-	}
-
-	@Override
-	public void finished() {
-
-	}
-
-	@Override
-	public void error(IOException pException) {
-
-	}
+@Documented
+@Retention(RetentionPolicy.CLASS)
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.TYPE_PARAMETER})
+public @interface Nullable {
 }

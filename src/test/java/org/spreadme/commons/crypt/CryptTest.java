@@ -35,7 +35,7 @@ import org.spreadme.commons.util.StringUtil;
  */
 public class CryptTest {
 
-	private static final String TEST_FILE_NAME = "CORE_TEST_FILE.txt";
+	private static final String TEST_FILE_NAME = "CORE_TEST_FILE_ONE.txt";
 
 	private File testFile = null;
 

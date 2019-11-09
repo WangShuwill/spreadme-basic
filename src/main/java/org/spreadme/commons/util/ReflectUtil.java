@@ -266,7 +266,7 @@ public abstract class ReflectUtil {
 		return (Class) params[index];
 	}
 
-	public static Class<?> forName(String typeName, ClassLoader[] classLoaders) {
+	public static Class<?> forName(String typeName, ClassLoader... classLoaders) {
 		if (primitiveNames.contains(typeName)) {
 			return primitiveTypes.get(primitiveNames.indexOf(typeName));
 		}

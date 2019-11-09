@@ -14,34 +14,15 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.io;
-
-import java.io.IOException;
+package org.spreadme.commons.func;
 
 /**
- * Abstract InputStream Observer
+ * Condition
  * @author shuwei.wang
- * @since 1.0.0
  */
-public abstract class AbstractInputStreamObserver implements InputStreamObserver {
+@FunctionalInterface
+public interface Condition {
 
-	@Override
-	public void data(int pByte) {
+	boolean match();
 
-	}
-
-	@Override
-	public void data(byte[] pBuffer, int pOffset, int pLength) {
-
-	}
-
-	@Override
-	public void finished() {
-
-	}
-
-	@Override
-	public void error(IOException pException) {
-
-	}
 }
