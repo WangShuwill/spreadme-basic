@@ -26,11 +26,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.spreadme.commons.cache.CacheClient;
+import org.spreadme.commons.cache.support.LocalCacheClient;
+
 /**
  * date utils
  * @author shuwei.wang
  */
 public abstract class Dates {
+
+	private static final CacheClient<String, DateTimeFormatter> FORMATTER_CACHE = new LocalCacheClient<>();
 
 	private Dates() {
 
@@ -38,7 +43,7 @@ public abstract class Dates {
 
 	public static String format(Date date, String pattern) {
 		LocalDateTime time = toLocalDataTime(date);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		DateTimeFormatter formatter = getDateFormatter(pattern);
 		return time.format(formatter);
 	}
 
@@ -80,22 +85,26 @@ public abstract class Dates {
 		return Date.from(zonedDateTime.toInstant());
 	}
 
-	public enum DateFormatType {
-
-		NORM_DATE_PATTERN("yyyy-MM-dd"),
-		NORM_TIME_PATTERN("HH:mm:ss"),
-		NORM_DATETIME_PATTERN("yyyy-MM-dd HH:mm:ss"),
-		HTTP_DATETIME_PATTERN("EEE, dd MMM yyyy HH:mm:ss z");
-
-		private String format;
-
-		DateFormatType(String format) {
-			this.format = format;
+	private static DateTimeFormatter getDateFormatter(String pattern) {
+		DateTimeFormatter formatter = FORMATTER_CACHE.get(pattern);
+		if (formatter == null) {
+			formatter = DateTimeFormatter.ofPattern(pattern);
+			final DateTimeFormatter previousFormatter = FORMATTER_CACHE.putIfAbsent(pattern, formatter);
+			if (previousFormatter != null) {
+				formatter = previousFormatter;
+			}
 		}
+		return formatter;
+	}
 
-		public String getFormat() {
-			return format;
-		}
+	public static final class DateFormatType {
+
+		public static String NORM_DATE_PATTERN = "yyyy-MM-dd";
+
+		public static String NORM_TIME_PATTERN = "HH:mm:ss";
+
+		public static String NORM_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
 	}
 
 }
