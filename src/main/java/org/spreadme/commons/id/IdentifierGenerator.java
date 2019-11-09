@@ -14,27 +14,22 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.codec;
+package org.spreadme.commons.id;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
- * id generator
+ * Identifier Generator
  * @author shuwei.wang
  * @since 1.0.0
  */
-public interface Id<S extends Serializable> {
+public interface IdentifierGenerator<S extends Serializable> {
 
-	Id<String> Default = new UUIDS();
+	/**
+	 * Gets the next identifier in the sequence.
+	 *
+	 * @return the next identifier in sequence
+	 */
+	S nextIdentifier();
 
-	S generate();
-
-	class UUIDS implements Id<String> {
-
-		@Override
-		public String generate() {
-			return UUID.randomUUID().toString();
-		}
-	}
 }

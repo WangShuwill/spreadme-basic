@@ -18,11 +18,10 @@ package org.spreadme.commons.crypt;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.spreadme.commons.codec.Id;
 
 /**
  * aes encrypt
@@ -32,7 +31,7 @@ import org.spreadme.commons.codec.Id;
 public abstract class AES {
 
 	public static String generateKey() {
-		String uuid = Id.Default.generate();
+		String uuid = UUID.randomUUID().toString();
 		return uuid.substring(0, uuid.indexOf("-"));
 	}
 

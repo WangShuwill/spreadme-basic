@@ -19,6 +19,10 @@ package org.spreadme.commons.util;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.spreadme.commons.id.IdentifierGenerator;
+import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
+import org.spreadme.commons.id.support.SnowflakeLongGenerator;
+import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Randoms;
 
 /**
@@ -32,6 +36,18 @@ public class UtilTest {
 		for (int i = 0; i < 100; i++) {
 			System.out.println(StringUtil.randomString(6));
 			System.out.println(StringUtil.randomString("-+*", 1));
+		}
+	}
+
+	@Test
+	public void testId() {
+		IdentifierGenerator<String> timeBasedGenerator = new TimeBasedIdentifierGenerator();
+		IdentifierGenerator<String> leftNumericGenerator = new PrefixedLeftNumericGenerator(StringUtil.randomString(1), true, 3);
+		IdentifierGenerator<Long> longIdentifierGenerator = new SnowflakeLongGenerator(1, 1);
+		for (int i = 0; i < 101; i++) {
+			System.out.println(timeBasedGenerator.nextIdentifier());
+			System.out.println(leftNumericGenerator.nextIdentifier());
+			System.out.println(longIdentifierGenerator.nextIdentifier());
 		}
 	}
 }
