@@ -125,4 +125,8 @@ public abstract class FileUtil {
 	public static File getTempDir() {
 		return new File(System.getProperty("java.io.tmpdir"));
 	}
+
+	public static String getFilenameExtension(String path) {
+		return null;
+	}
 }

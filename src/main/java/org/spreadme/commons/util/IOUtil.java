@@ -41,9 +41,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import org.spreadme.commons.lang.FileWriteMode;
@@ -259,6 +261,41 @@ public abstract class IOUtil {
 			FileChannel fileChann = new FileInputStream(new File(file.getAbsolutePath())).getChannel();
 			fileChann.transferTo(0, fileChann.size(), writableChann);
 			fileChann.close();
+		}
+	}
+
+	/**
+	 * 解压zip
+	 *
+	 * @param zipFile zip file
+	 * @param dstFile destionation file
+	 * @throws IOException IOException
+	 * TODO 优化
+	 */
+	public static void unzip(File zipFile, File dstFile) throws IOException {
+		if (!dstFile.exists()) {
+			dstFile.mkdirs();
+		}
+		try (ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"))) {
+			Enumeration enumeration = zip.entries();
+			while (enumeration.hasMoreElements()) {
+				ZipEntry zipEntry = (ZipEntry) enumeration.nextElement();
+				String zipEntryName = zipEntry.getName();
+				String outPath = (dstFile.getPath() + "/" + zipEntryName).replaceAll("\\*", "/");
+				//判断路径是否存在,不存在则创建文件路径
+				File file = new File(outPath.substring(0, outPath.lastIndexOf("/")));
+				if (!file.exists()) {
+					file.mkdirs();
+				}
+				//判断文件全路径是否为文件夹,如果是上面已经上传,不需要解压
+				if (new File(outPath).isDirectory()) {
+					continue;
+				}
+				try (InputStream input = zip.getInputStream(zipEntry);
+					 OutputStream output = new FileOutputStream(outPath)) {
+					IOUtil.copy(input, output);
+				}
+			}
 		}
 	}
 
