@@ -19,15 +19,17 @@ package org.spreadme.commons.crypt;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.Base64;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.Concurrents;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -65,9 +67,20 @@ public class CryptTest {
 	}
 
 	@Test
-	public void md5Test() throws IOException {
+	public void md5Test() throws Exception {
 		final String data = "test";
-		System.out.println(Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5)));
+
+		final int THREAD_POOL_SIZE = 100;
+		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+
+		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+			try {
+				System.out.println(Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5)));
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}, executor);
 	}
 
 	@Test

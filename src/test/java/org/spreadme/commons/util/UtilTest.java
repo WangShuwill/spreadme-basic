@@ -35,12 +35,6 @@ import org.spreadme.commons.system.SystemMonitor;
  */
 public class UtilTest {
 
-	private static final String FORMATTER = "HH:mm:ss dd.MM.yyyy";
-
-	private static final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
-
-	private static final int THREAD_POOL_SIZE = 100;
-
 	@Test
 	public void testStringUtil() {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
@@ -63,23 +57,24 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testDates() {
+	public void testDates() throws Exception {
+		final int THREAD_POOL_SIZE = 10;
+		final String FORMATTER = "HH:mm:ss dd.MM.yyyy";
+		final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
 		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-		while (true) {
-			executor.submit(() -> {
-				try {
-					String dateCreate = "19:30:55 03.05.2015";
-					//sdf.parse(dateCreate);
-					Dates.parse(dateCreate, FORMATTER);
-				}
-				catch (Throwable th) {
-					th.printStackTrace();
-					return;
-				}
-				System.out.print("OK ");
 
-			});
-		}
+		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+			try {
+				String dateCreate = "19:30:55 03.05.2015";
+				//sdf.parse(dateCreate);
+				Dates.parse(dateCreate, FORMATTER);
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				return;
+			}
+			System.out.print("OK ");
+		}, executor);
 	}
 
 	@Test
