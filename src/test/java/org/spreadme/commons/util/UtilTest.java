@@ -16,8 +16,10 @@
 
 package org.spreadme.commons.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Test;
 import org.spreadme.commons.id.IdentifierGenerator;
@@ -26,11 +28,18 @@ import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Dates;
 import org.spreadme.commons.lang.Randoms;
+import org.spreadme.commons.system.SystemMonitor;
 
 /**
  * @author shuwei.wang
  */
 public class UtilTest {
+
+	private static final String FORMATTER = "HH:mm:ss dd.MM.yyyy";
+
+	private static final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
+
+	private static final int THREAD_POOL_SIZE = 100;
 
 	@Test
 	public void testStringUtil() {
@@ -55,8 +64,27 @@ public class UtilTest {
 
 	@Test
 	public void testDates() {
-		for (int i = 0; i < 10; i++) {
-			System.out.println(Dates.format(new Date(), Dates.DateFormatType.NORM_DATETIME_PATTERN));
+		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+		while (true) {
+			executor.submit(() -> {
+				try {
+					String dateCreate = "19:30:55 03.05.2015";
+					//sdf.parse(dateCreate);
+					Dates.parse(dateCreate, FORMATTER);
+				}
+				catch (Throwable th) {
+					th.printStackTrace();
+					return;
+				}
+				System.out.print("OK ");
+
+			});
 		}
+	}
+
+	@Test
+	public void testSystemInfo() {
+		SystemMonitor monitor = new SystemMonitor();
+		System.out.println(monitor.getSystemInfo());
 	}
 }

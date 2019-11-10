@@ -42,9 +42,22 @@ public abstract class Dates {
 	}
 
 	public static String format(Date date, String pattern) {
-		LocalDateTime time = toLocalDataTime(date);
 		DateTimeFormatter formatter = getDateFormatter(pattern);
-		return time.format(formatter);
+		return formatter.format(date.toInstant());
+	}
+
+	public static Date parse(CharSequence text, String pattern) {
+		DateTimeFormatter formatter = getDateFormatter(pattern);
+		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
+		ZoneId zoneId = ZoneId.systemDefault();
+		ZonedDateTime zonedDateTime = dateTime.atZone(zoneId);
+		return Date.from(zonedDateTime.toInstant());
+	}
+
+	public static Date getDate(Date date, int field, int amount) {
+		Calendar calendar = toCalendar(date);
+		calendar.add(field, amount);
+		return calendar.getTime();
 	}
 
 	public static LocalDateTime toLocalDataTime(Date date) {
@@ -71,24 +84,10 @@ public abstract class Dates {
 		return calendar;
 	}
 
-	public static Date getDate(Date date, int field, int amount) {
-		Calendar calendar = toCalendar(date);
-		calendar.add(field, amount);
-		return calendar.getTime();
-	}
-
-	public static Date parse(CharSequence text, String pattern) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-		ZoneId zoneId = ZoneId.systemDefault();
-		ZonedDateTime zonedDateTime = dateTime.atZone(zoneId);
-		return Date.from(zonedDateTime.toInstant());
-	}
-
 	private static DateTimeFormatter getDateFormatter(String pattern) {
 		DateTimeFormatter formatter = FORMATTER_CACHE.get(pattern);
 		if (formatter == null) {
-			formatter = DateTimeFormatter.ofPattern(pattern);
+			formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
 			final DateTimeFormatter previousFormatter = FORMATTER_CACHE.putIfAbsent(pattern, formatter);
 			if (previousFormatter != null) {
 				formatter = previousFormatter;
