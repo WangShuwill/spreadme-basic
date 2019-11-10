@@ -17,6 +17,7 @@
 package org.spreadme.commons.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -51,6 +52,10 @@ public abstract class ClassUtil {
 
 	public static String getClassPath() {
 		return Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath();
+	}
+
+	public static InputStream getResourceAsStream(String resource){
+		return ClassUtil.getClassLoader().getResourceAsStream(resource);
 	}
 
 	public static Set<String> getClassPaths(String packageName, boolean isDecode) {
