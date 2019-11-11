@@ -122,7 +122,7 @@ public class IOTest {
 	public void testUnzipFiles() throws IOException {
 		File zipFile = new File(ClassUtil.getClassPath() + File.separator + ZIP_FILE);
 		try (FileInputStream in = new FileInputStream(zipFile)) {
-			IOUtil.unzip(in, new File(ClassUtil.getClassPath()), Charsets.ISO_8859_1);
+			IOUtil.unzip(in, new File(ClassUtil.getClassPath()), Charsets.UTF_8);
 		}
 	}
 
