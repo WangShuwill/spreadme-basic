@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
 import org.spreadme.commons.crypt.Hash;
+import org.spreadme.commons.lang.Charsets;
 import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.CollectionUtil;
@@ -48,6 +49,8 @@ public class IOTest {
 	private static final String TEST_FILE_NAME_ONE = "CORE_TEST_FILE_ONE.txt";
 
 	private static final String TEST_FILE_NAME_TWO = "CORE_TEST_FILE_ONE.txt";
+
+	private static final String ZIP_FILE = "jre6.zip";
 
 	private File testFileOne = null;
 
@@ -113,6 +116,14 @@ public class IOTest {
 		List<File> files = CollectionUtil.toList(f1, f2, f3);
 		File zipFile = new File(ClassUtil.getClassPath() + "text.zip");
 		IOUtil.zipFiles(zipFile, files);
+	}
+
+	@Test
+	public void testUnzipFiles() throws IOException {
+		File zipFile = new File(ClassUtil.getClassPath() + File.separator + ZIP_FILE);
+		try (FileInputStream in = new FileInputStream(zipFile)) {
+			IOUtil.unzip(in, new File(ClassUtil.getClassPath()), Charsets.ISO_8859_1);
+		}
 	}
 
 	@Test

@@ -41,13 +41,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.spreadme.commons.io.ArchiveEntry;
 import org.spreadme.commons.lang.FileWriteMode;
 import org.spreadme.commons.lang.LineIterator;
 
@@ -232,6 +232,35 @@ public abstract class IOUtil {
 		}
 	}
 
+	/**
+	 * zip inputstream
+	 *
+	 * @param entries list of ArchiveEntry {@link ArchiveEntry}
+	 * @param out OutputStream
+	 * @throws IOException IOException
+	 */
+	public static void zipInputstreams(final List<ArchiveEntry> entries, OutputStream out) throws IOException {
+		try (WritableByteChannel writableChann = Channels.newChannel(out)) {
+			Pipe pipe = Pipe.open();
+			CompletableFuture.runAsync(() -> {
+				try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
+					 WritableByteChannel writableChann1 = Channels.newChannel(zos)) {
+					for (ArchiveEntry entry : entries) {
+						zos.putNextEntry(new ZipEntry(entry.getName()));
+						final ReadableByteChannel readableChannel = Channels.newChannel(entry.getIn());
+						IOUtil.copy(readableChannel, writableChann1);
+						readableChannel.close();
+					}
+				}
+				catch (IOException ex) {
+					throw new IllegalStateException(ex.getMessage(), ex);
+				}
+			});
+			ReadableByteChannel readableChann = pipe.source();
+			copy(readableChann, writableChann);
+		}
+	}
+
 	private static void zipTask(Pipe pipe, List<File> files) {
 		try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
 			 WritableByteChannel writableChann = Channels.newChannel(zos)) {
@@ -265,37 +294,36 @@ public abstract class IOUtil {
 	}
 
 	/**
-	 * 解压zip
+	 * 解压zip文件
 	 *
-	 * @param zipFile zip file
-	 * @param dstFile destionation file
+	 * @param in InputStream
+	 * @param destDir Destination Dir
+	 * @param charset Charset
 	 * @throws IOException IOException
-	 * TODO 优化
+	 * TODO fix bug zip from macos
 	 */
-	public static void unzip(File zipFile, File dstFile) throws IOException {
-		if (!dstFile.exists()) {
-			dstFile.mkdirs();
-		}
-		try (ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"))) {
-			Enumeration enumeration = zip.entries();
-			while (enumeration.hasMoreElements()) {
-				ZipEntry zipEntry = (ZipEntry) enumeration.nextElement();
-				String zipEntryName = zipEntry.getName();
-				String outPath = (dstFile.getPath() + "/" + zipEntryName).replaceAll("\\*", "/");
-				//判断路径是否存在,不存在则创建文件路径
-				File file = new File(outPath.substring(0, outPath.lastIndexOf("/")));
-				if (!file.exists()) {
-					file.mkdirs();
-				}
-				//判断文件全路径是否为文件夹,如果是上面已经上传,不需要解压
-				if (new File(outPath).isDirectory()) {
+	public static void unzip(InputStream in, File destDir, Charset charset) throws IOException {
+		try (ZipInputStream zis = new ZipInputStream(in, charset)) {
+			ZipEntry zipEntry = zis.getNextEntry();
+			while (zipEntry != null) {
+				File destFile = new File(destDir, zipEntry.getName());
+				if (zipEntry.isDirectory() && !destFile.exists()) {
+					FileUtil.createFile(destFile.getPath(), false);
+					zipEntry = zis.getNextEntry();
 					continue;
 				}
-				try (InputStream input = zip.getInputStream(zipEntry);
-					 OutputStream output = new FileOutputStream(outPath)) {
-					IOUtil.copy(input, output);
+				String destDirPath = destDir.getCanonicalPath();
+				String destFilePath = destFile.getCanonicalPath();
+				if (!destFilePath.startsWith(destDirPath + File.separator)) {
+					throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
 				}
+
+				try (FileOutputStream fos = new FileOutputStream(destFile)) {
+					IOUtil.copy(zis, fos);
+				}
+				zipEntry = zis.getNextEntry();
 			}
+			zis.closeEntry();
 		}
 	}
 
