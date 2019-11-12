@@ -71,24 +71,4 @@ public enum MimeType {
 		this.value = value;
 	}
 
-	/**
-	 * get file extension name by file name
-	 * @param fileName file name
-	 * @return MimeType
-	 */
-	public static MimeType getByFileName(String fileName) {
-		if (fileName == null) {
-			return null;
-		}
-		int extIndex = fileName.lastIndexOf(fileName);
-		if (extIndex > 0 && extIndex + 1 < fileName.length()) {
-			String ext = fileName.substring(extIndex).toLowerCase();
-			return valueOf(ext);
-		}
-		return null;
-	}
-
-	public static MimeType getByFileType(FileType fileType) {
-		return map.get(fileType.name());
-	}
 }
