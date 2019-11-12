@@ -28,11 +28,38 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spreadme.commons.system.SystemInfo;
+
 /**
  * file util
  * @author shuwei.wang
  */
 public abstract class FileUtil {
+
+	private static final int NOT_FOUND = -1;
+
+	public static final char EXTENSION_SEPARATOR = '.';
+
+	public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
+
+	public static final String UNIX_SEPARATOR = "/";
+
+	public static final String WINDOWS_SEPARATOR = "\\";
+
+	private static final String OTHER_SEPARATOR;
+
+	static {
+		if (isSystemWindows()) {
+			OTHER_SEPARATOR = UNIX_SEPARATOR;
+		}
+		else {
+			OTHER_SEPARATOR = WINDOWS_SEPARATOR;
+		}
+	}
+
+	static boolean isSystemWindows() {
+		return SystemInfo.FILE_SEPARATOR.equals(WINDOWS_SEPARATOR);
+	}
 
 	/**
 	 * 创建文件或者文件夹
@@ -118,15 +145,66 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 获取临时文件目录
+	 * Returns the index of the last extension separator character, which is a dot.
 	 *
-	 * @return temp dir
+	 * @param fileName fileName
+	 * @return index
 	 */
-	public static File getTempDir() {
-		return new File(System.getProperty("java.io.tmpdir"));
+	public static int indexOfExtension(String fileName) {
+		if (StringUtil.isBlank(fileName)) {
+			return NOT_FOUND;
+		}
+		if (isSystemWindows()) {
+			// Special handling for NTFS ADS: Don't accept colon in the fileName.
+			final int offset = fileName.indexOf(':', getAdsCriticalOffset(fileName));
+			if (offset != -1) {
+				throw new IllegalArgumentException("NTFS ADS separator (':') in file name is forbidden.");
+			}
+		}
+		final int extensionPos = fileName.lastIndexOf(EXTENSION_SEPARATOR);
+		final int lastUnixPos = fileName.lastIndexOf(UNIX_SEPARATOR);
+		final int lastWindowsPos = fileName.lastIndexOf(WINDOWS_SEPARATOR);
+		final int lastSeparator = Math.max(lastUnixPos, lastWindowsPos);
+		return lastSeparator > extensionPos ? NOT_FOUND : extensionPos;
 	}
 
-	public static String getFilenameExtension(String path) {
-		return null;
+	/**
+	 * get file extension
+	 *
+	 * @param fileName fileName
+	 * @return fileName extension
+	 */
+	public static String getExtension(String fileName) {
+		if (StringUtil.isBlank(fileName)) {
+			return null;
+		}
+		final int index = indexOfExtension(fileName);
+		if (index == NOT_FOUND) {
+			return StringUtil.EMPTY;
+		}
+		return fileName.substring(index + 1);
+	}
+
+	/**
+	 * Special handling for NTFS ADS: Don't accept colon in the fileName.
+	 *  from apache-commons-io
+	 *
+	 * @param fileName a file name
+	 * @return ADS offsets.
+	 */
+	private static int getAdsCriticalOffset(final String fileName) {
+		// Step 1: Remove leading path segments.
+		final int offset1 = fileName.lastIndexOf(SystemInfo.FILE_SEPARATOR);
+		final int offset2 = fileName.lastIndexOf(OTHER_SEPARATOR);
+		if (offset1 == -1) {
+			if (offset2 == -1) {
+				return 0;
+			}
+			return offset2 + 1;
+		}
+		if (offset2 == -1) {
+			return offset1 + 1;
+		}
+		return Math.max(offset1, offset2) + 1;
 	}
 }

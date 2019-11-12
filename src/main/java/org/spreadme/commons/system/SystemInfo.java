@@ -28,8 +28,10 @@ public class SystemInfo implements Serializable {
 
 	private static final long serialVersionUID = 3798488087128864675L;
 
+	public static final int EOF = -1;
+
 	// 文件路径分隔符
-	public static final String FILE_PATH_SEPARATOR = File.separator;
+	public static final String FILE_SEPARATOR = File.separator;
 
 	// 换行符
 	public static final String LINE_SEPARATOR = System.lineSeparator();

@@ -261,6 +261,12 @@ public abstract class IOUtil {
 		}
 	}
 
+	/**
+	 * zip task
+	 *
+	 * @param pipe pipe
+	 * @param files files
+	 */
 	private static void zipTask(Pipe pipe, List<File> files) {
 		try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
 			 WritableByteChannel writableChann = Channels.newChannel(zos)) {
@@ -274,6 +280,15 @@ public abstract class IOUtil {
 		}
 	}
 
+	/**
+	 * realy zip task
+	 *
+	 * @param zos ZipOutputStream
+	 * @param file File
+	 * @param writableChann WritableByteChannel
+	 * @param base base
+	 * @throws IOException IOException
+	 */
 	private static void doZip(ZipOutputStream zos, File file, WritableByteChannel writableChann, String base) throws IOException {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
@@ -300,7 +315,6 @@ public abstract class IOUtil {
 	 * @param destDir Destination Dir
 	 * @param charset Charset
 	 * @throws IOException IOException
-	 * TODO fix bug zip from macos
 	 */
 	public static void unzip(InputStream in, File destDir, Charset charset) throws IOException {
 		try (ZipInputStream zis = new ZipInputStream(in, charset)) {
@@ -318,8 +332,9 @@ public abstract class IOUtil {
 					throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
 				}
 
-				try (FileOutputStream fos = new FileOutputStream(destFile)) {
-					IOUtil.copy(zis, fos);
+				try (FileOutputStream fos = new FileOutputStream(destFile);
+					 BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+					IOUtil.copy(zis, bos);
 				}
 				zipEntry = zis.getNextEntry();
 			}

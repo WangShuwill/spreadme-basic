@@ -35,6 +35,11 @@ public abstract class ClassUtil {
 
 	private static final String MAIN_METHOD_NAME = "main";
 
+	/**
+	 * get the thread context class loader
+	 *
+	 * @return ClassLoader
+	 */
 	public static ClassLoader getContextClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
 	}
@@ -54,8 +59,8 @@ public abstract class ClassUtil {
 		return Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath();
 	}
 
-	public static InputStream getResourceAsStream(String resource){
-		return ClassUtil.getClassLoader().getResourceAsStream(resource);
+	public static InputStream getResourceAsStream(String resource) {
+		return getClassLoader().getResourceAsStream(resource);
 	}
 
 	public static Set<String> getClassPaths(String packageName, boolean isDecode) {

@@ -35,7 +35,7 @@ import org.spreadme.commons.cache.support.LocalCacheClient;
  */
 public abstract class Dates {
 
-	private static final CacheClient<String, DateTimeFormatter> FORMATTER_CACHE = new LocalCacheClient<>();
+	private static final CacheClient<String, DateTimeFormatter> FORMATTER_CACHE = new LocalCacheClient<>(16);
 
 	private Dates() {
 

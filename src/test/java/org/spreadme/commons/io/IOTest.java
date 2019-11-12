@@ -137,6 +137,12 @@ public class IOTest {
 		}
 	}
 
+	@Test
+	public void testGetFileExtension(){
+		final String fileName = ClassUtil.getClassPath() + File.separator + ZIP_FILE;
+		System.out.println(FileUtil.getExtension(fileName));
+	}
+
 	private static FileInputStream toFileInputStream(File file) {
 		try {
 			return new FileInputStream(file);

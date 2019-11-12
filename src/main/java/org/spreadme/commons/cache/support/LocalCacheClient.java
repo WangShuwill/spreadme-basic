@@ -30,7 +30,15 @@ import org.spreadme.commons.cache.CacheClient;
  */
 public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 
-	private final Map<K, ValueWrapper<V>> POOL = new ConcurrentHashMap<>(256);
+	private final Map<K, ValueWrapper<V>> POOL;
+
+	public LocalCacheClient() {
+		this.POOL = new ConcurrentHashMap<>(32);
+	}
+
+	public LocalCacheClient(int initialCapacity) {
+		this.POOL = new ConcurrentHashMap<>(initialCapacity);
+	}
 
 	@Override
 	public void put(K key, V value) {
