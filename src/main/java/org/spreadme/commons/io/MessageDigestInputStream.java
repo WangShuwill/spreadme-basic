@@ -19,6 +19,9 @@ package org.spreadme.commons.io;
 import java.io.InputStream;
 import java.security.MessageDigest;
 
+import org.spreadme.commons.io.observer.MessageDigestInputStreamObserver;
+import org.spreadme.commons.io.observer.ObservableInputStream;
+
 /**
  * MessageDigestInputStream
  * @author shuwei.wang

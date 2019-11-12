@@ -19,7 +19,13 @@ package org.spreadme.commons.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.spreadme.commons.lang.Nullable;
 
 /**
  * collection util
@@ -44,4 +50,20 @@ public abstract class CollectionUtil {
 	public static <E> E[] toArray(Collection<E> collection) {
 		return collection.toArray((E[]) new Object[0]);
 	}
+
+	public static Map<String, Object> propertiesIntoMap(@Nullable Properties props) {
+		Map<String, Object> map = new HashMap<>();
+		if (props != null) {
+			for (Enumeration<?> en = props.propertyNames(); en.hasMoreElements(); ) {
+				String key = (String) en.nextElement();
+				Object value = props.get(key);
+				if (value == null) {
+					value = props.getProperty(key);
+				}
+				map.put(key, value);
+			}
+		}
+		return map;
+	}
+
 }

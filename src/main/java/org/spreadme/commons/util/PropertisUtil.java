@@ -27,6 +27,7 @@ import java.util.Properties;
  * Propertis Util
  * @author shuwei.wang
  */
+@Deprecated
 public abstract class PropertisUtil {
 
 	private PropertisUtil() {
