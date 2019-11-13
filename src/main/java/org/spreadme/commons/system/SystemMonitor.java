@@ -32,10 +32,10 @@ public class SystemMonitor {
 
 	private static final String OS_NAME_KEY = "os.name";
 
-	private static OSType osType;
+	private static OsType osType;
 
 	static {
-		osType = OSType.resolve(System.getProperty(OS_NAME_KEY));
+		osType = OsType.resolve(System.getProperty(OS_NAME_KEY));
 	}
 
 	public SystemInfo getSystemInfo() {

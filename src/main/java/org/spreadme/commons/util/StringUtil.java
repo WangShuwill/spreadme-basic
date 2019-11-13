@@ -243,4 +243,8 @@ public abstract class StringUtil {
 		}
 		return builder.toString();
 	}
+
+	public static String noneNullString(String text) {
+		return text == null ? "" : text;
+	}
 }

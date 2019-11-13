@@ -50,7 +50,7 @@ public class SystemInfo implements Serializable {
 
 	private String osName;
 
-	private OSType osType;
+	private OsType osType;
 
 	private String arch;
 
@@ -88,11 +88,11 @@ public class SystemInfo implements Serializable {
 		this.osName = osName;
 	}
 
-	public OSType getOsType() {
+	public OsType getOsType() {
 		return osType;
 	}
 
-	public void setOsType(OSType osType) {
+	public void setOsType(OsType osType) {
 		this.osType = osType;
 	}
 

@@ -44,7 +44,6 @@ public class FastByteArrayOutputStream extends OutputStream {
 
 	private static final int DEFAULT_BLOCK_SIZE = 256;
 
-
 	// The buffers used to store the content bytes
 	private final LinkedList<byte[]> buffers = new LinkedList<>();
 
@@ -64,7 +63,6 @@ public class FastByteArrayOutputStream extends OutputStream {
 	// Is the stream closed?
 	private boolean closed = false;
 
-
 	/**
 	 * Create a new <code>FastByteArrayOutputStream</code>
 	 * with the default initial capacity of 256 bytes.
@@ -83,9 +81,6 @@ public class FastByteArrayOutputStream extends OutputStream {
 		this.initialBlockSize = initialBlockSize;
 		this.nextBlockSize = initialBlockSize;
 	}
-
-
-	// Overridden methods
 
 	@Override
 	public void write(int datum) throws IOException {
@@ -159,9 +154,6 @@ public class FastByteArrayOutputStream extends OutputStream {
 	public String toString() {
 		return new String(toByteArrayUnsafe());
 	}
-
-
-	// Custom methods
 
 	/**
 	 * Return the number of bytes stored in this <code>FastByteArrayOutputStream</code>.

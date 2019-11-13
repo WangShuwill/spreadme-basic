@@ -27,7 +27,7 @@ import org.spreadme.commons.util.StringUtil;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public enum OSType {
+public enum OsType {
 
 	WINDOWS("windows"),
 	LINUX("linux"),
@@ -44,17 +44,17 @@ public enum OSType {
 	SUNOS("SunOS"),
 	UNKNOWN("UNKNOW");
 
-	private static Map<String, OSType> types = new HashMap<>(4);
+	private static Map<String, OsType> types = new HashMap<>(16);
 
 	static {
-		for (OSType type : OSType.values()) {
+		for (OsType type : OsType.values()) {
 			types.put(type.name, type);
 		}
 	}
 
 	private String name;
 
-	OSType(String name) {
+	OsType(String name) {
 		this.name = name;
 	}
 
@@ -62,8 +62,8 @@ public enum OSType {
 		return name;
 	}
 
-	public static OSType resolve(String arch) {
-		for (Map.Entry<String, OSType> entry : types.entrySet()) {
+	public static OsType resolve(String arch) {
+		for (Map.Entry<String, OsType> entry : types.entrySet()) {
 			if (StringUtil.trimAll(arch).toUpperCase().contains(entry.getKey().toUpperCase())) {
 				return entry.getValue();
 			}

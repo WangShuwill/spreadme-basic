@@ -17,7 +17,6 @@
 package org.spreadme.commons.io;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -67,7 +66,7 @@ public class IOTest {
 		MessageDigest digest = Hash.getMessageDigest(Algorithm.SHA256);
 		try (FileInputStream in = new FileInputStream(testFileOne);
 			 MessageDigestInputStream digestInput = new MessageDigestInputStream(in, digest);
-			 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
 			System.out.println(Hex.toHexString(digest.digest()));
