@@ -37,15 +37,31 @@ public abstract class Dates {
 
 	private static final CacheClient<String, DateTimeFormatter> FORMATTER_CACHE = new LocalCacheClient<>(16);
 
+	private static final Calendar CALENDAR = Calendar.getInstance();
+
 	private Dates() {
 
 	}
 
+	/**
+	 * 日期格式化
+	 *
+	 * @param date date
+	 * @param pattern pattern
+	 * @return format string
+	 */
 	public static String format(Date date, String pattern) {
 		DateTimeFormatter formatter = getDateFormatter(pattern);
 		return formatter.format(date.toInstant());
 	}
 
+	/**
+	 * 字符串转日期
+	 *
+	 * @param text text
+	 * @param pattern pattern
+	 * @return date
+	 */
 	public static Date parse(CharSequence text, String pattern) {
 		DateTimeFormatter formatter = getDateFormatter(pattern);
 		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
@@ -54,37 +70,73 @@ public abstract class Dates {
 		return Date.from(zonedDateTime.toInstant());
 	}
 
+	/**
+	 * 获取日期
+	 *
+	 * @param date date
+	 * @param field Field number for {@link Calendar}
+	 * @param amount 差值
+	 * @return date
+	 */
 	public static Date getDate(Date date, int field, int amount) {
 		Calendar calendar = toCalendar(date);
 		calendar.add(field, amount);
 		return calendar.getTime();
 	}
 
+	/**
+	 * date to LocalDateTime
+	 * @param date date
+	 * @return LocalDateTime
+	 */
 	public static LocalDateTime toLocalDataTime(Date date) {
 		Instant instant = date.toInstant();
 		ZoneId zoneId = ZoneId.systemDefault();
 		return instant.atZone(zoneId).toLocalDateTime();
 	}
 
+	/**
+	 * date to LocalDate
+	 *
+	 * @param date date
+	 * @return LocalDate
+	 */
 	public static LocalDate toLocalDate(Date date) {
 		Instant instant = date.toInstant();
 		ZoneId zoneId = ZoneId.systemDefault();
 		return instant.atZone(zoneId).toLocalDate();
 	}
 
+	/**
+	 * date to LocalTime
+	 *
+	 * @param date date
+	 * @return LocalTime
+	 */
 	public static LocalTime toLocalTime(Date date) {
 		Instant instant = date.toInstant();
 		ZoneId zoneId = ZoneId.systemDefault();
 		return instant.atZone(zoneId).toLocalTime();
 	}
 
+	/**
+	 * date to Calendar
+	 *
+	 * @param date date
+	 * @return Calendar
+	 */
 	public static Calendar toCalendar(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		return calendar;
+		CALENDAR.setTime(date);
+		return CALENDAR;
 	}
 
-	private static DateTimeFormatter getDateFormatter(String pattern) {
+	/**
+	 * get datetime fomatter by cache
+	 *
+	 * @param pattern pattern
+	 * @return DateTimeFormatter
+	 */
+	public static DateTimeFormatter getDateFormatter(String pattern) {
 		DateTimeFormatter formatter = FORMATTER_CACHE.get(pattern);
 		if (formatter == null) {
 			formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
@@ -94,6 +146,34 @@ public abstract class Dates {
 			}
 		}
 		return formatter;
+	}
+
+	/**
+	 * 获取一天的开始
+	 *
+	 * @param date date
+	 * @return start time of date
+	 */
+	public static Date getStartOfDate(Date date) {
+		CALENDAR.setTime(date);
+		CALENDAR.set(Calendar.HOUR_OF_DAY, 0);
+		CALENDAR.set(Calendar.MINUTE, 0);
+		CALENDAR.set(Calendar.SECOND, 0);
+		return CALENDAR.getTime();
+	}
+
+	/**
+	 * 获取一天的结束
+	 *
+	 * @param date date
+	 * @return end time of date
+	 */
+	public static Date getEndOfDate(Date date) {
+		CALENDAR.setTime(date);
+		CALENDAR.set(Calendar.HOUR_OF_DAY, 23);
+		CALENDAR.set(Calendar.MINUTE, 59);
+		CALENDAR.set(Calendar.SECOND, 59);
+		return CALENDAR.getTime();
 	}
 
 	public static final class DateFormatType {
