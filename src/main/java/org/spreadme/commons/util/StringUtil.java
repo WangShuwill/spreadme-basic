@@ -46,6 +46,10 @@ public abstract class StringUtil {
 
 	public static final int INDEX_NOT_FOUND = -1;
 
+	private StringUtil() {
+
+	}
+
 	/**
 	 * Convert an array of 8 bit characters into a string.
 	 *
@@ -220,10 +224,23 @@ public abstract class StringUtil {
 		return new String(chars);
 	}
 
+	/**
+	 * 随机生成字符串
+	 *
+	 * @param length 长度
+	 * @return 随机字符串
+	 */
 	public static String randomString(int length) {
 		return randomString(STRINGS, length);
 	}
 
+	/**
+	 * 根据传入的字符串生成随机的字符串
+	 *
+	 * @param base 基本字符串
+	 * @param length 长度
+	 * @return 随机字符串
+	 */
 	public static String randomString(String base, int length) {
 		if (isBlank(base) || length < 1 || base.length() < length) {
 			return null;
@@ -236,6 +253,13 @@ public abstract class StringUtil {
 		return strings.toString();
 	}
 
+	/**
+	 * repeat character with length
+	 *
+	 * @param c character
+	 * @param length length
+	 * @return result string
+	 */
 	public static String repeat(char c, int length) {
 		StringBuilder builder = new StringBuilder();
 		if (length < 1) {
@@ -247,7 +271,50 @@ public abstract class StringUtil {
 		return builder.toString();
 	}
 
+	/**
+	 * null string to empty string
+	 *
+	 * @param text text
+	 * @return result
+	 */
 	public static String noneNullString(String text) {
 		return text == null ? "" : text;
+	}
+
+	/**
+	 * 替换字符串
+	 *
+	 * @param base 字符串
+	 * @param oldPattern 被替换的字符串
+	 * @param newPattern 新的字符串
+	 * @return result
+	 */
+	public static String replace(String base, String oldPattern, String newPattern){
+		if(isBlank(base) || isBlank(oldPattern) || newPattern == null){
+			return base;
+		}
+		int index = base.indexOf(oldPattern);
+		if(index == INDEX_NOT_FOUND){
+			return base;
+		}
+		// 初始化StringBuilder容量
+		int capacity = base.length();
+		if(newPattern.length() > oldPattern.length()){
+			capacity += 16;
+		}
+		StringBuilder sb = new StringBuilder(capacity);
+
+		int pos = 0;
+		int oldLen = oldPattern.length();
+		while (index >= 0){
+			sb.append(base.substring(pos, index));
+			sb.append(newPattern);
+			pos = index + oldLen;
+			index = base.indexOf(oldPattern, pos);
+		}
+
+		// 追加剩余的字符串
+		sb.append(base.substring(pos));
+		return sb.toString();
 	}
 }

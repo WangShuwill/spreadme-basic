@@ -37,12 +37,15 @@ import org.spreadme.commons.system.SystemMonitor;
 public class UtilTest {
 
 	@Test
-	public void testStringUtil() {
+	public void testStringUtil() throws Exception {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
-		for (int i = 0; i < 100; i++) {
-			System.out.println(StringUtil.randomString(6));
-			System.out.println(StringUtil.randomString("-+*", 1));
-		}
+		final int THREAD_POOL_SIZE = 10;
+		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+			System.out.println(StringUtil.randomString(6) + " :: " + StringUtil.randomString("-+*", 1));
+		}, executor);
+
+		System.out.println(StringUtil.replace("wswei","w","90"));
 	}
 
 	@Test
@@ -79,7 +82,7 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testDates(){
+	public void testDates() {
 		System.out.println(Dates.toCalendar(new Date()).getTime());
 		System.out.println(Dates.getStartOfDate(new Date()));
 		System.out.println(Dates.getEndOfDate(new Date()));
