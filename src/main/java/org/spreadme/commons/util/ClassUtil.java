@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -56,7 +57,8 @@ public abstract class ClassUtil {
 	}
 
 	public static String getClassPath() {
-		return Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath();
+		return new File(Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath())
+				.getPath();
 	}
 
 	public static InputStream getResourceAsStream(String resource) {
