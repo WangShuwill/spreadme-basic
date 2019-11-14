@@ -44,6 +44,8 @@ public abstract class StringUtil {
 
 	public static final String STRINGS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+	public static final int INDEX_NOT_FOUND = -1;
+
 	/**
 	 * Convert an array of 8 bit characters into a string.
 	 *
@@ -82,20 +84,20 @@ public abstract class StringUtil {
 	}
 
 	/**
-	 * is it not empty
+	 * is it not Blank
 	 *
 	 * @param charSequence charSequence
-	 * @return is it not empty?
+	 * @return is it not Blank?
 	 */
 	public static boolean isNotBlank(final CharSequence charSequence) {
 		return !isBlank(charSequence);
 	}
 
 	/**
-	 * is it empty
+	 * is it Blank
 	 *
 	 * @param charSequence charSequence
-	 * @return is it empty
+	 * @return is it Blank
 	 */
 	public static boolean isBlank(final CharSequence charSequence) {
 		int len;
@@ -203,6 +205,7 @@ public abstract class StringUtil {
 		return sb.toString();
 	}
 
+	@Deprecated
 	public static String toUpper(final String source, Integer... indexs) {
 		if (isBlank(source) || indexs.length < 1) {
 			return source;

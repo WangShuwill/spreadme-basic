@@ -42,7 +42,6 @@ public abstract class ImageUtil {
 	 *
 	 * @param color {@link Color}
 	 * @return 16进制的颜色值，例如#fcf6d6
-	 * @since 4.1.14
 	 */
 	public static String toHex(Color color) {
 		String R = Integer.toHexString(color.getRed());
@@ -59,7 +58,6 @@ public abstract class ImageUtil {
 	 *
 	 * @param hex 16进制的颜色值，例如#fcf6d6
 	 * @return {@link Color}
-	 * @since 4.1.14
 	 */
 	public static Color hexToColor(String hex) {
 		return new Color(Integer.parseInt(StringUtil.trimStart(hex, "#"), 16));

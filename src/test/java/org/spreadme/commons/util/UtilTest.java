@@ -18,6 +18,7 @@ package org.spreadme.commons.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -57,7 +58,7 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testDates() throws Exception {
+	public void testDateFomatter() throws Exception {
 		final int THREAD_POOL_SIZE = 10;
 		final String FORMATTER = "HH:mm:ss dd.MM.yyyy";
 		final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
@@ -75,6 +76,13 @@ public class UtilTest {
 			}
 			System.out.print("OK ");
 		}, executor);
+	}
+
+	@Test
+	public void testDates(){
+		System.out.println(Dates.toCalendar(new Date()).getTime());
+		System.out.println(Dates.getStartOfDate(new Date()));
+		System.out.println(Dates.getEndOfDate(new Date()));
 	}
 
 	@Test
