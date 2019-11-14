@@ -24,59 +24,57 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public abstract class Randoms {
 
-	private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
-
 	private Randoms() {
 
 	}
 
 	public static boolean nextBoolean() {
-		return RANDOM.nextBoolean();
+		return ThreadLocalRandom.current().nextBoolean();
 	}
 
 	public static byte[] nextBytes(final int count) {
 		final byte[] bytes = new byte[count];
-		RANDOM.nextBytes(bytes);
+		ThreadLocalRandom.current().nextBytes(bytes);
 		return bytes;
 	}
 
 	public static int nextInt(final int start, final int end) {
-		return RANDOM.nextInt(start, end);
+		return ThreadLocalRandom.current().nextInt(start, end);
 	}
 
 	public static int nextInt(final int end) {
-		return RANDOM.nextInt(end);
+		return ThreadLocalRandom.current().nextInt(end);
 	}
 
 	public static int nextInt() {
-		return RANDOM.nextInt();
+		return ThreadLocalRandom.current().nextInt();
 	}
 
 	public static long nextLong(final long start, final long end) {
-		return RANDOM.nextLong(start, end);
+		return ThreadLocalRandom.current().nextLong(start, end);
 	}
 
 	public static long nextLong(final long end) {
-		return RANDOM.nextLong(end);
+		return ThreadLocalRandom.current().nextLong(end);
 	}
 
 	public static long nextLong() {
-		return RANDOM.nextLong();
+		return ThreadLocalRandom.current().nextLong();
 	}
 
 	public static double nextDouble(final double start, final double end) {
-		return RANDOM.nextDouble(start, end);
+		return ThreadLocalRandom.current().nextDouble(start, end);
 	}
 
 	public static double nextDouble(final double end) {
-		return RANDOM.nextDouble(end);
+		return ThreadLocalRandom.current().nextDouble(end);
 	}
 
 	public static double nextDouble() {
-		return RANDOM.nextDouble();
+		return ThreadLocalRandom.current().nextDouble();
 	}
 
 	public static float nextFloat() {
-		return RANDOM.nextFloat();
+		return ThreadLocalRandom.current().nextFloat();
 	}
 }
