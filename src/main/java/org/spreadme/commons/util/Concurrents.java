@@ -16,8 +16,12 @@
 
 package org.spreadme.commons.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Concurrent tool
@@ -59,5 +63,14 @@ public abstract class Concurrents {
 		long endTime = System.nanoTime();
 		System.out.println("\n[" + Thread.currentThread() + "] All thread is completed.");
 		return endTime - startTime;
+	}
+
+	public static <T> void startAllTaskInOnce(int size, Callable<T> callable) throws InterruptedException {
+		ExecutorService executorService = Executors.newWorkStealingPool();
+		List<Callable<T>> callables = new ArrayList<>();
+		for (int i = 0; i < size; i++) {
+			callables.add(callable);
+		}
+		executorService.invokeAll(callables);
 	}
 }

@@ -289,25 +289,25 @@ public abstract class StringUtil {
 	 * @param newPattern 新的字符串
 	 * @return result
 	 */
-	public static String replace(String base, String oldPattern, String newPattern){
-		if(isBlank(base) || isBlank(oldPattern) || newPattern == null){
+	public static String replace(String base, String oldPattern, String newPattern) {
+		if (isBlank(base) || isBlank(oldPattern) || newPattern == null) {
 			return base;
 		}
 		int index = base.indexOf(oldPattern);
-		if(index == INDEX_NOT_FOUND){
+		if (index == INDEX_NOT_FOUND) {
 			return base;
 		}
 		// 初始化StringBuilder容量
 		int capacity = base.length();
-		if(newPattern.length() > oldPattern.length()){
+		if (newPattern.length() > oldPattern.length()) {
 			capacity += 16;
 		}
 		StringBuilder sb = new StringBuilder(capacity);
 
 		int pos = 0;
 		int oldLen = oldPattern.length();
-		while (index >= 0){
-			sb.append(base.substring(pos, index));
+		while (index >= 0) {
+			sb.append(base, pos, index);
 			sb.append(newPattern);
 			pos = index + oldLen;
 			index = base.indexOf(oldPattern, pos);
@@ -316,5 +316,16 @@ public abstract class StringUtil {
 		// 追加剩余的字符串
 		sb.append(base.substring(pos));
 		return sb.toString();
+	}
+
+	/**
+	 * delete the string form this string
+	 *
+	 * @param text text
+	 * @param deleted will be deleted string
+	 * @return result
+	 */
+	public static String delete(String text, String deleted) {
+		return replace(text, deleted, EMPTY);
 	}
 }

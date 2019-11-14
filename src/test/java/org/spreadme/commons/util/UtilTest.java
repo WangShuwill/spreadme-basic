@@ -39,13 +39,12 @@ public class UtilTest {
 	@Test
 	public void testStringUtil() throws Exception {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
-		final int THREAD_POOL_SIZE = 10;
-		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
-			System.out.println(StringUtil.randomString(6) + " :: " + StringUtil.randomString("-+*", 1));
-		}, executor);
-
-		System.out.println(StringUtil.replace("wswei","w","90"));
+		Concurrents.startAllTaskInOnce(10, () -> {
+			String result = StringUtil.randomString(6) + " :: " + StringUtil.randomString("-+*", 1);
+			System.out.println(result);
+			return result;
+		});
+		System.out.println(StringUtil.replace("wsweiwwww//\\w/", "w", "90"));
 	}
 
 	@Test
