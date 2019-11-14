@@ -16,10 +16,10 @@
 
 package org.spreadme.commons.system;
 
-import java.lang.management.ManagementFactory;
-
 import com.sun.management.OperatingSystemMXBean;
 import org.spreadme.commons.util.MathUtil;
+
+import java.lang.management.ManagementFactory;
 
 /**
  * monitor service
@@ -55,7 +55,7 @@ public class SystemMonitor {
 		systemInfo.setFreeMemory(osmxbean.getFreePhysicalMemorySize());
 		systemInfo.setFreeMemoryUnit(MathUtil.lengthToUnit(systemInfo.getFreeMemory()));
 
-		systemInfo.setUsedMemory(systemInfo.getTotalMemory() - systemInfo.getFreeJvmMemory());
+		systemInfo.setUsedMemory(systemInfo.getTotalMemory() - systemInfo.getFreeMemory());
 		systemInfo.setUsedMemoryUnit(MathUtil.lengthToUnit(systemInfo.getUsedMemory()));
 
 		systemInfo.setProcessors(osmxbean.getAvailableProcessors());
