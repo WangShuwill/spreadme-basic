@@ -16,14 +16,13 @@
 
 package org.spreadme.commons.crypt;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.spreadme.commons.id.IdentifierGenerator;
-import org.spreadme.commons.id.support.UUIDGenerator;
+import org.spreadme.commons.codec.Hex;
 
 /**
  * aes encrypt
@@ -36,10 +35,18 @@ public abstract class AES {
 
 	}
 
-	public static String generateKey() {
-		IdentifierGenerator<UUID> uuidGenerator = new UUIDGenerator();
-		String uuid = uuidGenerator.nextIdentifier().toString();
-		return uuid.substring(0, uuid.indexOf("-"));
+	/**
+	 * generate key
+	 *
+	 * @param length length of byte array
+	 * @return hex key
+	 */
+	public static String generateKey(int length) {
+		SecureRandom random = new SecureRandom();
+		random.setSeed(System.currentTimeMillis());
+		byte[] bytes = new byte[length];
+		random.nextBytes(bytes);
+		return Hex.toHexString(bytes);
 	}
 
 	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {

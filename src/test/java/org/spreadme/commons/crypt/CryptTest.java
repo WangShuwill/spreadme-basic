@@ -46,7 +46,6 @@ public class CryptTest {
 
 	private String privateKey;
 
-
 	@Before
 	public void init() throws Exception {
 		testFile = new File(ClassUtil.getClassPath() + File.separator + TEST_FILE_NAME);
@@ -85,7 +84,7 @@ public class CryptTest {
 
 	@Test
 	public void aesTest() throws Exception {
-		String key = AES.generateKey();
+		String key = AES.generateKey(6);
 		System.out.println(key);
 		String data = "test";
 		byte[] encrypt = AES.encrypt(data.getBytes(), key.getBytes());
@@ -110,5 +109,14 @@ public class CryptTest {
 		System.out.println(BCrypt.hashpw(pwd, BCrypt.gensalt()));
 		System.out.println(BCrypt.checkpw(pwd, "$2a$10$bA2.WOmsYX/9To0w5BkaueORBgQPTuvS8MxR6YKTbTk948/5GlfkS"));
 		System.out.println(XOR.encrypt(pwd));
+	}
+
+	@Test
+	public void testKeyGenerator() throws InterruptedException {
+		Concurrents.startAllTaskInOnce(10, () -> {
+			String result = AES.generateKey(6);
+			System.out.println(result);
+			return result;
+		});
 	}
 }

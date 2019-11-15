@@ -59,8 +59,6 @@ public abstract class Hash {
 		}
 	}
 
-	private static SecureRandom random = new SecureRandom();
-
 	/**
 	 * 创建ThreadLocal的MessageDigest
 	 *
@@ -151,6 +149,7 @@ public abstract class Hash {
 	 */
 	public static byte[] generateSalt(int length) {
 		byte[] bytes = new byte[length];
+		SecureRandom random = new SecureRandom();
 		random.nextBytes(bytes);
 		return bytes;
 	}

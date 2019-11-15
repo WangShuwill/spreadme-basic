@@ -53,8 +53,19 @@ public abstract class RSA {
 	 * @throws NoSuchAlgorithmException {@link NoSuchAlgorithmException} NoSuchAlgorithmException
 	 */
 	public static KeyPair getKeyPair() throws NoSuchAlgorithmException {
+		return getKeyPair(2014);
+	}
+
+	/**
+	 * 生成密钥对
+	 *
+	 * @param keysize key size
+	 * @return 密钥对
+	 * @throws NoSuchAlgorithmException {@link NoSuchAlgorithmException} NoSuchAlgorithmException
+	 */
+	public static KeyPair getKeyPair(int keysize) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Algorithm.RSA.getValue());
-		keyGen.initialize(1024);
+		keyGen.initialize(keysize);
 		return keyGen.generateKeyPair();
 	}
 
