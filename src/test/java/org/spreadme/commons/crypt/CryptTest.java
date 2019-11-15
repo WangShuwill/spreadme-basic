@@ -84,13 +84,17 @@ public class CryptTest {
 
 	@Test
 	public void aesTest() throws Exception {
-		String key = AES.generateKey(6);
-		System.out.println(key);
-		String data = "test";
-		byte[] encrypt = AES.encrypt(data.getBytes(), key.getBytes());
-		System.out.println(StringUtil.fromByteArray(encrypt));
-		byte[] origin = AES.decrypt(encrypt, key.getBytes());
-		System.out.println(StringUtil.fromByteArray(origin));
+		Concurrents.startAllTaskInOnce(10, () -> {
+			final String data = "test";
+			String key = AES.generateKey(6);
+			byte[] encrypt = AES.encrypt(data.getBytes(), key.getBytes());
+			byte[] origin = AES.decrypt(encrypt, key.getBytes());
+			String result = String.format("The key is {%s}, the encrty is {%s}, the origin is {%s}",
+					key, Hex.toHexString(encrypt), StringUtil.fromByteArray(origin));
+			System.out.println(result);
+			return result;
+		});
+
 	}
 
 	@Test

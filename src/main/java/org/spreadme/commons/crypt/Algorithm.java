@@ -31,7 +31,9 @@ public enum Algorithm {
 	MD5("MD5"),
 	SHA("SHA"),
 	AES("AES"),
-	RSA("RSA");
+	AES_CBC_PKCS5Padding("AES/CBC/PKCS5Padding"),
+	RSA("RSA"),
+	RSA_ECB_PKCS1Padding("RSA/ECB/PKCS1Padding");
 
 	private final String value;
 

@@ -20,6 +20,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.spreadme.commons.codec.Hex;
@@ -30,6 +31,19 @@ import org.spreadme.commons.codec.Hex;
  * @since 1.0.0
  */
 public abstract class AES {
+
+	private static final ThreadLocal<Cipher> CIPHER;
+
+	static {
+		CIPHER = ThreadLocal.withInitial(() -> {
+			try {
+				return Cipher.getInstance(Algorithm.AES_CBC_PKCS5Padding.getValue());
+			}
+			catch (Exception e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+		});
+	}
 
 	private AES() {
 
@@ -50,17 +64,26 @@ public abstract class AES {
 	}
 
 	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {
-		Cipher cipher = Cipher.getInstance(Algorithm.AES.getValue());
-		key = extendKey(key);
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getValue()));
-		return cipher.doFinal(rawData);
+		//使用CBC模式，需要一个向量iv，可增加加密算法的强度
+		SecretKeySpec keySpec = getKeySpec(key);
+		CIPHER.get().init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(keySpec.getEncoded()));
+		return CIPHER.get().doFinal(rawData);
 	}
 
 	public static byte[] decrypt(byte[] cipherData, byte[] key) throws Exception {
-		Cipher cipher = Cipher.getInstance(Algorithm.AES.getValue());
-		key = extendKey(key);
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, Algorithm.AES.getValue()));
-		return cipher.doFinal(cipherData);
+		//使用CBC模式，需要一个向量iv，可增加加密算法的强度
+		SecretKeySpec keySpec = getKeySpec(key);
+		CIPHER.get().init(Cipher.DECRYPT_MODE, getKeySpec(key), new IvParameterSpec(keySpec.getEncoded()));
+		return CIPHER.get().doFinal(cipherData);
+	}
+
+	private static SecretKeySpec getKeySpec(byte[] key) {
+		if (key.length != 16) {
+			key = extendKey(key);
+		}
+		SecretKeySpec secretKeySpec = new SecretKeySpec(key, Algorithm.AES.getValue());
+		byte[] encoded = secretKeySpec.getEncoded();
+		return new SecretKeySpec(encoded, Algorithm.AES.getValue());
 	}
 
 	private static byte[] extendKey(byte[] key) {
