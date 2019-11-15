@@ -16,6 +16,8 @@
 
 package org.spreadme.commons.lang;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -28,53 +30,66 @@ public abstract class Randoms {
 
 	}
 
+	public static ThreadLocalRandom getRandom() {
+		return ThreadLocalRandom.current();
+	}
+
+	public static SecureRandom getSecureRandom() {
+		try {
+			return SecureRandom.getInstance("SHA1PRNG");
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static boolean nextBoolean() {
-		return ThreadLocalRandom.current().nextBoolean();
+		return getRandom().nextBoolean();
 	}
 
 	public static byte[] nextBytes(final int count) {
 		final byte[] bytes = new byte[count];
-		ThreadLocalRandom.current().nextBytes(bytes);
+		getRandom().nextBytes(bytes);
 		return bytes;
 	}
 
 	public static int nextInt(final int start, final int end) {
-		return ThreadLocalRandom.current().nextInt(start, end);
+		return getRandom().nextInt(start, end);
 	}
 
 	public static int nextInt(final int end) {
-		return ThreadLocalRandom.current().nextInt(end);
+		return getRandom().nextInt(end);
 	}
 
 	public static int nextInt() {
-		return ThreadLocalRandom.current().nextInt();
+		return getRandom().nextInt();
 	}
 
 	public static long nextLong(final long start, final long end) {
-		return ThreadLocalRandom.current().nextLong(start, end);
+		return getRandom().nextLong(start, end);
 	}
 
 	public static long nextLong(final long end) {
-		return ThreadLocalRandom.current().nextLong(end);
+		return getRandom().nextLong(end);
 	}
 
 	public static long nextLong() {
-		return ThreadLocalRandom.current().nextLong();
+		return getRandom().nextLong();
 	}
 
 	public static double nextDouble(final double start, final double end) {
-		return ThreadLocalRandom.current().nextDouble(start, end);
+		return getRandom().nextDouble(start, end);
 	}
 
 	public static double nextDouble(final double end) {
-		return ThreadLocalRandom.current().nextDouble(end);
+		return getRandom().nextDouble(end);
 	}
 
 	public static double nextDouble() {
-		return ThreadLocalRandom.current().nextDouble();
+		return getRandom().nextDouble();
 	}
 
 	public static float nextFloat() {
-		return ThreadLocalRandom.current().nextFloat();
+		return getRandom().nextFloat();
 	}
 }

@@ -16,7 +16,6 @@
 
 package org.spreadme.commons.crypt;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 import javax.crypto.Cipher;
@@ -24,6 +23,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.spreadme.commons.codec.Hex;
+import org.spreadme.commons.lang.Randoms;
 
 /**
  * aes encrypt
@@ -56,10 +56,8 @@ public abstract class AES {
 	 * @return hex key
 	 */
 	public static String generateKey(int length) {
-		SecureRandom random = new SecureRandom();
-		random.setSeed(System.currentTimeMillis());
 		byte[] bytes = new byte[length];
-		random.nextBytes(bytes);
+		Randoms.getSecureRandom().nextBytes(bytes);
 		return Hex.toHexString(bytes);
 	}
 
