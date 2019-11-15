@@ -45,12 +45,9 @@ public class MathCodeGenerator implements CodeGenerator {
 		int n1 = Randoms.nextInt(limit);
 		int n2 = Randoms.nextInt(limit);
 		String operator = StringUtil.randomString(operators, 1);
-		StringBuilder builder = new StringBuilder()
-				.append(n1)
-				.append(operator)
-				.append(n2)
-				.append("=");
-		return new CaptchaCode(builder.toString(), String.valueOf(calcu(operator, n1, n2)));
+		String builder = n1 + operator + n2 + "=";
+		assert operator != null;
+		return new CaptchaCode(builder, String.valueOf(calcu(operator, n1, n2)));
 	}
 
 	@Override
