@@ -16,15 +16,23 @@
 
 package org.spreadme.commons.io.serialize;
 
-import org.spreadme.commons.lang.Nullable;
-
 /**
- * Serialization
+ * Serializer Exception
  * @author shuwei.wang
  */
-public interface Serializer<T> {
+public class SerializeException extends RuntimeException {
 
-	byte[] serialize(@Nullable T object) throws SerializeException;
+	private static final long serialVersionUID = -717625035363051092L;
 
-	T deserialize(@Nullable byte[] bytes) throws SerializeException;
+	private Throwable cause;
+
+	public SerializeException(String msg, Throwable cause) {
+		super(msg);
+
+		this.cause = cause;
+	}
+
+	public Throwable getCause() {
+		return cause;
+	}
 }

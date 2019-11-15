@@ -16,6 +16,13 @@
 
 package org.spreadme.commons.io.serialize;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import org.spreadme.commons.io.FastByteArrayOutputStream;
+
 /**
  * Object Serializer
  * @author shuwei.wang
@@ -23,12 +30,27 @@ package org.spreadme.commons.io.serialize;
 public class ObjectSerializer<T> implements Serializer {
 
 	@Override
-	public byte[] serialize(Object object) {
-		return new byte[0];
+	public byte[] serialize(Object object) throws SerializeException {
+		try (FastByteArrayOutputStream bos = new FastByteArrayOutputStream();
+			 ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+
+			oos.writeObject(object);
+			return bos.toByteArray();
+		}
+		catch (IOException ex) {
+			throw new SerializeException(ex.getMessage(), ex);
+		}
 	}
 
 	@Override
 	public Object deserialize(byte[] bytes) {
-		return null;
+		try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+			 ObjectInputStream ois = new ObjectInputStream(bis)) {
+
+			return ois.readObject();
+		}
+		catch (Exception ex) {
+			throw new SerializeException(ex.getMessage(), ex);
+		}
 	}
 }

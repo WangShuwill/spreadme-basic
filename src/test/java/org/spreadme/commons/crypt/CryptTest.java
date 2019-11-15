@@ -49,7 +49,7 @@ public class CryptTest {
 	@Before
 	public void init() throws Exception {
 		testFile = new File(ClassUtil.getClassPath() + File.separator + TEST_FILE_NAME);
-		KeyPair keyPair = RSA.getKeyPair();
+		KeyPair keyPair = RSA.getKeyPair(2048);
 		publicKey = RSA.getPublicKey(keyPair);
 		privateKey = RSA.getPrivateKey(keyPair);
 

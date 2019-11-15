@@ -14,17 +14,42 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.io.serialize;
-
-import org.spreadme.commons.lang.Nullable;
+package org.spreadme.commons.lang;
 
 /**
- * Serialization
+ * Image Formats
  * @author shuwei.wang
  */
-public interface Serializer<T> {
+public enum ImageFormats {
 
-	byte[] serialize(@Nullable T object) throws SerializeException;
+	UNKNOWN,
+	BMP,
+	DCX,
+	GIF,
+	ICNS,
+	ICO,
+	JBIG2,
+	JPEG,
+	PAM,
+	PSD,
+	PBM,
+	PGM,
+	PNM,
+	PPM,
+	PCX,
+	PNG,
+	RGBE,
+	TGA,
+	TIFF,
+	WBMP,
+	XBM,
+	XPM;
 
-	T deserialize(@Nullable byte[] bytes) throws SerializeException;
+	public String getName() {
+		return name().toLowerCase();
+	}
+
+	public String getExtension() {
+		return name().toLowerCase();
+	}
 }
