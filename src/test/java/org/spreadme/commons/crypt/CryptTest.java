@@ -21,12 +21,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
-import java.util.Base64;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.spreadme.commons.codec.Base64;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Concurrents;
@@ -42,19 +42,19 @@ public class CryptTest {
 
 	private File testFile = null;
 
-	private String publicKey;
+	private byte[] publicKey;
 
-	private String privateKey;
+	private byte[] privateKey;
 
 	@Before
 	public void init() throws Exception {
 		testFile = new File(ClassUtil.getClassPath() + File.separator + TEST_FILE_NAME);
-		KeyPair keyPair = RSA.getKeyPair(2048);
+		KeyPair keyPair = RSA.getKeyPair();
 		publicKey = RSA.getPublicKey(keyPair);
 		privateKey = RSA.getPrivateKey(keyPair);
 
-		System.out.println("publickey: " + publicKey);
-		System.out.println("privatekey: " + privateKey);
+		System.out.println("publickey: " + Base64.toBase64String(publicKey));
+		System.out.println("privatekey: " + Base64.toBase64String(privateKey));
 	}
 
 	@Test
@@ -101,9 +101,13 @@ public class CryptTest {
 	public void testRSA() throws Exception {
 		byte[] text = "wswei".getBytes(StandardCharsets.UTF_8);
 		byte[] encryptData = RSA.encryptByPublicKey(text, publicKey);
-		System.out.println(Base64.getEncoder().encodeToString(encryptData));
+		System.out.println(Base64.toBase64String(encryptData));
 		byte[] rawData = RSA.decryptByPrivateKey(encryptData, privateKey);
 		System.out.println(new String(rawData));
+
+		byte[] signData = RSA.sign(text, privateKey, Algorithm.SHA256withRSA);
+		System.out.println(Base64.toBase64String(signData));
+		System.out.println(RSA.verify(text, publicKey, signData, Algorithm.SHA256withRSA));
 	}
 
 	@Test
