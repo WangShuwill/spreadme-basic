@@ -23,6 +23,8 @@ package org.spreadme.commons.crypt;
  */
 public enum Algorithm {
 
+	DES("DES"),
+	DES_CBC_PKCS5Padding("DES/CBC/PKCS5Padding"),
 	SHA1("SHA-1"),
 	SHA224("SHA-224"),
 	SHA256("SHA-256"),

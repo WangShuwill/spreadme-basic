@@ -16,13 +16,11 @@
 
 package org.spreadme.commons.crypt;
 
-import java.util.Arrays;
+import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.spreadme.commons.lang.Randoms;
 
 /**
  * aes encrypt
@@ -50,13 +48,15 @@ public abstract class AES {
 	/**
 	 * generate key
 	 *
-	 * @param length length of byte array
 	 * @return byte array of key
 	 */
-	public static byte[] generateKey(int length) {
-		byte[] bytes = new byte[length];
-		Randoms.getSecureRandom().nextBytes(bytes);
-		return bytes;
+	public static byte[] generateKey() {
+		try {
+			return KeyGen.generateKey(128, Algorithm.AES);
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
 	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {
@@ -75,16 +75,10 @@ public abstract class AES {
 
 	private static SecretKeySpec getKeySpec(byte[] key) {
 		if (key.length != 16) {
-			key = extendKey(key);
+			key = KeyGen.extendKey(key);
 		}
 		SecretKeySpec secretKeySpec = new SecretKeySpec(key, Algorithm.AES.getValue());
 		byte[] encoded = secretKeySpec.getEncoded();
 		return new SecretKeySpec(encoded, Algorithm.AES.getValue());
-	}
-
-	private static byte[] extendKey(byte[] key) {
-		key = Hash.toHexString(key, null, 0, Algorithm.MD5).getBytes();
-		key = Arrays.copyOf(key, key.length / 2);
-		return key;
 	}
 }
