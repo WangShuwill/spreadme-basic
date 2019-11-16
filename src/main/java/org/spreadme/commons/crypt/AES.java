@@ -22,7 +22,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.lang.Randoms;
 
 /**
@@ -52,12 +51,12 @@ public abstract class AES {
 	 * generate key
 	 *
 	 * @param length length of byte array
-	 * @return hex key
+	 * @return byte array of key
 	 */
-	public static String generateKey(int length) {
+	public static byte[] generateKey(int length) {
 		byte[] bytes = new byte[length];
 		Randoms.getSecureRandom().nextBytes(bytes);
-		return Hex.toHexString(bytes);
+		return bytes;
 	}
 
 	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {

@@ -30,6 +30,8 @@ import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
+import org.spreadme.commons.lang.Randoms;
+
 /**
  * rsa
  * @author shuwei.wang
@@ -53,7 +55,7 @@ public abstract class RSA {
 	 */
 	public static KeyPair getKeyPair() throws NoSuchAlgorithmException {
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(Algorithm.RSA.getValue());
-		keyGen.initialize(1024);
+		keyGen.initialize(1024, Randoms.getSecureRandom());
 		return keyGen.generateKeyPair();
 	}
 

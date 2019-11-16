@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.lang.Nullable;
+import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.CollectionUtil;
 
 /**
@@ -149,8 +149,7 @@ public abstract class Hash {
 	 */
 	public static byte[] generateSalt(int length) {
 		byte[] bytes = new byte[length];
-		SecureRandom random = new SecureRandom();
-		random.nextBytes(bytes);
+		Randoms.getSecureRandom().nextBytes(bytes);
 		return bytes;
 	}
 

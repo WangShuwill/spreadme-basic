@@ -86,11 +86,11 @@ public class CryptTest {
 	public void aesTest() throws Exception {
 		Concurrents.startAllTaskInOnce(10, () -> {
 			final String data = "test";
-			String key = AES.generateKey(6);
-			byte[] encrypt = AES.encrypt(data.getBytes(), key.getBytes());
-			byte[] origin = AES.decrypt(encrypt, key.getBytes());
+			byte[] key = AES.generateKey(6);
+			byte[] encrypt = AES.encrypt(data.getBytes(), key);
+			byte[] origin = AES.decrypt(encrypt, key);
 			String result = String.format("The key is {%s}, the encrty is {%s}, the origin is {%s}",
-					key, Hex.toHexString(encrypt), StringUtil.fromByteArray(origin));
+					Hex.toHexString(key), Hex.toHexString(encrypt), StringUtil.fromByteArray(origin));
 			System.out.println(result);
 			return result;
 		});
@@ -122,8 +122,8 @@ public class CryptTest {
 	@Test
 	public void testKeyGenerator() throws InterruptedException {
 		Concurrents.startAllTaskInOnce(10, () -> {
-			String result = AES.generateKey(6);
-			System.out.println(result);
+			byte[] result = AES.generateKey(6);
+			System.out.println(Hex.toHexString(result));
 			return result;
 		});
 	}
