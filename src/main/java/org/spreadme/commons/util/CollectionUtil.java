@@ -43,11 +43,17 @@ public abstract class CollectionUtil {
 
 	@SafeVarargs
 	public static <E> List<E> toList(E... data) {
+		if (data == null) {
+			return new ArrayList<>();
+		}
 		return new ArrayList<>(Arrays.asList(data));
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <E> E[] toArray(Collection<E> collection) {
+		if (collection == null) {
+			return (E[]) new Object[0];
+		}
 		return collection.toArray((E[]) new Object[0]);
 	}
 
