@@ -19,7 +19,6 @@ package org.spreadme.commons.util;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,6 +47,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.spreadme.commons.io.ArchiveEntry;
+import org.spreadme.commons.io.FastByteArrayOutputStream;
 import org.spreadme.commons.lang.FileWriteMode;
 import org.spreadme.commons.lang.LineIterator;
 
@@ -134,7 +134,7 @@ public abstract class IOUtil {
 	 * @throws IOException IOException
 	 */
 	public static byte[] toByteArray(InputStream input) throws IOException {
-		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final FastByteArrayOutputStream bos = new FastByteArrayOutputStream();
 		copy(input, bos);
 		return bos.toByteArray();
 	}
