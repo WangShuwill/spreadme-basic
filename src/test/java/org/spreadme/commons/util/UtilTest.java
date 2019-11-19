@@ -43,7 +43,7 @@ public class UtilTest {
 	public void testStringUtil() throws Exception {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
 		Concurrents.startAllTaskInOnce(10, () -> {
-			String result = StringUtil.randomString(6) + " :: " + StringUtil.randomString("-+*", 1);
+			String result = StringUtil.randomString(8) + " :: " + StringUtil.randomString("-+*", 1);
 			System.out.println(result + " :: " + Hash.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
 			return result;
 		});
@@ -72,8 +72,8 @@ public class UtilTest {
 		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
 			try {
 				String dateCreate = "19:30:55 03.05.2015";
-				//sdf.parse(dateCreate);
-				Dates.parse(dateCreate, FORMATTER);
+				sdf.parse(dateCreate);
+				//Dates.parse(dateCreate, FORMATTER);
 			}
 			catch (Exception ex) {
 				ex.printStackTrace();
