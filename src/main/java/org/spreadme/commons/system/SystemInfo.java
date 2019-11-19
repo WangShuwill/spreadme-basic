@@ -52,7 +52,7 @@ public class SystemInfo implements Serializable {
 
 	private OsType osType;
 
-	private String arch;
+	private ArchType archType;
 
 	private int processors;
 
@@ -96,12 +96,12 @@ public class SystemInfo implements Serializable {
 		this.osType = osType;
 	}
 
-	public String getArch() {
-		return arch;
+	public ArchType getArchType() {
+		return archType;
 	}
 
-	public void setArch(String arch) {
-		this.arch = arch;
+	public void setArchType(ArchType archType) {
+		this.archType = archType;
 	}
 
 	public int getProcessors() {
@@ -213,7 +213,7 @@ public class SystemInfo implements Serializable {
 		return "SystemInfo{" +
 				"osName='" + osName + '\'' +
 				", osType='" + osType + '\'' +
-				", arch='" + arch + '\'' +
+				", archType='" + archType + '\'' +
 				", processors=" + processors +
 				", totalJvmMemory=" + totalJvmMemory +
 				", totalJvmMemoryUnit='" + totalJvmMemoryUnit + '\'' +

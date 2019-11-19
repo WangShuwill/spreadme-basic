@@ -62,9 +62,9 @@ public enum OsType {
 		return name;
 	}
 
-	public static OsType resolve(String arch) {
+	public static OsType resolve(String osname) {
 		for (Map.Entry<String, OsType> entry : types.entrySet()) {
-			if (StringUtil.trimAll(arch).toUpperCase().contains(entry.getKey().toUpperCase())) {
+			if (StringUtil.trimAll(osname).toUpperCase().contains(entry.getKey().toUpperCase())) {
 				return entry.getValue();
 			}
 		}

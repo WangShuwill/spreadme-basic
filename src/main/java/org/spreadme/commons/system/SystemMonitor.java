@@ -16,10 +16,10 @@
 
 package org.spreadme.commons.system;
 
+import java.lang.management.ManagementFactory;
+
 import com.sun.management.OperatingSystemMXBean;
 import org.spreadme.commons.util.MathUtil;
-
-import java.lang.management.ManagementFactory;
 
 /**
  * monitor service
@@ -62,7 +62,7 @@ public class SystemMonitor {
 		String osName = System.getProperty(OS_NAME_KEY);
 		systemInfo.setOsName(osName);
 		systemInfo.setOsType(osType);
-		systemInfo.setArch(osmxbean.getArch());
+		systemInfo.setArchType(ArchType.resolve(osmxbean.getArch()));
 		return systemInfo;
 	}
 }

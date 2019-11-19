@@ -22,11 +22,39 @@ package org.spreadme.commons.system;
  * @since 1.0.0
  */
 public enum ArchType {
+
 	X32,
 	X64,
 	PPC,
 	PPC64,
+	AARCH_64,
 	ARM,
 	ARM64,
-	UNKNOWN
+	UNKNOWN;
+
+	public static ArchType resolve(String arch) {
+		ArchType archType = ArchType.UNKNOWN;
+		int bits;
+		if (arch.contains("arm")) {
+			archType = ArchType.ARM;
+		}
+		else if (arch.contains("aarch64")) {
+			archType = ArchType.AARCH_64;
+		}
+		else if (arch.contains("ppc")) {
+			bits = 32;
+			if (arch.contains("64")) {
+				bits = 64;
+			}
+			archType = (32 == bits) ? ArchType.PPC : ArchType.PPC64;
+		}
+		else if (arch.contains("86") || arch.contains("amd")) {
+			bits = 32;
+			if (arch.contains("64")) {
+				bits = 64;
+			}
+			archType = (32 == bits) ? ArchType.X32 : ArchType.X64;
+		}
+		return archType;
+	}
 }
