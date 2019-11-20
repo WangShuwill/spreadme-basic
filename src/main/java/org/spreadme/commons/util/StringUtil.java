@@ -328,4 +328,38 @@ public abstract class StringUtil {
 	public static String delete(String text, String deleted) {
 		return replace(text, deleted, EMPTY);
 	}
+
+	/**
+	 * string to unicode
+	 *
+	 * @param string string
+	 * @return unicode string
+	 */
+	public static String stringToUnicode(String string) {
+		if (StringUtil.isBlank(string)) {
+			return string;
+		}
+		StringBuilder unicode = new StringBuilder();
+		for (int i = 0, l = string.length(); i < l; i++) {
+			char c = string.charAt(i);
+			unicode.append("\\u").append(Integer.toHexString(c));
+		}
+		return unicode.toString();
+	}
+
+	/**
+	 * unicode to string
+	 *
+	 * @param unicode unicode string
+	 * @return string
+	 */
+	public static String unicodeToString(String unicode) {
+		StringBuilder string = new StringBuilder();
+		String[] hex = unicode.split("\\\\u");
+		for (int i = 1, l = hex.length; i < l; i++) {
+			int data = Integer.parseInt(hex[i], 16);
+			string.append((char) data);
+		}
+		return string.toString();
+	}
 }

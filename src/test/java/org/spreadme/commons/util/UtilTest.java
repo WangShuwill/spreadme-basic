@@ -30,6 +30,7 @@ import org.spreadme.commons.id.IdentifierGenerator;
 import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
 import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
+import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.lang.Dates;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.system.SystemMonitor;
@@ -44,10 +45,13 @@ public class UtilTest {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
 		Concurrents.startAllTaskInOnce(10, () -> {
 			String result = StringUtil.randomString(8) + " :: " + StringUtil.randomString("-+*", 1);
-			System.out.println(result + " :: " + Hash.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
+			Console.info(result + " :: " + Hash.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
 			return result;
 		});
-		System.out.println(StringUtil.replace("wsweiwwww//\\w/", "w", "90"));
+		Console.info(StringUtil.replace("wsweiwwww//\\w/", "w", "90"));
+		String unicode = StringUtil.stringToUnicode("TEst^&测试");
+		Console.info(unicode);
+		Console.info(StringUtil.unicodeToString(unicode));
 	}
 
 	@Test

@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Encode and decode byte arrays (typically from binary to 7-bit ASCII encodings).
+ * Encode and decode byte arrays
  * @author shuwei.wang
  * @since 1.0.0
  */
