@@ -19,6 +19,7 @@ package org.spreadme.commons.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.spreadme.commons.lang.Randoms;
@@ -361,5 +362,9 @@ public abstract class StringUtil {
 			string.append((char) data);
 		}
 		return string.toString();
+	}
+
+	public static String[] toStringArray(Collection<String> collection) {
+		return collection.toArray(new String[0]);
 	}
 }

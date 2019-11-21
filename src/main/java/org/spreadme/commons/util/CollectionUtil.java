@@ -49,14 +49,6 @@ public abstract class CollectionUtil {
 		return new ArrayList<>(Arrays.asList(data));
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <E> E[] toArray(Collection<E> collection) {
-		if (collection == null) {
-			return (E[]) new Object[0];
-		}
-		return collection.toArray((E[]) new Object[0]);
-	}
-
 	public static Map<String, Object> propertiesIntoMap(@Nullable Properties props) {
 		Map<String, Object> map = new HashMap<>();
 		if (props != null) {
