@@ -99,4 +99,10 @@ public class UtilTest {
 		SystemMonitor monitor = new SystemMonitor();
 		System.out.println(monitor.getSystemInfo());
 	}
+
+	@Test
+	public void testDateParse() {
+		Date date = Dates.parse("1993-12-12 12:00", "yyyy-MM-dd HH:mm");
+		System.out.println(date);
+	}
 }

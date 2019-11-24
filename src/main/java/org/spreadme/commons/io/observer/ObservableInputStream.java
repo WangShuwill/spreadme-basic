@@ -36,6 +36,8 @@ public abstract class ObservableInputStream extends InputStream {
 		this.in = in;
 	}
 
+	private long size;
+
 	/**
 	 * Adds an Observer.
 	 *
@@ -143,6 +145,7 @@ public abstract class ObservableInputStream extends InputStream {
 	 * @throws IOException Some observer has thrown an exception, which is being passed down.
 	 */
 	protected void noteDataBytes(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
+		this.size += pLength;
 		for (final InputStreamObserver observer : getObservers()) {
 			observer.data(pBuffer, pOffset, pLength);
 		}
@@ -166,6 +169,7 @@ public abstract class ObservableInputStream extends InputStream {
 	 * @throws IOException Some observer has thrown an exception, which is being passed down.
 	 */
 	protected void noteDataByte(final int pDataByte) throws IOException {
+		this.size = size + 1;
 		for (final InputStreamObserver observer : getObservers()) {
 			observer.data(pDataByte);
 		}
@@ -180,5 +184,9 @@ public abstract class ObservableInputStream extends InputStream {
 		for (final InputStreamObserver observer : getObservers()) {
 			observer.error(pException);
 		}
+	}
+
+	public long getSize() {
+		return this.size;
 	}
 }

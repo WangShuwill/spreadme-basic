@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQueries;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -64,10 +66,21 @@ public abstract class Dates {
 	 */
 	public static Date parse(CharSequence text, String pattern) {
 		DateTimeFormatter formatter = getDateFormatter(pattern);
-		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-		ZoneId zoneId = ZoneId.systemDefault();
-		ZonedDateTime zonedDateTime = dateTime.atZone(zoneId);
-		return Date.from(zonedDateTime.toInstant());
+		TemporalAccessor accessor = formatter.parse(text);
+		LocalTime localTime = accessor.query(TemporalQueries.localTime());
+		LocalDate localDate = accessor.query(TemporalQueries.localDate());
+		if (localTime == null) {
+			ZoneId zone = ZoneId.systemDefault();
+			Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
+			return Date.from(instant);
+		}
+		else {
+			LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+			ZoneId zoneId = ZoneId.systemDefault();
+			ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
+			return Date.from(zonedDateTime.toInstant());
+		}
+
 	}
 
 	/**
