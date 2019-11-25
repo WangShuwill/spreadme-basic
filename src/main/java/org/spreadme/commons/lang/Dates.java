@@ -21,12 +21,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import org.spreadme.commons.cache.CacheClient;
 import org.spreadme.commons.cache.support.LocalCacheClient;
@@ -67,20 +67,11 @@ public abstract class Dates {
 	public static Date parse(CharSequence text, String pattern) {
 		DateTimeFormatter formatter = getDateFormatter(pattern);
 		TemporalAccessor accessor = formatter.parse(text);
-		LocalTime localTime = accessor.query(TemporalQueries.localTime());
-		LocalDate localDate = accessor.query(TemporalQueries.localDate());
-		if (localTime == null) {
-			ZoneId zone = ZoneId.systemDefault();
-			Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
-			return Date.from(instant);
-		}
-		else {
-			LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
-			ZoneId zoneId = ZoneId.systemDefault();
-			ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
-			return Date.from(zonedDateTime.toInstant());
-		}
-
+		LocalTime time = accessor.query(TemporalQueries.localTime());
+		LocalDate date = accessor.query(TemporalQueries.localDate());
+		LocalDateTime dateTime = Objects.isNull(time) ? date.atStartOfDay() : LocalDateTime.of(date, time);
+		ZoneId zoneId = ZoneId.systemDefault();
+		return Date.from(dateTime.atZone(zoneId).toInstant());
 	}
 
 	/**
