@@ -22,8 +22,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
+import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -78,14 +80,15 @@ public abstract class Dates {
 	 * 获取日期
 	 *
 	 * @param date date
-	 * @param field Field number for {@link Calendar}
+	 * @param unit A unit of date-time, such as Days or Hours. {@link TemporalUnit}
 	 * @param amount 差值
 	 * @return date
 	 */
-	public static Date getDate(Date date, int field, int amount) {
-		Calendar calendar = toCalendar(date);
-		calendar.add(field, amount);
-		return calendar.getTime();
+	public static Date getDate(Date date, ChronoUnit unit, long amount) {
+		LocalDateTime dateTime = toLocalDataTime(date);
+		dateTime = dateTime.plus(amount, unit);
+		ZoneId zoneId = ZoneId.systemDefault();
+		return Date.from(dateTime.atZone(zoneId).toInstant());
 	}
 
 	/**
@@ -129,6 +132,7 @@ public abstract class Dates {
 	 * @param date date
 	 * @return Calendar
 	 */
+	@Deprecated
 	public static Calendar toCalendar(Date date) {
 		CALENDAR.setTime(date);
 		return CALENDAR;
@@ -159,11 +163,9 @@ public abstract class Dates {
 	 * @return start time of date
 	 */
 	public static Date getStartOfDate(Date date) {
-		CALENDAR.setTime(date);
-		CALENDAR.set(Calendar.HOUR_OF_DAY, 0);
-		CALENDAR.set(Calendar.MINUTE, 0);
-		CALENDAR.set(Calendar.SECOND, 0);
-		return CALENDAR.getTime();
+		LocalDate localDate = toLocalDate(date);
+		LocalDateTime dateTime = LocalDateTime.of(localDate, LocalTime.MIN);
+		return toDate(dateTime);
 	}
 
 	/**
@@ -173,11 +175,14 @@ public abstract class Dates {
 	 * @return end time of date
 	 */
 	public static Date getEndOfDate(Date date) {
-		CALENDAR.setTime(date);
-		CALENDAR.set(Calendar.HOUR_OF_DAY, 23);
-		CALENDAR.set(Calendar.MINUTE, 59);
-		CALENDAR.set(Calendar.SECOND, 59);
-		return CALENDAR.getTime();
+		LocalDate localDate = toLocalDate(date);
+		LocalDateTime dateTime = LocalDateTime.of(localDate, LocalTime.MAX);
+		return toDate(dateTime);
+	}
+
+	public static Date toDate(LocalDateTime dateTime) {
+		ZoneId zoneId = ZoneId.systemDefault();
+		return Date.from(dateTime.atZone(zoneId).toInstant());
 	}
 
 	public static final class DateFormatType {

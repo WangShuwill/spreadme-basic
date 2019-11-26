@@ -18,6 +18,7 @@ package org.spreadme.commons.util;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -60,9 +61,9 @@ public class UtilTest {
 		IdentifierGenerator<String> leftNumericGenerator = new PrefixedLeftNumericGenerator(StringUtil.randomString(1), true, 3);
 		IdentifierGenerator<Long> longIdentifierGenerator = new SnowflakeLongGenerator(1, 1);
 		for (int i = 0; i < 101; i++) {
-			System.out.println(timeBasedGenerator.nextIdentifier());
-			System.out.println(leftNumericGenerator.nextIdentifier());
-			System.out.println(longIdentifierGenerator.nextIdentifier());
+			Console.info(timeBasedGenerator.nextIdentifier());
+			Console.info(leftNumericGenerator.nextIdentifier());
+			Console.info(longIdentifierGenerator.nextIdentifier());
 		}
 	}
 
@@ -83,26 +84,26 @@ public class UtilTest {
 				ex.printStackTrace();
 				return;
 			}
-			System.out.print("OK ");
+			Console.info("OK ");
 		}, executor);
 	}
 
 	@Test
 	public void testDates() {
-		System.out.println(Dates.toCalendar(new Date()).getTime());
-		System.out.println(Dates.getStartOfDate(new Date()));
-		System.out.println(Dates.getEndOfDate(new Date()));
+		Console.info(Dates.getStartOfDate(new Date()));
+		Console.info(Dates.getEndOfDate(new Date()));
+		Console.info(Dates.getDate(new Date(), ChronoUnit.DAYS, -100));
 	}
 
 	@Test
 	public void testSystemInfo() {
 		SystemMonitor monitor = new SystemMonitor();
-		System.out.println(monitor.getSystemInfo());
+		Console.info(monitor.getSystemInfo());
 	}
 
 	@Test
 	public void testDateParse() {
-		Date date = Dates.parse("1993-12-12 12:00", "yyyy-MM-dd HH:mm");
-		System.out.println(date);
+		Date date = Dates.parse("1993-12-12 12:00:09", "yyyy-MM-dd HH:mm:ss");
+		Console.info(date);
 	}
 }
