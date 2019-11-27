@@ -17,6 +17,7 @@
 package org.spreadme.commons.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -34,6 +35,7 @@ import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.lang.Dates;
 import org.spreadme.commons.lang.Randoms;
+import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.system.SystemMonitor;
 
 /**
@@ -89,10 +91,13 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testDates() {
+	public void testDates() throws IOException {
 		Console.info(Dates.getStartOfDate(new Date()));
 		Console.info(Dates.getEndOfDate(new Date()));
 		Console.info(Dates.getDate(new Date(), ChronoUnit.DAYS, -100));
+		Console.info(1 << 28 ^ 80);
+		final String path = ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "/testpath/123/test.txt";
+		FileUtil.createFile(path, true);
 	}
 
 	@Test

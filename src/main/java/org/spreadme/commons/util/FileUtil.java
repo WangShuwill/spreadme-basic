@@ -74,13 +74,12 @@ public abstract class FileUtil {
 		File file = new File(path);
 		if (!file.exists()) {
 			if (isFile) {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
+				Path dirPath = file.getParentFile().toPath();
+				Files.createDirectories(dirPath);
+				Files.createFile(file.toPath());
 				return file;
 			}
-			else if (file.mkdirs()) {
-				return file;
-			}
+			Files.createDirectories(file.toPath());
 		}
 		return file;
 	}

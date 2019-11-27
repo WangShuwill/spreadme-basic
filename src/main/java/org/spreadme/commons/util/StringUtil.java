@@ -45,6 +45,8 @@ public abstract class StringUtil {
 
 	public static final String STRINGS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+	public static final char[] CHARS = STRINGS.toCharArray();
+
 	public static final int INDEX_NOT_FOUND = -1;
 
 	private StringUtil() {
