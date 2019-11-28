@@ -16,13 +16,19 @@
 
 package org.spreadme.commons.util;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.imageio.ImageIO;
 
 import org.junit.Test;
 import org.spreadme.commons.crypt.Algorithm;
@@ -33,7 +39,9 @@ import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.lang.Dates;
+import org.spreadme.commons.lang.ImageFormats;
 import org.spreadme.commons.lang.Randoms;
+import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.system.SystemMonitor;
 
 /**
@@ -60,10 +68,11 @@ public class UtilTest {
 		IdentifierGenerator<String> timeBasedGenerator = new TimeBasedIdentifierGenerator();
 		IdentifierGenerator<String> leftNumericGenerator = new PrefixedLeftNumericGenerator(StringUtil.randomString(1), true, 3);
 		IdentifierGenerator<Long> longIdentifierGenerator = new SnowflakeLongGenerator(1, 1);
-		for (int i = 0; i < 101; i++) {
-			Console.info(timeBasedGenerator.nextIdentifier());
-			Console.info(leftNumericGenerator.nextIdentifier());
-			Console.info(longIdentifierGenerator.nextIdentifier());
+		for (int i = 0; i < 100; i++) {
+			Console.info("timebase: %s, numeric: %s, longid: %s",
+					timeBasedGenerator.nextIdentifier(),
+					leftNumericGenerator.nextIdentifier(),
+					longIdentifierGenerator.nextIdentifier());
 		}
 	}
 
@@ -105,5 +114,21 @@ public class UtilTest {
 	public void testDateParse() {
 		Date date = Dates.parse("1993-12-12 12:00:09", "yyyy-MM-dd HH:mm:ss");
 		Console.info(date);
+	}
+
+	@Test
+	public void testTextToImage() throws IOException {
+		BufferedImage image = ImageUtil.toImage("Test测试", new Font(Font.SANS_SERIF, Font.PLAIN, (int) (50 * 0.75)), Color.BLACK);
+		ImageIO.write(image, ImageFormats.PNG.getName(),
+				new File(ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "water.png"));
+	}
+
+	@Test
+	public void testNetUtil() {
+		final String host = NetUtil.getHostByUrl("https://ci.qiyuesuo.me");
+		final String hostIp = NetUtil.getIpByDomain(host);
+		Console.info(host);
+		Console.info(hostIp);
+		Console.info(NetUtil.isReachable(hostIp, 5000));
 	}
 }

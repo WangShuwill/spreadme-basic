@@ -17,6 +17,7 @@
 package org.spreadme.commons.util;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import org.spreadme.commons.lang.Randoms;
 
@@ -63,4 +64,36 @@ public abstract class ImageUtil {
 		return new Color(Integer.parseInt(StringUtil.trimStart(hex, "#"), 16));
 	}
 
+	/**
+	 * 文字转图片
+	 *
+	 * @param text 文字
+	 * @param font 字体
+	 * @param color 颜色
+	 * @return BufferedImage
+	 */
+	public static BufferedImage toImage(String text, Font font, Color color) {
+		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+		Graphics fontGraphics = image.getGraphics();
+		fontGraphics.setFont(font);
+		int width = fontGraphics.getFontMetrics().stringWidth(text);
+		int height = font.getSize();
+
+		BufferedImage trueImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics = trueImage.createGraphics();
+		trueImage = graphics.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+		graphics = trueImage.createGraphics();
+		graphics.setColor(color);
+		graphics.setFont(font);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		FontMetrics fm = graphics.getFontMetrics(font);
+		int ascent = fm.getAscent();
+		int descent = fm.getDescent();
+		int x = (width - fontGraphics.getFontMetrics().stringWidth(text)) / 2;
+		int y = (height - (ascent + descent)) / 2 + ascent;
+		graphics.drawString(text, x, y);
+		graphics.dispose();
+		return trueImage;
+	}
 }
