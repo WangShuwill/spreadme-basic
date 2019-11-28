@@ -70,18 +70,18 @@ public abstract class FileUtil {
 	 * @throws IOException IOException
 	 */
 	public static File createFile(String path, boolean isFile) throws IOException {
-		path = path.replaceAll("\\*", "/");
-		File file = new File(path);
-		if (!file.exists()) {
+		Path filePath = Paths.get(path);
+		filePath = filePath.normalize();
+		if (!Files.exists(filePath)) {
 			if (isFile) {
-				Path dirPath = file.getParentFile().toPath();
+				Path dirPath = filePath.getParent();
 				Files.createDirectories(dirPath);
-				Files.createFile(file.toPath());
-				return file;
+				Files.createFile(filePath);
+				return filePath.toFile();
 			}
-			Files.createDirectories(file.toPath());
+			Files.createDirectories(filePath);
 		}
-		return file;
+		return filePath.toFile();
 	}
 
 	/**
@@ -205,5 +205,17 @@ public abstract class FileUtil {
 			return offset1 + 1;
 		}
 		return Math.max(offset1, offset2) + 1;
+	}
+
+	/**
+	 * normalize path
+	 *
+	 * @param path path
+	 * @return normalize path
+	 */
+	public static String normalize(String path) {
+		Path filePath = Paths.get(path);
+		filePath = filePath.normalize();
+		return filePath.toString();
 	}
 }
