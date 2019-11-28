@@ -33,6 +33,7 @@ import org.spreadme.commons.crypt.Algorithm;
 import org.spreadme.commons.crypt.Hash;
 import org.spreadme.commons.lang.Charsets;
 import org.spreadme.commons.lang.LineIterator;
+import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.CollectionUtil;
 import org.spreadme.commons.util.FileUtil;
@@ -80,6 +81,8 @@ public class IOTest {
 		for (File file : files) {
 			System.out.println(file);
 		}
+		final String path = ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "/testpath/123/test.txt";
+		FileUtil.createFile(path, true);
 	}
 
 	@Test
