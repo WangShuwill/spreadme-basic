@@ -224,7 +224,18 @@ public abstract class IOUtil {
 	 * @throws IOException IOException
 	 */
 	public static void zipFiles(File zip, List<File> files) throws IOException {
-		try (WritableByteChannel writableChann = Channels.newChannel(new FileOutputStream(zip))) {
+		zipFiles(files, new FileOutputStream(zip));
+	}
+
+	/**
+	 * zip files
+	 *
+	 * @param files files
+	 * @param out OutputStream
+	 * @throws IOException IOException
+	 */
+	public static void zipFiles(List<File> files, OutputStream out) throws IOException{
+		try (WritableByteChannel writableChann = Channels.newChannel(new BufferedOutputStream(out))) {
 			Pipe pipe = Pipe.open();
 			CompletableFuture.runAsync(() -> zipTask(pipe, files));
 			ReadableByteChannel readableChann = pipe.source();
