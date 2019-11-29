@@ -16,13 +16,19 @@
 
 package org.spreadme.commons.crypt;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+
+import org.spreadme.commons.util.IOUtil;
 
 /**
  * DES
@@ -70,6 +76,20 @@ public abstract class DES {
 		SecretKey secretKey = getKeySpec(key);
 		CIPHER.get().init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(secretKey.getEncoded()));
 		return CIPHER.get().doFinal(cipherData);
+	}
+
+	public static void encrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
+		SecretKey secretKey = getKeySpec(key);
+		Cipher cipher = CIPHER.get();
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(secretKey.getEncoded()));
+		IOUtil.copy(new CipherInputStream(in, cipher), out);
+	}
+
+	public static void decrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
+		SecretKey secretKey = getKeySpec(key);
+		Cipher cipher = CIPHER.get();
+		cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(secretKey.getEncoded()));
+		IOUtil.copy(in, new CipherOutputStream(out, cipher));
 	}
 
 	private static SecretKey getKeySpec(byte[] key) throws Exception {

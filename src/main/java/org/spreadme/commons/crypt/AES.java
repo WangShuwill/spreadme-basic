@@ -16,11 +16,17 @@
 
 package org.spreadme.commons.crypt;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.spreadme.commons.util.IOUtil;
 
 /**
  * aes encrypt
@@ -71,6 +77,20 @@ public abstract class AES {
 		SecretKeySpec keySpec = getKeySpec(key);
 		CIPHER.get().init(Cipher.DECRYPT_MODE, getKeySpec(key), new IvParameterSpec(keySpec.getEncoded()));
 		return CIPHER.get().doFinal(cipherData);
+	}
+
+	public static void encrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
+		SecretKeySpec keySpec = getKeySpec(key);
+		Cipher cipher = CIPHER.get();
+		cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(keySpec.getEncoded()));
+		IOUtil.copy(new CipherInputStream(in, cipher), out);
+	}
+
+	public static void decrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
+		SecretKeySpec keySpec = getKeySpec(key);
+		Cipher cipher = CIPHER.get();
+		cipher.init(Cipher.DECRYPT_MODE, getKeySpec(key), new IvParameterSpec(keySpec.getEncoded()));
+		IOUtil.copy(in, new CipherOutputStream(out, cipher));
 	}
 
 	private static SecretKeySpec getKeySpec(byte[] key) {

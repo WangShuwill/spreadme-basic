@@ -16,7 +16,9 @@
 
 package org.spreadme.commons.crypt;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
@@ -139,5 +141,21 @@ public class CryptTest {
 				Hex.toHexString(key),
 				Hex.toHexString(encrypt),
 				StringUtil.fromByteArray(origin));
+	}
+
+	@Test
+	public void testAESFile() throws Exception{
+		try(BufferedInputStream in = new BufferedInputStream(new FileInputStream(testFile));
+			ByteArrayOutputStream out = new ByteArrayOutputStream()){
+
+			byte[] key = AES.generateKey();
+			AES.encrypt(in, out, key);
+			Console.info(Hex.toHexString(out.toByteArray()));
+
+			ByteArrayInputStream bis = new ByteArrayInputStream(out.toByteArray());
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			AES.decrypt(bis, bos, key);
+			Console.info(StringUtil.fromByteArray(bos.toByteArray()));
+		}
 	}
 }
