@@ -80,6 +80,8 @@ public class SystemInfo implements Serializable {
 
 	private String usedMemoryUnit;
 
+	private Double cpuLoad;
+
 	public String getOsName() {
 		return osName;
 	}
@@ -208,6 +210,14 @@ public class SystemInfo implements Serializable {
 		this.usedMemoryUnit = usedMemoryUnit;
 	}
 
+	public Double getCpuLoad() {
+		return cpuLoad;
+	}
+
+	public void setCpuLoad(Double cpuLoad) {
+		this.cpuLoad = cpuLoad;
+	}
+
 	@Override
 	public String toString() {
 		return "SystemInfo{" +
@@ -227,6 +237,7 @@ public class SystemInfo implements Serializable {
 				", freeMemoryUnit='" + freeMemoryUnit + '\'' +
 				", usedMemory=" + usedMemory +
 				", usedMemoryUnit='" + usedMemoryUnit + '\'' +
+				", cpuLoad='" + cpuLoad + '\'' +
 				'}';
 	}
 }
