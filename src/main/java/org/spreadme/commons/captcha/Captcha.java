@@ -41,10 +41,11 @@ public interface Captcha {
 	/**
 	 * 校验验证码
 	 *
+	 * @param code captcha code
 	 * @param input 输入
 	 * @return 校验是否成功
 	 */
-	boolean verify(String input);
+	boolean verify(CaptchaCode code, String input);
 
 	/**
 	 * 设置验证码生成器

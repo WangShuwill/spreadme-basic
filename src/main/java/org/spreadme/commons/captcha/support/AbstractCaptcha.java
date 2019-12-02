@@ -102,8 +102,8 @@ public abstract class AbstractCaptcha implements Captcha {
 	}
 
 	@Override
-	public boolean verify(String input) {
-		return generator.verify(this.code, input);
+	public boolean verify(CaptchaCode code, String input) {
+		return generator.verify(code, input);
 	}
 
 	@Override
