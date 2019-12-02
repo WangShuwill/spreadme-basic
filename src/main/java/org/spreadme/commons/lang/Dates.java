@@ -185,6 +185,15 @@ public abstract class Dates {
 		return Date.from(dateTime.atZone(zoneId).toInstant());
 	}
 
+	/**
+	 * 获取当前时间戳
+	 *
+	 * @return 时间戳
+	 */
+	public static int getTimestamp() {
+		return (int) (System.currentTimeMillis() / 1000);
+	}
+
 	public static final class DateFormatType {
 
 		public static String NORM_DATE_PATTERN = "yyyy-MM-dd";

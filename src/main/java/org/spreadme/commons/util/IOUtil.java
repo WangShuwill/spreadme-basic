@@ -255,11 +255,11 @@ public abstract class IOUtil {
 			Pipe pipe = Pipe.open();
 			CompletableFuture.runAsync(() -> {
 				try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
-					 WritableByteChannel writableChann1 = Channels.newChannel(zos)) {
+					 WritableByteChannel writableChannl = Channels.newChannel(zos)) {
 					for (ArchiveEntry entry : entries) {
 						zos.putNextEntry(new ZipEntry(entry.getName()));
 						final ReadableByteChannel readableChannel = Channels.newChannel(entry.getIn());
-						IOUtil.copy(readableChannel, writableChann1);
+						IOUtil.copy(readableChannel, writableChannl);
 						readableChannel.close();
 					}
 				}

@@ -114,6 +114,7 @@ public class UtilTest {
 	public void testDateParse() {
 		Date date = Dates.parse("1993-12-12 12:00:09", "yyyy-MM-dd HH:mm:ss");
 		Console.info(date);
+		Console.info(Dates.getTimestamp());
 	}
 
 	@Test
