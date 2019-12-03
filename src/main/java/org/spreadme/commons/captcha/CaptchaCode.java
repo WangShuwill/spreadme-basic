@@ -28,11 +28,15 @@ public class CaptchaCode implements Cacheable {
 
 	private static final long serialVersionUID = 8913251841658989029L;
 
-	private final String code;
+	private String code;
 
-	private final String value;
+	private String value;
 
-	public CaptchaCode(String code, String value) {
+	public CaptchaCode() {
+
+	}
+
+	public CaptchaCode(final String code, final String value) {
 		this.code = code;
 		this.value = value;
 	}
