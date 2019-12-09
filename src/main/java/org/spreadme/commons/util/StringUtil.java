@@ -140,6 +140,12 @@ public abstract class StringUtil {
 		return sb.toString();
 	}
 
+	/**
+	 * trim whitespace at start of string
+	 *
+	 * @param source source
+	 * @return trim start of string
+	 */
 	public static String trimStart(final String source) {
 		if (isBlank(source)) {
 			return source;
@@ -151,6 +157,12 @@ public abstract class StringUtil {
 		return sb.toString();
 	}
 
+	/**
+	 * trim whitespace at end of string
+	 *
+	 * @param source source
+	 * @return trim end of string
+	 */
 	public static String trimEnd(final String source) {
 		if (isBlank(source)) {
 			return source;
@@ -158,56 +170,6 @@ public abstract class StringUtil {
 		StringBuilder sb = new StringBuilder(source);
 		while (sb.length() > 1 && Character.isWhitespace(sb.charAt(sb.length() - 1))) {
 			sb.deleteCharAt(sb.length() - 1);
-		}
-		return sb.toString();
-	}
-
-	public static String trimStart(final String source, final char startChar) {
-		if (isBlank(source)) {
-			return source;
-		}
-		StringBuilder sb = new StringBuilder(source);
-		while (sb.length() > 1 && sb.charAt(0) == startChar) {
-			sb.deleteCharAt(0);
-		}
-		return sb.toString();
-	}
-
-	public static String trimEnd(final String source, final char endChar) {
-		if (isBlank(source)) {
-			return source;
-		}
-		StringBuilder sb = new StringBuilder(source);
-		while (sb.length() > 1 && sb.charAt(sb.length() - 1) == endChar) {
-			sb.deleteCharAt(sb.length() - 1);
-		}
-		return sb.toString();
-	}
-
-	public static String trimStart(final String source, final String startStr) {
-		if (isBlank(source) || isBlank(startStr)) {
-			return source;
-		}
-		int len = startStr.length();
-		StringBuilder sb = new StringBuilder(source);
-		for (int i = 0; i < len; i++) {
-			if (len <= sb.length() && sb.charAt(0) == startStr.charAt(i)) {
-				sb.deleteCharAt(0);
-			}
-		}
-		return sb.toString();
-	}
-
-	public static String trimEnd(final String source, final String endStr) {
-		if (isBlank(source) || isBlank(endStr)) {
-			return source;
-		}
-		int len = endStr.length();
-		StringBuilder sb = new StringBuilder(source);
-		for (int i = len; i > 0; i--) {
-			if (len <= sb.length() && sb.charAt(sb.length() - 1) == endStr.charAt(i - 1)) {
-				sb.deleteCharAt(sb.length() - 1);
-			}
 		}
 		return sb.toString();
 	}
@@ -366,6 +328,12 @@ public abstract class StringUtil {
 		return string.toString();
 	}
 
+	/**
+	 * convert string list to array
+	 *
+	 * @param collection collection of string
+	 * @return array of string
+	 */
 	public static String[] toStringArray(Collection<String> collection) {
 		return collection.toArray(new String[0]);
 	}

@@ -61,7 +61,7 @@ public abstract class ImageUtil {
 	 * @return {@link Color}
 	 */
 	public static Color hexToColor(String hex) {
-		return new Color(Integer.parseInt(StringUtil.trimStart(hex, "#"), 16));
+		return new Color(Integer.parseInt(hex.replace("#", StringUtil.EMPTY), 16));
 	}
 
 	/**
