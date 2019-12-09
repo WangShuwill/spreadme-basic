@@ -31,4 +31,6 @@ public final class ContentType {
 	public static final String XML = "application/xml";
 
 	public static final String TEXT_XML = "text/xml";
+
+	public static final String TEXT_HTMl = "text/html";
 }

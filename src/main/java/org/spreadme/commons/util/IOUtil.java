@@ -60,7 +60,8 @@ public abstract class IOUtil {
 
 	private static final int EOF = -1;
 
-	private static final int DEFAULT_BUFFER_SIZE = 1024 * 16;
+	// buffer size used for reading and writing
+	private static final int DEFAULT_BUFFER_SIZE = 8192;
 
 	/**
 	 * copy inputsteam to outputstream
