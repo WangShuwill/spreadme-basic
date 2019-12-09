@@ -16,7 +16,6 @@
 
 package org.spreadme.commons.captcha;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,6 +27,7 @@ import javax.imageio.ImageIO;
 import org.junit.Test;
 import org.spreadme.commons.captcha.generator.MathCodeGenerator;
 import org.spreadme.commons.captcha.support.CurvesCaptcha;
+import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.lang.ImageFormats;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.IOUtil;
@@ -41,15 +41,12 @@ public class CodeGeneratorTest {
 
 	@Test
 	public void testMathCodeGenerator() throws IOException {
-		CodeGenerator generator = new MathCodeGenerator();
-		CaptchaCode code = generator.generate();
-		System.out.println(code);
-		generator.verify(code, "100");
+		Captcha captcha = new CurvesCaptcha(200, 50).generator(new MathCodeGenerator());
+		CaptchaCode code = captcha.create();
+		Console.info(code);
 
-		Captcha captcha = new CurvesCaptcha(200, 50);
-		BufferedImage image = captcha.create();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(image, ImageFormats.PNG.getName(), bos);
+		ImageIO.write(code.getImage(), ImageFormats.PNG.getName(), bos);
 
 		try (ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
 			 FileOutputStream out = new FileOutputStream(new File(ClassUtil.getClassPath() + FILE_NAME))) {
