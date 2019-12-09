@@ -37,9 +37,4 @@ public class RandomCodeGenerator implements CodeGenerator {
 		String code = StringUtil.randomString(this.legth);
 		return new CaptchaCode(code, code);
 	}
-
-	@Override
-	public boolean verify(CaptchaCode code, String input) {
-		return StringUtil.isNotBlank(input) && input.equalsIgnoreCase(code.getValue());
-	}
 }

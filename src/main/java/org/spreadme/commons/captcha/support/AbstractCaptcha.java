@@ -39,8 +39,6 @@ public abstract class AbstractCaptcha implements Captcha {
 
 	protected Color color = ImageUtil.hexToColor("#293a80"); //颜色
 
-	protected CaptchaCode code; // 验证码
-
 	protected CodeGenerator generator; // 验证码生成器
 
 	public AbstractCaptcha(int width, int height, CodeGenerator generator) {
@@ -55,19 +53,20 @@ public abstract class AbstractCaptcha implements Captcha {
 	}
 
 	@Override
-	public BufferedImage create() {
+	public CaptchaCode create() {
 		// 生成验证码
-		this.code = this.generator.generate();
+		CaptchaCode code = this.generator.generate();
 		// 绘制图像
 		BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphics = image.createGraphics();
 		image = graphics.getDeviceConfiguration().createCompatibleImage(this.width, this.height, Transparency.TRANSLUCENT);
 		graphics = image.createGraphics();
-		drawText(code.getCode(), graphics, this.color);
+		drawText(code.getText(), graphics, this.color);
 		// 混淆图像
 		confuseImage(graphics);
 		graphics.dispose();
-		return image;
+		code.setImage(image);
+		return code;
 	}
 
 	protected abstract void confuseImage(Graphics2D graphics);
@@ -97,23 +96,15 @@ public abstract class AbstractCaptcha implements Captcha {
 	}
 
 	@Override
-	public CaptchaCode getCode() {
-		return this.code;
-	}
-
-	@Override
-	public boolean verify(CaptchaCode code, String input) {
-		return generator.verify(code, input);
-	}
-
-	@Override
-	public void setGenerator(CodeGenerator generator) {
+	public Captcha generator(CodeGenerator generator) {
 		this.generator = generator;
+		return this;
 	}
 
 	@Override
-	public void setColor(String hexColor) {
+	public Captcha color(String hexColor) {
 		this.color = ImageUtil.hexToColor(hexColor);
+		return this;
 	}
 
 }

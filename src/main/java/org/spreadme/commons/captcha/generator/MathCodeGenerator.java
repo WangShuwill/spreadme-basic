@@ -50,11 +50,6 @@ public class MathCodeGenerator implements CodeGenerator {
 		return new CaptchaCode(builder, String.valueOf(calcu(operator, n1, n2)));
 	}
 
-	@Override
-	public boolean verify(CaptchaCode code, String input) {
-		return StringUtil.isNotBlank(input) && input.equals(code.getValue());
-	}
-
 	public int getLength() {
 		return this.maxNumberLength * 2 + 2;
 	}

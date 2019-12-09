@@ -16,8 +16,6 @@
 
 package org.spreadme.commons.captcha;
 
-import java.awt.image.BufferedImage;
-
 /**
  * 验证码
  * @author shuwei.wang
@@ -27,37 +25,22 @@ public interface Captcha {
 	/**
 	 * 创建验证码图像
 	 *
-	 * @return captcha image {@link BufferedImage}
-	 */
-	BufferedImage create();
-
-	/**
-	 * 获取验证码
-	 *
 	 * @return captcha code {@link CaptchaCode}
 	 */
-	CaptchaCode getCode();
+	CaptchaCode create();
 
 	/**
-	 * 校验验证码
+	 * 设置代码生成起
 	 *
-	 * @param code captcha code
-	 * @param input 输入
-	 * @return 校验是否成功
+	 * @param generator CodeGenerator
+	 * @return Captcha
 	 */
-	boolean verify(CaptchaCode code, String input);
-
-	/**
-	 * 设置验证码生成器
-	 *
-	 * @param generator 验证码生成器 {@link CodeGenerator}
-	 */
-	void setGenerator(CodeGenerator generator);
+	Captcha generator(CodeGenerator generator);
 
 	/**
 	 * 设置颜色
-	 *
-	 * @param hexColor 十六进制颜色值
+	 * @param hexColor hex color
+	 * @return Captcha
 	 */
-	void setColor(String hexColor);
+	Captcha color(String hexColor);
 }

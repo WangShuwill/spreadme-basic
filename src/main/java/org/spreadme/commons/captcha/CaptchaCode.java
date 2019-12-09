@@ -16,19 +16,17 @@
 
 package org.spreadme.commons.captcha;
 
-import java.util.Objects;
-
-import org.spreadme.commons.cache.Cacheable;
+import java.awt.image.BufferedImage;
 
 /**
  * captcha code
  * @author shuwei.wang
  */
-public class CaptchaCode implements Cacheable {
+public class CaptchaCode {
 
-	private static final long serialVersionUID = 8913251841658989029L;
+	private BufferedImage image;
 
-	private String code;
+	private String text;
 
 	private String value;
 
@@ -36,13 +34,21 @@ public class CaptchaCode implements Cacheable {
 
 	}
 
-	public CaptchaCode(final String code, final String value) {
-		this.code = code;
+	public CaptchaCode(final String text, final String value) {
+		this.text = text;
 		this.value = value;
 	}
 
-	public String getCode() {
-		return code;
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
+	public String getText() {
+		return text;
 	}
 
 	public String getValue() {
@@ -50,29 +56,10 @@ public class CaptchaCode implements Cacheable {
 	}
 
 	@Override
-	public String toCacheKey() {
-		return String.valueOf(this.hashCode());
-	}
-
-	@Override
 	public String toString() {
 		return "CaptchaCode{" +
-				"code='" + code + '\'' +
+				"text='" + text + '\'' +
 				", value='" + value + '\'' +
 				'}';
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		CaptchaCode that = (CaptchaCode) o;
-		return Objects.equals(code, that.code) &&
-				Objects.equals(value, that.value);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(code, value);
 	}
 }

@@ -29,12 +29,4 @@ public interface CodeGenerator {
 	 */
 	CaptchaCode generate();
 
-	/**
-	 * 校验验证码
-	 *
-	 * @param code 验证码
-	 * @param input 输入
-	 * @return 是否校验成功
-	 */
-	boolean verify(CaptchaCode code, String input);
 }
