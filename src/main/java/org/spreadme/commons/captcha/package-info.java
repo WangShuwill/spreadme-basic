@@ -14,4 +14,7 @@
  * limitations under the License.
  */
 
+/**
+ * the package use generate captcha
+ */
 package org.spreadme.commons.captcha;

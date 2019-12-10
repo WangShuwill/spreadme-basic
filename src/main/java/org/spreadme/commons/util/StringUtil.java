@@ -19,6 +19,8 @@ package org.spreadme.commons.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -336,5 +338,18 @@ public abstract class StringUtil {
 	 */
 	public static String[] toStringArray(Collection<String> collection) {
 		return collection.toArray(new String[0]);
+	}
+
+	/**
+	 * Make a string representation of the exception.
+	 * @param e The exception to stringify
+	 * @return A string with exception name and call stack.
+	 */
+	public static String stringifyException(Throwable e) {
+		StringWriter writer = new StringWriter();
+		try (PrintWriter printer = new PrintWriter(writer)) {
+			e.printStackTrace(printer);
+		}
+		return writer.toString();
 	}
 }

@@ -23,6 +23,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.spreadme.commons.lang.Console;
+
 /**
  * Concurrent tool
  * @author shuwei.wang
@@ -39,13 +41,11 @@ public abstract class Concurrents {
 		for (int i = 0; i < threadNums; i++) {
 			executor.submit(() -> {
 				try {
-					// 使线程在此等待，当开始门打开时，一起涌入门中
 					startGate.await();
 					try {
 						task.run();
 					}
 					finally {
-						// 将结束门减1，减到0时，就可以开启结束门了
 						endGate.countDown();
 					}
 				}
@@ -55,13 +55,11 @@ public abstract class Concurrents {
 			});
 		}
 		long startTime = System.nanoTime();
-		System.out.println("\n[" + Thread.currentThread() + "] All thread is ready to begin task.");
-		// 因开启门只需一个开关，所以立马就开启开始门
+		Console.info("\n[" + Thread.currentThread() + "] All thread is ready to begin task.");
 		startGate.countDown();
-		// 等等结束门开启
 		endGate.await();
 		long endTime = System.nanoTime();
-		System.out.println("\n[" + Thread.currentThread() + "] All thread is completed.");
+		Console.info("\n[" + Thread.currentThread() + "] All thread is completed.");
 		return endTime - startTime;
 	}
 

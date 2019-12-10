@@ -132,4 +132,14 @@ public class UtilTest {
 		Console.info(hostIp);
 		Console.info(NetUtil.isReachable(hostIp, 5000));
 	}
+
+	@Test
+	public void testStringifyException() {
+		try {
+			throw new IllegalStateException("StringifyException tes");
+		}
+		catch (Exception ex) {
+			Console.info(StringUtil.stringifyException(ex));
+		}
+	}
 }
