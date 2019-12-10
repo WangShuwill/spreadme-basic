@@ -14,4 +14,21 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.captcha.generator;
+package org.spreadme.commons.captcha.code;
+
+import org.spreadme.commons.captcha.CaptchaCode;
+
+/**
+ * code code
+ * @author shuwei.wang
+ */
+public interface CodeGenerator {
+
+	/**
+	 * 验证码生成
+	 *
+	 * @return code
+	 */
+	CaptchaCode generate();
+
+}

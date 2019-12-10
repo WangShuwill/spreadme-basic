@@ -14,19 +14,26 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.captcha;
+package org.spreadme.commons.captcha.code;
+
+import org.spreadme.commons.captcha.CaptchaCode;
+import org.spreadme.commons.util.StringUtil;
 
 /**
- * code generator
+ * random code code
  * @author shuwei.wang
  */
-public interface CodeGenerator {
+public class RandomCodeGenerator implements CodeGenerator {
 
-	/**
-	 * 验证码生成
-	 *
-	 * @return code
-	 */
-	CaptchaCode generate();
+	private final int legth;
 
+	public RandomCodeGenerator(int legth) {
+		this.legth = legth;
+	}
+
+	@Override
+	public CaptchaCode generate() {
+		String code = StringUtil.randomString(this.legth);
+		return new CaptchaCode(code, code);
+	}
 }

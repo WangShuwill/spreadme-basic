@@ -14,15 +14,14 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.captcha.generator;
+package org.spreadme.commons.captcha.code;
 
 import org.spreadme.commons.captcha.CaptchaCode;
-import org.spreadme.commons.captcha.CodeGenerator;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.StringUtil;
 
 /**
- * math code generator
+ * math code code
  * @author shuwei.wang
  */
 public class MathCodeGenerator implements CodeGenerator {

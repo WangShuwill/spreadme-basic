@@ -25,7 +25,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.junit.Test;
-import org.spreadme.commons.captcha.generator.MathCodeGenerator;
+import org.spreadme.commons.captcha.code.MathCodeGenerator;
 import org.spreadme.commons.captcha.support.CurvesCaptcha;
 import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.lang.ImageFormats;

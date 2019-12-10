@@ -18,6 +18,7 @@ package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
 
+import org.spreadme.commons.captcha.code.RandomCodeGenerator;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.ImageUtil;
 
@@ -30,7 +31,7 @@ public class LineCaptcha extends AbstractCaptcha {
 	private int lineCount;
 
 	public LineCaptcha(int width, int height, int length, int lineCount) {
-		super(width, height, length);
+		super(width, height, new RandomCodeGenerator(length));
 		this.lineCount = lineCount;
 	}
 

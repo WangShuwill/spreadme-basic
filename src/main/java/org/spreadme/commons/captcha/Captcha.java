@@ -16,6 +16,10 @@
 
 package org.spreadme.commons.captcha;
 
+import java.awt.*;
+
+import org.spreadme.commons.captcha.code.CodeGenerator;
+
 /**
  * 验证码
  * @author shuwei.wang
@@ -43,4 +47,6 @@ public interface Captcha {
 	 * @return Captcha
 	 */
 	Captcha color(String hexColor);
+
+	Captcha font(Font font);
 }
