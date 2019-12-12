@@ -26,13 +26,11 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.spreadme.commons.func.Initializer;
-
 /**
  * SSL Initializer
  * @author shuwei.wang
  */
-public class SSLInitializer implements Initializer<HttpsURLConnection> {
+public class SSLInitializer {
 
 	private SSLContext sslcontext;
 
@@ -65,7 +63,6 @@ public class SSLInitializer implements Initializer<HttpsURLConnection> {
 		allHostsValid = (hostname, session) -> true;
 	}
 
-	@Override
 	public HttpsURLConnection init(HttpsURLConnection connection) {
 		connection.setSSLSocketFactory(sslcontext.getSocketFactory());
 		connection.setHostnameVerifier(allHostsValid);
