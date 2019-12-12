@@ -35,12 +35,22 @@ import org.spreadme.commons.util.IOUtil;
  */
 public abstract class AES {
 
-	private static final ThreadLocal<Cipher> CIPHER;
+	private static final ThreadLocal<Cipher> CIPHER_CBC;
+	private static final ThreadLocal<Cipher> CIPHER_NORMAL;
 
 	static {
-		CIPHER = ThreadLocal.withInitial(() -> {
+		CIPHER_CBC = ThreadLocal.withInitial(() -> {
 			try {
 				return Cipher.getInstance(Algorithm.AES_CBC_PKCS5Padding.getValue());
+			}
+			catch (Exception e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+		});
+
+		CIPHER_NORMAL = ThreadLocal.withInitial(() -> {
+			try {
+				return Cipher.getInstance(Algorithm.AES.getValue());
 			}
 			catch (Exception e) {
 				throw new RuntimeException(e.getMessage(), e);
@@ -65,31 +75,23 @@ public abstract class AES {
 		}
 	}
 
-	public static byte[] encrypt(byte[] rawData, byte[] key) throws Exception {
-		//使用CBC模式，需要一个向量iv，可增加加密算法的强度
-		SecretKeySpec keySpec = getKeySpec(key);
-		CIPHER.get().init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(keySpec.getEncoded()));
-		return CIPHER.get().doFinal(rawData);
+	public static byte[] encrypt(byte[] rawData, byte[] key, boolean isUseCBC) throws Exception {
+		Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, isUseCBC);
+		return cipher.doFinal(rawData);
 	}
 
-	public static byte[] decrypt(byte[] cipherData, byte[] key) throws Exception {
-		//使用CBC模式，需要一个向量iv，可增加加密算法的强度
-		SecretKeySpec keySpec = getKeySpec(key);
-		CIPHER.get().init(Cipher.DECRYPT_MODE, getKeySpec(key), new IvParameterSpec(keySpec.getEncoded()));
-		return CIPHER.get().doFinal(cipherData);
+	public static byte[] decrypt(byte[] cipherData, byte[] key, boolean isUseCBC) throws Exception {
+		Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, isUseCBC);
+		return cipher.doFinal(cipherData);
 	}
 
-	public static void encrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
-		SecretKeySpec keySpec = getKeySpec(key);
-		Cipher cipher = CIPHER.get();
-		cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(keySpec.getEncoded()));
+	public static void encrypt(InputStream in, OutputStream out, byte[] key, boolean isUseCBC) throws Exception {
+		Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, isUseCBC);
 		IOUtil.copy(new CipherInputStream(in, cipher), out);
 	}
 
-	public static void decrypt(InputStream in, OutputStream out, byte[] key) throws Exception{
-		SecretKeySpec keySpec = getKeySpec(key);
-		Cipher cipher = CIPHER.get();
-		cipher.init(Cipher.DECRYPT_MODE, getKeySpec(key), new IvParameterSpec(keySpec.getEncoded()));
+	public static void decrypt(InputStream in, OutputStream out, byte[] key, boolean isUseCBC) throws Exception {
+		Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, isUseCBC);
 		IOUtil.copy(in, new CipherOutputStream(out, cipher));
 	}
 
@@ -100,5 +102,20 @@ public abstract class AES {
 		SecretKeySpec secretKeySpec = new SecretKeySpec(key, Algorithm.AES.getValue());
 		byte[] encoded = secretKeySpec.getEncoded();
 		return new SecretKeySpec(encoded, Algorithm.AES.getValue());
+	}
+
+	private static Cipher initCipher(int mode, byte[] key, boolean isUseCBC) throws Exception {
+		SecretKeySpec keySpec = getKeySpec(key);
+		if (isUseCBC) {
+			Cipher cipher = CIPHER_CBC.get();
+			//使用CBC模式，需要一个向量iv，可增加加密算法的强度
+			cipher.init(mode, keySpec, new IvParameterSpec(keySpec.getEncoded()));
+			return cipher;
+		}
+		else {
+			Cipher cipher = CIPHER_NORMAL.get();
+			cipher.init(mode, keySpec);
+			return cipher;
+		}
 	}
 }

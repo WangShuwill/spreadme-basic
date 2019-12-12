@@ -65,8 +65,7 @@ public class IOTest {
 	@Test
 	public void testMessageDigestInputStream() throws Exception {
 		MessageDigest digest = Hash.getMessageDigest(Algorithm.SHA256);
-		try (FileInputStream in = new FileInputStream(testFileOne);
-			 MessageDigestInputStream digestInput = new MessageDigestInputStream(in, digest);
+		try (MessageDigestInputStream digestInput = new MessageDigestInputStream(IOUtil.toInputstream(testFileOne), digest);
 			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
@@ -140,7 +139,7 @@ public class IOTest {
 	}
 
 	@Test
-	public void testGetFileExtension(){
+	public void testGetFileExtension() {
 		final String fileName = ClassUtil.getClassPath() + File.separator + ZIP_FILE;
 		System.out.println(FileUtil.getExtension(fileName));
 	}

@@ -90,8 +90,8 @@ public class CryptTest {
 		Concurrents.startAllTaskInOnce(10, () -> {
 			final String data = "test";
 			byte[] key = AES.generateKey();
-			byte[] encrypt = AES.encrypt(data.getBytes(), key);
-			byte[] origin = AES.decrypt(encrypt, key);
+			byte[] encrypt = AES.encrypt(data.getBytes(), key, true);
+			byte[] origin = AES.decrypt(encrypt, key, true);
 			String result = String.format("The key is {%s}, the encrty is {%s}, the origin is {%s}",
 					Hex.toHexString(key), Hex.toHexString(encrypt), StringUtil.fromByteArray(origin));
 			Console.info(result);
@@ -144,17 +144,17 @@ public class CryptTest {
 	}
 
 	@Test
-	public void testAESFile() throws Exception{
-		try(BufferedInputStream in = new BufferedInputStream(new FileInputStream(testFile));
-			ByteArrayOutputStream out = new ByteArrayOutputStream()){
+	public void testAESFile() throws Exception {
+		try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(testFile));
+			 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
 			byte[] key = AES.generateKey();
-			AES.encrypt(in, out, key);
+			AES.encrypt(in, out, key, true);
 			Console.info(Hex.toHexString(out.toByteArray()));
 
 			ByteArrayInputStream bis = new ByteArrayInputStream(out.toByteArray());
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			AES.decrypt(bis, bos, key);
+			AES.decrypt(bis, bos, key, true);
 			Console.info(StringUtil.fromByteArray(bos.toByteArray()));
 		}
 	}
