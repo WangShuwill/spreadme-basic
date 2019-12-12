@@ -37,7 +37,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.spreadme.commons.io.ArchiveEntry;
 import org.spreadme.commons.io.FastByteArrayOutputStream;
+import org.spreadme.commons.io.RepeatableInputStream;
 import org.spreadme.commons.lang.FileWriteMode;
 import org.spreadme.commons.lang.LineIterator;
 
@@ -79,20 +82,20 @@ public abstract class IOUtil {
 	/**
 	 * copy ReadableByteChannel to WritableByteChannel
 	 *
-	 * @param readableChannel ReadableByteChannel
-	 * @param writableChannl WritableByteChannel
+	 * @param readableChan ReadableByteChannel
+	 * @param writableChan WritableByteChannel
 	 * @throws IOException IOException
 	 */
-	public static void copy(final ReadableByteChannel readableChannel, final WritableByteChannel writableChannl) throws IOException {
+	public static void copy(final ReadableByteChannel readableChan, final WritableByteChannel writableChan) throws IOException {
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
-		while (readableChannel.read(byteBuffer) != EOF) {
+		while (readableChan.read(byteBuffer) != EOF) {
 			byteBuffer.flip();
-			writableChannl.write(byteBuffer);
+			writableChan.write(byteBuffer);
 			byteBuffer.compact();
 		}
 		byteBuffer.flip();
 		while (byteBuffer.hasRemaining()) {
-			writableChannl.write(byteBuffer);
+			writableChan.write(byteBuffer);
 		}
 	}
 
@@ -166,6 +169,40 @@ public abstract class IOUtil {
 	}
 
 	/**
+	 * form path to inputstream
+	 *
+	 * @param path path
+	 * @param openOptions open options {@link OpenOption}
+	 * @return InputStream
+	 * @throws IOException IOException
+	 */
+	public static InputStream toInputstream(String path, OpenOption... openOptions) throws IOException {
+		return Files.newInputStream(Paths.get(path), openOptions);
+	}
+
+	/**
+	 * form file to inputstream
+	 *
+	 * @param file File
+	 * @param openOptions open options {@link OpenOption}
+	 * @return Inputstream
+	 * @throws IOException IOException
+	 */
+	public static InputStream toInputstream(File file, OpenOption... openOptions) throws IOException {
+		return Files.newInputStream(file.toPath(), openOptions);
+	}
+
+	/**
+	 * change inputstream to repeatable
+	 *
+	 * @param inputStream InputStream
+	 * @return RepeatableInputStream {@link RepeatableInputStream}
+	 */
+	public static RepeatableInputStream toRepeatable(InputStream inputStream) {
+		return new RepeatableInputStream(inputStream);
+	}
+
+	/**
 	 * read lines from reader
 	 *
 	 * @param input Reader
@@ -235,7 +272,7 @@ public abstract class IOUtil {
 	 * @param out OutputStream
 	 * @throws IOException IOException
 	 */
-	public static void zipFiles(List<File> files, OutputStream out) throws IOException{
+	public static void zipFiles(List<File> files, OutputStream out) throws IOException {
 		try (WritableByteChannel writableChann = Channels.newChannel(new BufferedOutputStream(out))) {
 			Pipe pipe = Pipe.open();
 			CompletableFuture.runAsync(() -> zipTask(pipe, files));
