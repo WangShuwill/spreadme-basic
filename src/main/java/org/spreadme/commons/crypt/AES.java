@@ -26,8 +26,6 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.spreadme.commons.util.IOUtil;
-
 /**
  * aes encrypt
  * @author shuwei.wang
@@ -75,26 +73,67 @@ public abstract class AES {
 		}
 	}
 
+	/**
+	 * encrypt data with aes
+	 *
+	 * @param rawData original data
+	 * @param key secret key
+	 * @param isUseCBC is use cbc mode
+	 * @return encrypt data
+	 * @throws Exception Exception
+	 */
 	public static byte[] encrypt(byte[] rawData, byte[] key, boolean isUseCBC) throws Exception {
 		Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, isUseCBC);
 		return cipher.doFinal(rawData);
 	}
 
+	/**
+	 * decrypt data with aes
+	 *
+	 * @param cipherData encrypt data
+	 * @param key secret key
+	 * @param isUseCBC is use cbc mode
+	 * @return original data
+	 * @throws Exception Exception
+	 */
 	public static byte[] decrypt(byte[] cipherData, byte[] key, boolean isUseCBC) throws Exception {
 		Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, isUseCBC);
 		return cipher.doFinal(cipherData);
 	}
 
-	public static void encrypt(InputStream in, OutputStream out, byte[] key, boolean isUseCBC) throws Exception {
+	/**
+	 * encrypt data by InputStream
+	 *
+	 * @param in InputStream
+	 * @param key secret key
+	 * @param isUseCBC is use cbc mode
+	 * @return CipherInputStream
+	 * @throws Exception Exception
+	 */
+	public static CipherInputStream encrypt(InputStream in, byte[] key, boolean isUseCBC) throws Exception {
 		Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, isUseCBC);
-		IOUtil.copy(new CipherInputStream(in, cipher), out);
+		return new CipherInputStream(in, cipher);
 	}
 
-	public static void decrypt(InputStream in, OutputStream out, byte[] key, boolean isUseCBC) throws Exception {
+	/**
+	 * decrypt data with InputStream
+	 *
+	 * @param out OutputStream
+	 * @param key secret key
+	 * @param isUseCBC is use cbc mode
+	 * @return CipherOutputStream
+	 * @throws Exception Exception
+	 */
+	public static CipherOutputStream decrypt(OutputStream out, byte[] key, boolean isUseCBC) throws Exception {
 		Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, isUseCBC);
-		IOUtil.copy(in, new CipherOutputStream(out, cipher));
+		return new CipherOutputStream(out, cipher);
 	}
 
+	/**
+	 * generate SecretKeySpec
+	 * @param key secret key byte array
+	 * @return SecretKeySpec
+	 */
 	private static SecretKeySpec getKeySpec(byte[] key) {
 		if (key.length != 16) {
 			key = KeyGen.extendKey(key);
@@ -104,6 +143,14 @@ public abstract class AES {
 		return new SecretKeySpec(encoded, Algorithm.AES.getValue());
 	}
 
+	/**
+	 * init cipher
+	 * @param mode cipher mode
+	 * @param key secret key
+	 * @param isUseCBC is use cbc mode
+	 * @return Cipher
+	 * @throws Exception Exception
+	 */
 	private static Cipher initCipher(int mode, byte[] key, boolean isUseCBC) throws Exception {
 		SecretKeySpec keySpec = getKeySpec(key);
 		if (isUseCBC) {

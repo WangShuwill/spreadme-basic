@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +35,7 @@ import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.lang.Console;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Concurrents;
+import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -145,17 +148,19 @@ public class CryptTest {
 
 	@Test
 	public void testAESFile() throws Exception {
-		try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(testFile));
-			 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+		try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(testFile))) {
 
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			byte[] key = AES.generateKey();
-			AES.encrypt(in, out, key, true);
+			InputStream cipherIn = AES.encrypt(in, key, true);
+			IOUtil.copy(cipherIn, out);
 			Console.info(Hex.toHexString(out.toByteArray()));
 
 			ByteArrayInputStream bis = new ByteArrayInputStream(out.toByteArray());
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			AES.decrypt(bis, bos, key, true);
-			Console.info(StringUtil.fromByteArray(bos.toByteArray()));
+			ByteArrayOutputStream outer = new ByteArrayOutputStream();
+			OutputStream cipherOut = AES.decrypt(outer, key, true);
+			IOUtil.copy(bis, cipherOut);
+			Console.info(new String(outer.toByteArray()));
 		}
 	}
 }
