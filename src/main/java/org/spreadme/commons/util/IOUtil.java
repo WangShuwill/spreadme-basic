@@ -203,6 +203,30 @@ public abstract class IOUtil {
 	}
 
 	/**
+	 *  form path to outputStream
+	 *
+	 * @param path path
+	 * @param openOptions open options {@link OpenOption}
+	 * @return OutputStream
+	 * @throws IOException IOException
+	 */
+	public static OutputStream toOutputstream(String path, OpenOption... openOptions) throws IOException {
+		return Files.newOutputStream(Paths.get(path), openOptions);
+	}
+
+	/**
+	 * form file to outputStream
+	 *
+	 * @param file file
+	 * @param openOptions open options {@link OpenOption}
+	 * @return OutputStream
+	 * @throws IOException IOException
+	 */
+	public static OutputStream toOutputstream(File file, OpenOption... openOptions) throws IOException {
+		return Files.newOutputStream(file.toPath(), openOptions);
+	}
+
+	/**
 	 * read lines from reader
 	 *
 	 * @param input Reader
@@ -413,18 +437,13 @@ public abstract class IOUtil {
 	 * @param resources Closeable resource
 	 */
 	public static void close(Closeable... resources) {
-		if (resources == null) {
-			return;
-		}
+		if (resources == null) return;
 		try {
 			for (Closeable resource : resources) {
-				if (resource != null) {
-					resource.close();
-				}
+				if (resource != null) resource.close();
 			}
 		}
 		catch (IOException ignore) {
-
 		}
 	}
 
