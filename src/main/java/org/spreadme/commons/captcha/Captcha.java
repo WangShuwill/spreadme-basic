@@ -34,7 +34,7 @@ public interface Captcha {
 	CaptchaCode create();
 
 	/**
-	 * 设置代码生成起
+	 * 设置代码生成器
 	 *
 	 * @param generator CodeGenerator
 	 * @return Captcha
@@ -43,10 +43,17 @@ public interface Captcha {
 
 	/**
 	 * 设置颜色
+	 *
 	 * @param hexColor hex color
 	 * @return Captcha
 	 */
 	Captcha color(String hexColor);
 
+	/**
+	 * 设置字体
+	 *
+	 * @param font font
+	 * @return Captcha
+	 */
 	Captcha font(Font font);
 }
