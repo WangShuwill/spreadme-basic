@@ -144,6 +144,18 @@ public abstract class IOUtil {
 	}
 
 	/**
+	 * string to file
+	 * @param content content
+	 * @param file file
+	 * @throws IOException IOException
+	 */
+	public static void toFile(String content, File file) throws IOException {
+		try(FileWriter writer = new FileWriter(file)){
+			writer.write(content);
+		}
+	}
+
+	/**
 	 * intputstream to file
 	 *
 	 * @param in InputStream
