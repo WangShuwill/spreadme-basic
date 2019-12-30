@@ -59,4 +59,8 @@ public final class Defaults {
 			return null;
 		}
 	}
+
+	public static <T> T of(Class<T> clazz) {
+		return defaultValue(clazz);
+	}
 }
