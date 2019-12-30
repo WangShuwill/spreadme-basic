@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.lang;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -93,6 +94,7 @@ public abstract class Dates {
 
 	/**
 	 * date to LocalDateTime
+	 *
 	 * @param date date
 	 * @return LocalDateTime
 	 */
@@ -183,6 +185,19 @@ public abstract class Dates {
 	public static Date toDate(LocalDateTime dateTime) {
 		ZoneId zoneId = ZoneId.systemDefault();
 		return Date.from(dateTime.atZone(zoneId).toInstant());
+	}
+
+	/**
+	 * get amount of time
+	 *
+	 * @param d1 from date
+	 * @param d2 to date
+	 * @return Duration {@link Duration}
+	 */
+	public static Duration getDuration(Date d1, Date d2) {
+		LocalDateTime dt1 = toLocalDataTime(d1);
+		LocalDateTime dt2 = toLocalDataTime(d2);
+		return Duration.between(dt1, dt2);
 	}
 
 	/**

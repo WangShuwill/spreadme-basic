@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
@@ -115,6 +116,9 @@ public class UtilTest {
 		Date date = Dates.parse("1993-12-12 12:00:09", "yyyy-MM-dd HH:mm:ss");
 		Console.info(date);
 		Console.info(Dates.getTimestamp());
+		Date toDate = new Date();
+		Duration duration = Dates.getDuration(date, toDate);
+		Console.info(duration.toDays());
 	}
 
 	@Test
