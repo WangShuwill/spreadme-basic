@@ -34,6 +34,7 @@ import org.spreadme.commons.util.IOUtil;
  * DES
  * @author shuwei.wang
  */
+@Deprecated
 public abstract class DES {
 
 	private static final ThreadLocal<Cipher> CIPHER;

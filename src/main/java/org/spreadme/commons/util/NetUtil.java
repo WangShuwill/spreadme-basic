@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.util;
 
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -76,6 +77,23 @@ public abstract class NetUtil {
 		}
 		catch (Exception e) {
 			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}
+
+	public static boolean isConnected(String url, int timeout) {
+		HttpURLConnection connection = null;
+		try {
+			URL u = new URL(url);
+			connection = (HttpURLConnection) u.openConnection();
+			return true;
+		}
+		catch (Exception ex) {
+			return false;
+		}
+		finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
 		}
 	}
 }

@@ -134,6 +134,7 @@ public class UtilTest {
 		final String hostIp = NetUtil.getIpByDomain(host);
 		Console.info(host);
 		Console.info(hostIp);
+		Console.info(NetUtil.isConnected("https://ci.qiyuesuo.me", 5000));
 		Console.info(NetUtil.isReachable(hostIp, 5000));
 	}
 
