@@ -80,6 +80,13 @@ public abstract class NetUtil {
 		}
 	}
 
+	/**
+	 * can connect the url
+	 *
+	 * @param url url
+	 * @param timeout timeout
+	 * @return is connected
+	 */
 	public static boolean isConnected(String url, int timeout) {
 		HttpURLConnection connection = null;
 		try {
