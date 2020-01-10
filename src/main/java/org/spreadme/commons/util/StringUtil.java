@@ -197,7 +197,7 @@ public abstract class StringUtil {
 	 * @param length 长度
 	 * @return 随机字符串
 	 */
-	public static String randomString(int length) {
+	public static String randomString(final int length) {
 		return randomString(STRINGS, length);
 	}
 
@@ -208,7 +208,7 @@ public abstract class StringUtil {
 	 * @param length 长度
 	 * @return 随机字符串
 	 */
-	public static String randomString(String base, int length) {
+	public static String randomString(String base, final int length) {
 		if (isBlank(base) || length < 1 || base.length() < length) {
 			return null;
 		}

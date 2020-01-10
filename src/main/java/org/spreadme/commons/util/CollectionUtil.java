@@ -33,14 +33,33 @@ import org.spreadme.commons.lang.Nullable;
  */
 public abstract class CollectionUtil {
 
+	/**
+	 * 判断集合是否为空（null或者没有元素）
+	 *
+	 * @param collection Collection
+	 * @return 是否为空
+	 */
 	public static boolean isEmpty(Collection<?> collection) {
 		return collection == null || collection.isEmpty();
 	}
 
+	/**
+	 * 判断集合是否不为空（不为null并且有元素）
+	 *
+	 * @param collection Collection
+	 * @return 是否不为空
+	 */
 	public static boolean isNotEmpty(Collection<?> collection) {
 		return collection != null && !collection.isEmpty();
 	}
 
+	/**
+	 * 可变参数转化为List
+	 *
+	 * @param data data
+	 * @param <E> E
+	 * @return List
+	 */
 	@SafeVarargs
 	public static <E> List<E> toList(E... data) {
 		if (data == null) {
@@ -49,6 +68,12 @@ public abstract class CollectionUtil {
 		return new ArrayList<>(Arrays.asList(data));
 	}
 
+	/**
+	 * Properties to Map
+	 *
+	 * @param props Properties
+	 * @return Map
+	 */
 	public static Map<String, Object> propertiesIntoMap(@Nullable Properties props) {
 		Map<String, Object> map = new HashMap<>();
 		if (props != null) {
@@ -63,5 +88,11 @@ public abstract class CollectionUtil {
 		}
 		return map;
 	}
-
+	
+	public static <E> Collection<E> addAll(Collection<E> all, Collection<E> sub) {
+		if (isNotEmpty(sub)) {
+			all.addAll(sub);
+		}
+		return all;
+	}
 }

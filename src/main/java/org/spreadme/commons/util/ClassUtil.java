@@ -57,8 +57,7 @@ public abstract class ClassUtil {
 	}
 
 	public static String getClassPath() {
-		return new File(Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath())
-				.getPath();
+		return new File(Objects.requireNonNull(getClassLoader().getResource(StringUtil.EMPTY)).getPath()).getPath();
 	}
 
 	public static InputStream getResourceAsStream(String resource) {

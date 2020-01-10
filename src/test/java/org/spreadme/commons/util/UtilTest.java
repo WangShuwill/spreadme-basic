@@ -141,7 +141,7 @@ public class UtilTest {
 	@Test
 	public void testStringifyException() {
 		try {
-			throw new IllegalStateException("StringifyException tes");
+			throw new IllegalStateException("StringifyException test");
 		}
 		catch (Exception ex) {
 			Console.info(StringUtil.stringifyException(ex));
