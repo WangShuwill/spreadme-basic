@@ -35,8 +35,12 @@ public abstract class Randoms {
 	}
 
 	public static SecureRandom getSecureRandom() {
+		return getSecureRandom("SHA1PRNG");
+	}
+
+	public static SecureRandom getSecureRandom(String algorithm){
 		try {
-			return SecureRandom.getInstance("SHA1PRNG");
+			return SecureRandom.getInstance(algorithm);
 		}
 		catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);

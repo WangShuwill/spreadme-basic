@@ -22,12 +22,13 @@ package org.spreadme.commons.util;
  */
 public abstract class MathUtil {
 
+	private static final int UNIT_SIZE = 1024;
 	private static final String[] UNITS = new String[] {"", "K", "M", "G", "T", "P", "E"};
 
 	public static String lengthToUnit(long length) {
-		for (int i = 6; i > 0; i--) {
+		for (int i = UNITS.length - 1; i > 0; i--) {
 			// 1024 is for 1024 kb is 1 MB etc
-			double step = Math.pow(1024, i);
+			double step = Math.pow(UNIT_SIZE, i);
 			if (length > step) {
 				return String.format("%3.1f%s", length / step, UNITS[i]);
 			}
