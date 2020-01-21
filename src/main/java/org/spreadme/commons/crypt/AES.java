@@ -151,7 +151,7 @@ public abstract class AES {
 	 * @return Cipher
 	 * @throws Exception Exception
 	 */
-	private static Cipher initCipher(int mode, byte[] key, boolean isUseCBC) throws Exception {
+	public static Cipher initCipher(int mode, byte[] key, boolean isUseCBC) throws Exception {
 		SecretKeySpec keySpec = getKeySpec(key);
 		if (isUseCBC) {
 			Cipher cipher = CIPHER_CBC.get();

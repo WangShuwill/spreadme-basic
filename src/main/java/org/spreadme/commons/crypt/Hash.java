@@ -48,7 +48,9 @@ public abstract class Hash {
 	 * 支持的Hash算法
 	 */
 	private static final List<Algorithm> SUPPORT_HASH_ALGO = CollectionUtil.toList(
-			Algorithm.SHA, Algorithm.SHA1, Algorithm.SHA224, Algorithm.SHA256, Algorithm.SHA384, Algorithm.SHA512, Algorithm.MD5
+			Algorithm.SHA, Algorithm.SHA1, Algorithm.SHA224,
+			Algorithm.SHA256, Algorithm.SHA384, Algorithm.SHA512,
+			Algorithm.MD5
 	);
 
 	private static final Map<Algorithm, ThreadLocal<MessageDigest>> MESSAGEDIGEST_MAP = new HashMap<>(SUPPORT_HASH_ALGO.size());

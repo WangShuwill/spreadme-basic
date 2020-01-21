@@ -200,6 +200,10 @@ public abstract class Dates {
 		return Duration.between(dt1, dt2);
 	}
 
+	public static Duration getDuration(LocalDateTime d1, LocalDateTime d2){
+		return Duration.between(d1, d2);
+	}
+
 	/**
 	 * 获取当前时间戳
 	 *

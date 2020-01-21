@@ -147,4 +147,11 @@ public class UtilTest {
 			Console.info(StringUtil.stringifyException(ex));
 		}
 	}
+
+	@Test
+	public void testStringLength(){
+		String string = "Hello你好";
+		Console.info(string.length());
+		Console.info(string.codePointCount(0, string.length()));
+	}
 }
