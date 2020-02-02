@@ -44,6 +44,8 @@ public abstract class Hash {
 
 	}
 
+	private static final int BUFFER_LENGTH = 8 * 1024;
+
 	/**
 	 * 支持的Hash算法
 	 */
@@ -97,13 +99,12 @@ public abstract class Hash {
 	 * @throws IOException IOException
 	 */
 	public static byte[] get(InputStream in, Algorithm algorithm) throws IOException {
-		int bufferLength = 8 * 1024;
-		byte[] buffer = new byte[bufferLength];
+		byte[] buffer = new byte[BUFFER_LENGTH];
 		int readed = in.read(buffer);
 		MessageDigest digest = getMessageDigest(algorithm);
 		while (readed > -1) {
 			digest.update(buffer, 0, readed);
-			readed = in.read(buffer, 0, bufferLength);
+			readed = in.read(buffer, 0, BUFFER_LENGTH);
 		}
 		return digest.digest();
 	}
