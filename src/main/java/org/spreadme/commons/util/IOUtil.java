@@ -106,12 +106,12 @@ public abstract class IOUtil {
 	 * @param destPath dest path
 	 * @throws IOException IOException
 	 */
-	public static void copyFile(final String srcPath, final String destPath) throws IOException {
+	public static void copy(final String srcPath, final String destPath) throws IOException {
 		File dest = new File(destPath);
 		if (!dest.exists()) {
 			dest = FileUtil.createFile(destPath, true);
 		}
-		copyFile(new File(srcPath), dest);
+		copy(new File(srcPath), dest);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public abstract class IOUtil {
 	 * @param dest dest file
 	 * @throws IOException IOException
 	 */
-	public static void copyFile(final File src, final File dest) throws IOException {
+	public static void copy(final File src, final File dest) throws IOException {
 		if (dest.exists() && dest.isDirectory()) {
 			throw new IOException("Destination '" + dest + "' exists but is a directory");
 		}

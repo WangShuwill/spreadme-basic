@@ -90,7 +90,7 @@ public class IOTest {
 		final String filePath = ClassUtil.getClassPath() + "/file/test.txt";
 		IOUtil.toFile(new ByteArrayInputStream(text.getBytes()), filePath);
 		final String destPath = ClassUtil.getClassPath() + "/cfile/test.txt";
-		IOUtil.copyFile(filePath, destPath);
+		IOUtil.copy(filePath, destPath);
 		try (FileInputStream in = new FileInputStream(new File(destPath))) {
 			System.out.println(IOUtil.readLines(in, StandardCharsets.UTF_8));
 		}
