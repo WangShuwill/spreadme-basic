@@ -41,4 +41,5 @@ public interface HttpClientResponse extends HttpMessage, Closeable {
 	 */
 	int getStatusCode() throws IOException;
 
+	String getResponseMessage() throws IOException;
 }

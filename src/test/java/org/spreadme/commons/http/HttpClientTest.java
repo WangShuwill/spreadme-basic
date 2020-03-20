@@ -16,6 +16,8 @@
 
 package org.spreadme.commons.http;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 
 import org.junit.Test;
@@ -34,13 +36,18 @@ public class HttpClientTest {
 	@Test
 	public void testClient() throws Exception {
 		HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
-		URI url = new URI("http://www.baidu.com");
-		HttpClientRequest request = requestFactory.createRequest(url, HttpMethod.GET, HttpHeader.DEFAULT.setHeader(HeaderType.ACCEPT_ENCODING, Charsets.UTF_8.name()));
+		URI url = new URI("http://app176.qiyuesuo.net/callback/category/draft");
+		HttpClientRequest request = requestFactory.createRequest(url, HttpMethod.POST, HttpHeader.DEFAULT.setHeader(HeaderType.ACCEPT_ENCODING, Charsets.UTF_8.name()));
+		String paramaters = "t";
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(request.getBody()));
+		writer.write(paramaters);
+		writer.close();
 		HttpClientResponse response = request.execute();
-		String result = StringUtil.fromInputStream(response.getBody());
-		System.out.println(result);
 		System.out.println(response.getHeader());
 		System.out.println(response.getStatusCode());
+		System.out.println(response.getResponseMessage());
+		String result = StringUtil.fromInputStream(response.getBody());
+		System.out.println(result);
 		response.close();
 	}
 }

@@ -53,6 +53,11 @@ public class DefaultHttpClientResponse implements HttpClientResponse {
 	}
 
 	@Override
+	public String getResponseMessage() throws IOException {
+		return this.connection.getResponseMessage();
+	}
+
+	@Override
 	public HttpHeader getHeader() {
 		HttpHeader httpHeader = new HttpHeader();
 		Map<String, List<String>> headers = this.connection.getHeaderFields();
