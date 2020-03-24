@@ -18,14 +18,11 @@ package org.spreadme.commons.http;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
-import java.net.URI;
 
 import org.junit.Test;
-import org.spreadme.commons.http.client.DefaultHttpClientRequestFactory;
-import org.spreadme.commons.http.client.HttpClientRequest;
-import org.spreadme.commons.http.client.HttpClientRequestFactory;
-import org.spreadme.commons.http.client.HttpClientResponse;
-import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.http.client.HttpClient;
+import org.spreadme.commons.http.client.HttpMessageReader;
+import org.spreadme.commons.http.client.HttpMessageWriter;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -35,19 +32,15 @@ public class HttpClientTest {
 
 	@Test
 	public void testClient() throws Exception {
-		HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
-		URI url = new URI("http://app176.qiyuesuo.net/callback/category/draft");
-		HttpClientRequest request = requestFactory.createRequest(url, HttpMethod.POST, HttpHeader.DEFAULT.setHeader(HeaderType.ACCEPT_ENCODING, Charsets.UTF_8.name()));
-		String paramaters = "t";
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(request.getBody()));
-		writer.write(paramaters);
-		writer.close();
-		HttpClientResponse response = request.execute();
-		System.out.println(response.getHeader());
-		System.out.println(response.getStatusCode());
-		System.out.println(response.getResponseMessage());
-		String result = StringUtil.fromInputStream(response.getBody());
+		String url = "http://app176.qiyuesuo.net/callback/category/draft";
+		HttpMessageWriter writer = (out) -> {
+			String paramaters = "t";
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
+			bufferedWriter.write(paramaters);
+			bufferedWriter.close();
+		};
+		HttpMessageReader<String> reader = StringUtil::fromInputStream;
+		String result = HttpClient.execute(url, HttpMethod.POST, HttpHeader.DEFAULT, writer, reader).get();
 		System.out.println(result);
-		response.close();
 	}
 }
