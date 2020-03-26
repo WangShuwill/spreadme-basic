@@ -17,12 +17,11 @@
 package org.spreadme.commons.http.client;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author shuwei.wang
  */
 public interface HttpMessageReader<T> {
 
-	T reader(InputStream in) throws IOException;
+	T reader(HttpClientResponse response) throws IOException;
 }

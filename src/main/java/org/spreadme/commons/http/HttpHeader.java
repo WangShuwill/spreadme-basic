@@ -19,6 +19,7 @@ package org.spreadme.commons.http;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Http Header
@@ -38,6 +39,10 @@ public class HttpHeader implements Iterable<HttpHeader.HttpHeaderProperty> {
 	public HttpHeader setHeader(String key, String value) {
 		properties.add(new HttpHeaderProperty(key, value));
 		return this;
+	}
+
+	public Optional<HttpHeaderProperty> getHeader(String key) {
+		return this.properties.stream().filter(p -> p.getKey().equals(key)).findAny();
 	}
 
 	@Override

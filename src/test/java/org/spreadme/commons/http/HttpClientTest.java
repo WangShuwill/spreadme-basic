@@ -39,7 +39,11 @@ public class HttpClientTest {
 			bufferedWriter.write(paramaters);
 			bufferedWriter.close();
 		};
-		HttpMessageReader<String> reader = StringUtil::fromInputStream;
+		HttpMessageReader<String> reader = response -> {
+			System.out.println(response.getHeader());
+			System.out.println(HttpClient.isGzip(response.getHeader()));
+			return StringUtil.fromInputStream(response.getBody());
+		};
 		String result = HttpClient.execute(url, HttpMethod.POST, HttpHeader.DEFAULT, writer, reader).get();
 		System.out.println(result);
 	}

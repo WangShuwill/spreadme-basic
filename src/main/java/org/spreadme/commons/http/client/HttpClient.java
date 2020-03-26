@@ -17,13 +17,17 @@
 package org.spreadme.commons.http.client;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import org.spreadme.commons.http.HeaderType;
 import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
 import org.spreadme.commons.util.IOUtil;
@@ -34,6 +38,9 @@ import org.spreadme.commons.util.StringUtil;
  * @author shuwei.wang
  */
 public class HttpClient {
+
+	public static final String TWO_HYPHENS = "--";
+	public static final String LINE_END = "\r\n";
 
 	public static <T> CompletableFuture<T> execute(final String url, HttpMethod method, HttpHeader header,
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) {
@@ -46,7 +53,8 @@ public class HttpClient {
 					messageWriter.write(request.getBody());
 				}
 				HttpClientResponse response = request.execute();
-				T result = messageReader.reader(response.getBody());
+				response.getHeader();
+				T result = messageReader.reader(response);
 				response.close();
 				return result;
 			}
@@ -58,17 +66,14 @@ public class HttpClient {
 	}
 
 	public static <T> CompletableFuture<T> doGet(String url, Map<String, Object> params, HttpHeader header, HttpMessageReader<T> reader) {
-		String param = params.entrySet().stream().map(e -> e.getValue() + "=" + e.getValue()).collect(Collectors.joining("&"));
+		String param = params.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
 		return execute(url + "?" + param, HttpMethod.GET, header, null, reader);
 	}
 
 	public static String doGet(String url, Map<String, Object> params) {
-		CompletableFuture<String> future = doGet(url, params, null, in -> {
-			try {
+		CompletableFuture<String> future = doGet(url, params, HttpHeader.DEFAULT, r -> {
+			try (InputStream in = r.getBody()) {
 				return StringUtil.fromInputStream(in);
-			}
-			finally {
-				IOUtil.close(in);
 			}
 		});
 		try {
@@ -77,5 +82,51 @@ public class HttpClient {
 		catch (InterruptedException | ExecutionException ex) {
 			throw new IllegalStateException(ex);
 		}
+	}
+
+	public String buildFormData(final String boundary, final String key, final String value) {
+		StringBuilder param = new StringBuilder();
+		param.append(TWO_HYPHENS).append(boundary).append(LINE_END);
+		param.append("Content-Disposition: form-data;")
+				.append("name").append("=").append("\"").append(key).append("\"")
+				.append(LINE_END);
+		param.append("Content-Type: text/plain").append(LINE_END);
+		param.append("Content-Lenght: ").append(value.length()).append(LINE_END);
+		param.append(LINE_END).append(value).append(LINE_END);
+		return param.toString();
+	}
+
+	public void buildMultipart(final String boundary, final String key, final String filename,
+			final InputStream input, final OutputStream output) throws IOException {
+
+		StringBuilder param = new StringBuilder();
+		param.append(LINE_END).append(TWO_HYPHENS).append(boundary).append(LINE_END);
+		param.append("Content-Disposition: form-data;")
+				.append("name").append("=").append("\"").append(key).append("\";")
+				.append("filename").append("=").append("\"").append(filename).append("\"")
+				.append(LINE_END);
+		param.append("Content-Type: " + "file/*").append(LINE_END);
+		param.append("Content-Lenght: " + "file/*").append(LINE_END).append(LINE_END);
+
+		output.write(param.toString().getBytes());
+		IOUtil.copy(input, output);
+	}
+
+	/**
+	 * 写结束标记位
+	 * @param boundary boundary
+	 * @param output OutputStream
+	 * @throws IOException IOException
+	 */
+	public void buildEOF(final String boundary, final OutputStream output) throws IOException {
+		byte[] endData = (LINE_END + TWO_HYPHENS + boundary + TWO_HYPHENS + LINE_END).getBytes();
+		output.write(endData);
+		output.flush();
+	}
+
+	public static boolean isGzip(HttpHeader httpHeader) {
+		Optional<HttpHeader.HttpHeaderProperty> property = httpHeader.getHeader(HeaderType.CONTENT_ENCODING);
+		return property.isPresent() && StringUtil.isNotBlank(property.get().getValue())
+				&& property.get().getValue().contains("gzip");
 	}
 }
