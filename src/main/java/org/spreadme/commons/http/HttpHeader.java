@@ -41,6 +41,11 @@ public class HttpHeader implements Iterable<HttpHeader.HttpHeaderProperty> {
 		return this;
 	}
 
+	public HttpHeader setContentType(String contentType){
+		properties.add(new HttpHeaderProperty(HeaderType.CONTENT_TYPE, contentType));
+		return this;
+	}
+
 	public Optional<HttpHeaderProperty> getHeader(String key) {
 		return this.properties.stream().filter(p -> p.getKey().equals(key)).findAny();
 	}
