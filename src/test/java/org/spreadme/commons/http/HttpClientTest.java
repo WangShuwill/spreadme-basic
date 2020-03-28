@@ -19,21 +19,16 @@ package org.spreadme.commons.http;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.spreadme.commons.http.client.HttpClient;
 import org.spreadme.commons.http.client.HttpMessageReader;
 import org.spreadme.commons.http.client.HttpMessageWriter;
+import org.spreadme.commons.lang.LocalMimeResource;
 import org.spreadme.commons.lang.MimeResource;
 import org.spreadme.commons.lang.MimeType;
 import org.spreadme.commons.util.ClassUtil;
-import org.spreadme.commons.util.FileUtil;
 import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
 
@@ -43,7 +38,7 @@ import org.spreadme.commons.util.StringUtil;
 public class HttpClientTest {
 
 	@Test
-	public void testClient() throws Exception {
+	public void testClient() {
 		String url = "http://app176.qiyuesuo.net/callback/category/draft";
 		HttpMessageWriter writer = (out) -> {
 			String paramaters = "t";
@@ -61,35 +56,16 @@ public class HttpClientTest {
 	}
 
 	@Test
-	public void testPostFile() throws Exception {
-		final String url = "http://192.168.50.103:8090/word/topdf";
-		final String path = "/Users/wangshuwei/Downloads/documents/";
+	public void testPostFile() {
+		final String url = "http://10.147.18.20:8090/word/topdf";
+		final String path = "/Users/wangshuwei/Downloads/documents/电子数据存证报告-完整版（需求完整版）190916 .docx";
 
-		final List<File> files = FileUtil.getFiles(path, file -> {
-			String ext = FileUtil.getExtension(file.getName());
-			return "doc".equals(ext) || "docx".equals(ext);
+		MimeResource resource = new LocalMimeResource(path, MimeType.DOCX);
+		HttpParam param = new HttpParam().add("file", resource);
+		HttpClient httpClient = new HttpClient();
+		httpClient.post(url, param, HttpHeader.DEFAULT, r -> {
+			IOUtil.toFile(r.getBody(), ClassUtil.getClassPath() + File.separator + UUID.randomUUID().toString() + ".pdf");
+			return true;
 		});
-
-		final int count = files.size();
-		final AtomicInteger atomic = new AtomicInteger(count);
-		final CountDownLatch downLatch = new CountDownLatch(count);
-
-		ExecutorService executorService = Executors.newFixedThreadPool(count);
-		for (int i = 0; i < count; i++) {
-			executorService.submit(() -> {
-				int index = atomic.decrementAndGet();
-				System.out.println(index);
-				MimeResource resource = new LocalMimeResource(files.get(index).getPath(), MimeType.DOCX);
-				HttpParam param = new HttpParam().add("file", resource);
-				HttpClient httpClient = new HttpClient();
-				httpClient.post(url, param, HttpHeader.DEFAULT, r -> {
-					IOUtil.toFile(r.getBody(), ClassUtil.getClassPath() + File.separator + UUID.randomUUID().toString() + ".pdf");
-					return true;
-				});
-				downLatch.countDown();
-			});
-		}
-		downLatch.await();
-		executorService.shutdown();
 	}
 }

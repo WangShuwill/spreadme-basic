@@ -17,6 +17,7 @@
 package org.spreadme.commons.http.client;
 
 import java.io.InputStream;
+import java.net.Proxy;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -34,11 +35,18 @@ import org.spreadme.commons.util.StringUtil;
  */
 public class HttpClient {
 
+	private int connectTimeout = -1;
+	private int readTimeout = -1;
+	private Proxy proxy;
+
 	public <T> T execute(final String url, HttpMethod method, HttpHeader header,
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) {
 
 		try {
 			HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
+			requestFactory.setConnectTimeout(this.connectTimeout);
+			requestFactory.setReadTimeout(this.readTimeout);
+			requestFactory.setProxy(this.proxy);
 			HttpClientRequest request = requestFactory.createRequest(new URI(url), method, header);
 			if (messageWriter != null) {
 				messageWriter.write(request.getBody());
@@ -80,5 +88,17 @@ public class HttpClient {
 			byte[] content = param.getParams().isEmpty() ? new byte[0] : param.getQueryString().getBytes(Charsets.UTF_8);
 			return execute(url, HttpMethod.POST, header, out -> out.write(content), reader);
 		}
+	}
+
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
+
+	public void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	public void setProxy(Proxy proxy) {
+		this.proxy = proxy;
 	}
 }

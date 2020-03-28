@@ -1,5 +1,5 @@
 /*
- * Copyright [3/26/20 5:28 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [3/27/20 8:40 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.http;
+package org.spreadme.commons.lang;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.spreadme.commons.lang.MimeResource;
-import org.spreadme.commons.lang.MimeType;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * LocalMimeResource
@@ -52,7 +50,7 @@ public class LocalMimeResource implements MimeResource {
 
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return new FileInputStream(this.file);
+		return Files.newInputStream(Paths.get(this.path));
 	}
 
 	@Override
@@ -60,7 +58,6 @@ public class LocalMimeResource implements MimeResource {
 		return "LocalMimeResource{" +
 				"path='" + path + '\'' +
 				", mimeType=" + mimeType +
-				", file=" + file +
 				'}';
 	}
 }
