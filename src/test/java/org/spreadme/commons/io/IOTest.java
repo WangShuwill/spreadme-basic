@@ -50,7 +50,7 @@ public class IOTest {
 
 	private static final String TEST_FILE_NAME_TWO = "CORE_TEST_FILE_ONE.txt";
 
-	private static final String ZIP_FILE = "jre6.zip";
+	private static final String ZIP_FILE = "test.zip";
 
 	private File testFileOne = null;
 
@@ -111,11 +111,8 @@ public class IOTest {
 
 	@Test
 	public void testZipFiles() throws IOException {
-		File f1 = new File("/Users/wangshuwei/Downloads/jre/jre6");
-		File f2 = new File("/Users/wangshuwei/Downloads/jre/jre7");
-		File f3 = new File("/Users/wangshuwei/Downloads/jre/jre8");
-		List<File> files = CollectionUtil.toList(f1, f2, f3);
-		File zipFile = new File(ClassUtil.getClassPath() + "text.zip");
+		List<File> files = CollectionUtil.toList(testFileOne, testFileTwo);
+		File zipFile = new File(ClassUtil.getClassPath() + File.separator + ZIP_FILE);
 		IOUtil.zipFiles(zipFile, files);
 	}
 

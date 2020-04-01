@@ -25,6 +25,7 @@ import java.lang.management.ThreadMXBean;
  * CPUMonitor
  * @author shuwei.wang
  */
+@Deprecated
 public class CPUMonitor {
 
 	private static CPUMonitor instance = new CPUMonitor();

@@ -16,15 +16,33 @@
 
 package org.spreadme.commons.http;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.OutputStreamWriter;
+import java.util.UUID;
+
 import org.junit.Test;
+import org.spreadme.commons.http.client.HttpClient;
+import org.spreadme.commons.http.client.HttpMessageReader;
+import org.spreadme.commons.http.client.HttpMessageWriter;
 import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
+import org.spreadme.commons.lang.LocalMimeResource;
+import org.spreadme.commons.lang.MimeResource;
+import org.spreadme.commons.lang.MimeType;
+import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.IOUtil;
+import org.spreadme.commons.util.StringUtil;
 
 /**
  * @author shuwei.wang
  */
 public class HttpTest {
+
+	private static final String TEST_FILE_NAME_ONE = "CORE_TEST_FILE_ONE.txt";
+	private static final String POST_FILE_PATH = ClassUtil.getClassPath() + File.separator + TEST_FILE_NAME_ONE;
+	private static final String URL = "http://app176.qiyuesuo.net/callback/category/draft";
 
 	@Test
 	public void testUserAgent() {
@@ -36,5 +54,33 @@ public class HttpTest {
 		Browser browser = UserAgent.getBrowser(useragent);
 		System.out.println("Browswe Name: " + browser.getName());
 		System.out.println("Browser Version: " + browser.getVersion());
+	}
+
+	@Test
+	public void testClient() {
+		HttpMessageWriter writer = (out) -> {
+			String paramaters = "t";
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
+			bufferedWriter.write(paramaters);
+			bufferedWriter.close();
+		};
+		HttpMessageReader<String> reader = response -> {
+			System.out.println(response.getHeader());
+			return StringUtil.fromInputStream(response.getBody());
+		};
+		HttpClient httpClient = new HttpClient();
+		String result = httpClient.execute(URL, HttpMethod.POST, HttpHeader.DEFAULT, writer, reader);
+		System.out.println(result);
+	}
+
+	public void testPostFile() {
+		MimeResource resource = new LocalMimeResource(POST_FILE_PATH, MimeType.DOCX);
+		HttpParam param = new HttpParam().add("file", resource);
+		HttpClient httpClient = new HttpClient();
+		httpClient.setConnectTimeout(10);
+		httpClient.post(URL, param, HttpHeader.DEFAULT, r -> {
+			IOUtil.toFile(r.getBody(), ClassUtil.getClassPath() + File.separator + UUID.randomUUID().toString() + ".pdf");
+			return true;
+		});
 	}
 }

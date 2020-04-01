@@ -87,8 +87,8 @@ public class UtilTest {
 		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
 			try {
 				String dateCreate = "19:30:55 03.05.2015";
-				sdf.parse(dateCreate);
-				//Dates.parse(dateCreate, FORMATTER);
+				//sdf.parse(dateCreate);
+				Dates.parse(dateCreate, FORMATTER);
 			}
 			catch (Exception ex) {
 				ex.printStackTrace();

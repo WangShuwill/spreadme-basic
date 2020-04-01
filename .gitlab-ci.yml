@@ -1,6 +1,8 @@
 stages:
   - clean
   - compile
+  - test
+
 clean:
   stage: clean
   script:
@@ -10,3 +12,8 @@ compile:
   stage: compile
   script:
     - mvn compile
+
+test:
+  stage: test
+  script:
+    - mvn test
