@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.spreadme.commons.lang.MimeResource;
+import org.spreadme.commons.util.StringUtil;
 
 /**
  * Http Parameter
@@ -56,7 +57,8 @@ public class HttpParam {
 
 	public String getQueryString() {
 		return params.entrySet().stream()
-				.map(e -> e.getKey() + "=" + e.getValue())
+				.filter(e -> StringUtil.isNotBlank(e.getKey()))
+				.map(e -> e.getKey() + "=" + StringUtil.noneNullString(e.getValue()))
 				.collect(Collectors.joining("&"));
 	}
 
