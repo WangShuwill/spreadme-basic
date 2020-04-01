@@ -71,9 +71,9 @@ public class DefaultHttpClientResponse implements HttpClientResponse {
 
 	@Override
 	public void close() {
+		IOUtil.close(this.inputStream);
 		if (connection != null) {
 			connection.disconnect();
 		}
-		IOUtil.close(this.inputStream);
 	}
 }

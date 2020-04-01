@@ -17,6 +17,7 @@
 package org.spreadme.commons.http.client;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.net.URI;
 
 import org.spreadme.commons.http.HttpHeader;
@@ -26,8 +27,25 @@ import org.spreadme.commons.http.HttpMethod;
  * Http Client Request Factory
  * @author shuwei.wang
  */
-@FunctionalInterface
 public interface HttpClientRequestFactory {
+
+	/**
+	 * set proxy
+	 * @param proxy proxy
+	 */
+	void setProxy(Proxy proxy);
+
+	/**
+	 * set the connect timeou
+	 * @param connectTimeout connect time out
+	 */
+	void setConnectTimeout(int connectTimeout);
+
+	/**
+	 * set read timeout
+	 * @param readTimeout read timeout
+	 */
+	void setReadTimeout(int readTimeout);
 
 	/**
 	 * Create a new {@link HttpClientRequest} for the specified URI and HTTP method.

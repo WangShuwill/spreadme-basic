@@ -16,17 +16,17 @@
 
 package org.spreadme.commons.http.client;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.net.Proxy;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
+import org.spreadme.commons.http.ContentType;
 import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
-import org.spreadme.commons.util.IOUtil;
+import org.spreadme.commons.http.HttpParam;
+import org.spreadme.commons.lang.Charsets;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -35,47 +35,70 @@ import org.spreadme.commons.util.StringUtil;
  */
 public class HttpClient {
 
-	public static <T> CompletableFuture<T> execute(final String url, HttpMethod method, HttpHeader header,
+	private int connectTimeout = -1;
+	private int readTimeout = -1;
+	private Proxy proxy;
+
+	public <T> T execute(final String url, HttpMethod method, HttpHeader header,
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) {
 
-		return CompletableFuture.supplyAsync(() -> {
-			try {
-				HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
-				HttpClientRequest request = requestFactory.createRequest(new URI(url), method, header);
-				if (messageWriter != null) {
-					messageWriter.write(request.getBody());
-				}
-				HttpClientResponse response = request.execute();
-				T result = messageReader.reader(response.getBody());
-				response.close();
-				return result;
-			}
-			catch (IOException | URISyntaxException ex) {
-				throw new IllegalStateException(ex);
-			}
-
-		});
-	}
-
-	public static <T> CompletableFuture<T> doGet(String url, Map<String, Object> params, HttpHeader header, HttpMessageReader<T> reader) {
-		String param = params.entrySet().stream().map(e -> e.getValue() + "=" + e.getValue()).collect(Collectors.joining("&"));
-		return execute(url + "?" + param, HttpMethod.GET, header, null, reader);
-	}
-
-	public static String doGet(String url, Map<String, Object> params) {
-		CompletableFuture<String> future = doGet(url, params, null, in -> {
-			try {
-				return StringUtil.fromInputStream(in);
-			}
-			finally {
-				IOUtil.close(in);
-			}
-		});
 		try {
-			return future.get();
+			HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
+			requestFactory.setConnectTimeout(this.connectTimeout);
+			requestFactory.setReadTimeout(this.readTimeout);
+			requestFactory.setProxy(this.proxy);
+			HttpClientRequest request = requestFactory.createRequest(new URI(url), method, header);
+			if (messageWriter != null) {
+				messageWriter.write(request.getBody());
+			}
+			HttpClientResponse response = request.execute();
+			response.getHeader();
+			T result = messageReader.reader(response);
+			response.close();
+			return result;
 		}
-		catch (InterruptedException | ExecutionException ex) {
+		catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}
+	}
+
+	public <T> T get(String url, Map<String, String> params, HttpHeader header, HttpMessageReader<T> reader) {
+		HttpParam param = new HttpParam(params);
+		//TODO URLEcode
+		return execute(url + "?" + param.getQueryString(), HttpMethod.GET, header, null, reader);
+	}
+
+	public String get(String url, Map<String, String> params) {
+		return get(url, params, HttpHeader.DEFAULT, r -> {
+			try (InputStream in = r.getBody()) {
+				return StringUtil.fromInputStream(in);
+			}
+		});
+	}
+
+	public <T> T post(String url, HttpParam param, HttpHeader header, HttpMessageReader<T> reader) {
+		final Charset charset = Charsets.UTF_8;
+		if (param.isMultiPart()) {
+			final String boundary = StringUtil.randomString(36);
+			header.setContentType(ContentType.MULTIPART + ";charset=" + charset + ";boundary=" + boundary);
+			return execute(url, HttpMethod.POST, header, new FormHttpMessageWriter(param, charset, boundary), reader);
+		}
+		else {
+			header.setContentType(ContentType.FORM_URLENCODED + ";charset=" + charset);
+			byte[] content = param.getParams().isEmpty() ? new byte[0] : param.getQueryString().getBytes(Charsets.UTF_8);
+			return execute(url, HttpMethod.POST, header, out -> out.write(content), reader);
+		}
+	}
+
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
+
+	public void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	public void setProxy(Proxy proxy) {
+		this.proxy = proxy;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright [3/23/20 8:52 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [3/26/20 2:51 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,63 +16,66 @@
 
 package org.spreadme.commons.http;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.spreadme.commons.util.IOUtil;
+import org.spreadme.commons.lang.MimeResource;
+import org.spreadme.commons.util.StringUtil;
 
 /**
- * http request param
+ * Http Parameter
  * @author shuwei.wang
  */
 public class HttpParam {
 
-	public static final String TWO_HYPHENS = "--";
-	public static final String LINE_END = "\r\n";
+	private boolean isMultiPart = false;
+	private Map<String, String> params = new LinkedHashMap<>();
+	private Map<String, MimeResource> multipart = new LinkedHashMap<>();
 
-	public static String buildFormData(final String boundary, final String key, final String value) {
-		StringBuilder param = new StringBuilder();
-		param.append(TWO_HYPHENS).append(boundary).append(LINE_END);
-		param.append("Content-Disposition: form-data;")
-				.append("name").append("=").append("\"").append(key).append("\"")
-				.append(LINE_END);
-		param.append("Content-Type: text/plain").append(LINE_END);
-		param.append("Content-Lenght: ").append(value.length()).append(LINE_END);
-		param.append(LINE_END).append(value).append(LINE_END);
-		return param.toString();
+	public HttpParam() {
 	}
 
-	public static void buildMultipart(final String boundary, final String key, final String filename,
-			final InputStream input, final OutputStream output) throws IOException {
-
-		StringBuilder param = new StringBuilder();
-		param.append(LINE_END).append(TWO_HYPHENS).append(boundary).append(LINE_END);
-		param.append("Content-Disposition: form-data;")
-				.append("name").append("=").append("\"").append(key).append("\";")
-				.append("filename").append("=").append("\"").append(filename).append("\"")
-				.append(LINE_END);
-		param.append("Content-Type: " + "file/*").append(LINE_END);
-		param.append("Content-Lenght: " + "file/*").append(LINE_END).append(LINE_END);
-
-		output.write(param.toString().getBytes());
-		IOUtil.copy(input, output);
+	public HttpParam(Map<String, String> params) {
+		this.params.putAll(params);
 	}
 
-	/**
-	 * 写结束标记位
-	 * @param boundary boundary
-	 * @param output OutputStream
-	 * @throws IOException IOException
-	 */
-	public static void buildEOF(final String boundary, final OutputStream output) throws IOException {
-		byte[] endData = (LINE_END + TWO_HYPHENS + boundary + TWO_HYPHENS + LINE_END).getBytes();
-		output.write(endData);
-		output.flush();
+	public HttpParam add(String key, Object value) {
+		if (value instanceof MimeResource) {
+			this.isMultiPart = true;
+			this.multipart.put(key, (MimeResource) value);
+		}
+		else {
+			this.params.put(key, String.valueOf(value));
+		}
+		return this;
 	}
 
-	//TODO
-	public void write(OutputStream out){
+	public boolean isMultiPart() {
+		return this.isMultiPart;
+	}
 
+	public String getQueryString() {
+		return params.entrySet().stream()
+				.filter(e -> StringUtil.isNotBlank(e.getKey()))
+				.map(e -> e.getKey() + "=" + StringUtil.noneNullString(e.getValue()))
+				.collect(Collectors.joining("&"));
+	}
+
+	public Map<String, String> getParams() {
+		return params;
+	}
+
+	public Map<String, MimeResource> getMultipart() {
+		return multipart;
+	}
+
+	@Override
+	public String toString() {
+		return "HttpParam{" +
+				"isMultiPart=" + isMultiPart +
+				", params=" + params +
+				", multipart=" + multipart +
+				'}';
 	}
 }

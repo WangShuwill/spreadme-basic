@@ -1,5 +1,5 @@
 /*
- * Copyright [3/23/20 10:29 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [3/26/20 2:54 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.http.client;
-
-import java.io.IOException;
+package org.spreadme.commons.lang;
 
 /**
+ * Serializer
  * @author shuwei.wang
  */
-public interface HttpMessageReader<T> {
+public interface Serializer<T> {
 
-	T reader(HttpClientResponse response) throws IOException;
+	byte[] serialize(T t);
+
+	T deserialize(byte[] data);
 }

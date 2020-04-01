@@ -38,7 +38,7 @@ public abstract class KeyGen {
 	}
 
 	public static byte[] extendKey(byte[] key) {
-		key = Hash.toHexString(key, null, 0, Algorithm.MD5).getBytes();
+		key = Digest.toHexString(key, null, 0, Algorithm.MD5).getBytes();
 		key = Arrays.copyOf(key, key.length / 2);
 		return key;
 	}

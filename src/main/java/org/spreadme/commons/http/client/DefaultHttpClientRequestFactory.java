@@ -87,14 +87,17 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 		connection.setRequestMethod(httpMethod.name());
 	}
 
+	@Override
 	public void setProxy(Proxy proxy) {
 		this.proxy = proxy;
 	}
 
+	@Override
 	public void setConnectTimeout(int connectTimeout) {
 		this.connectTimeout = connectTimeout;
 	}
 
+	@Override
 	public void setReadTimeout(int readTimeout) {
 		this.readTimeout = readTimeout;
 	}

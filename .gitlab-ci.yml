@@ -1,0 +1,25 @@
+stages:
+  - clean
+  - compile
+  - test
+  - install
+
+clean:
+  stage: clean
+  script:
+    - mvn clean
+
+compile:
+  stage: compile
+  script:
+    - mvn compile
+
+test:
+  stage: test
+  script:
+    - mvn test
+
+install:
+  stage: install
+  script:
+    - mvn install

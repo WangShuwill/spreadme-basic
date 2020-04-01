@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
-import org.spreadme.commons.crypt.Hash;
+import org.spreadme.commons.crypt.Digest;
 import org.spreadme.commons.lang.Charsets;
 import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.system.SystemInfo;
@@ -50,7 +50,7 @@ public class IOTest {
 
 	private static final String TEST_FILE_NAME_TWO = "CORE_TEST_FILE_ONE.txt";
 
-	private static final String ZIP_FILE = "jre6.zip";
+	private static final String ZIP_FILE = "test.zip";
 
 	private File testFileOne = null;
 
@@ -64,13 +64,13 @@ public class IOTest {
 
 	@Test
 	public void testMessageDigestInputStream() throws Exception {
-		MessageDigest digest = Hash.getMessageDigest(Algorithm.SHA256);
+		MessageDigest digest = Digest.getMessageDigest(Algorithm.SHA256);
 		try (MessageDigestInputStream digestInput = new MessageDigestInputStream(IOUtil.toInputstream(testFileOne), digest);
 			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
 			System.out.println(Hex.toHexString(digest.digest()));
-			System.out.println(Hash.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+			System.out.println(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
 		}
 	}
 
@@ -111,11 +111,8 @@ public class IOTest {
 
 	@Test
 	public void testZipFiles() throws IOException {
-		File f1 = new File("/Users/wangshuwei/Downloads/jre/jre6");
-		File f2 = new File("/Users/wangshuwei/Downloads/jre/jre7");
-		File f3 = new File("/Users/wangshuwei/Downloads/jre/jre8");
-		List<File> files = CollectionUtil.toList(f1, f2, f3);
-		File zipFile = new File(ClassUtil.getClassPath() + "text.zip");
+		List<File> files = CollectionUtil.toList(testFileOne, testFileTwo);
+		File zipFile = new File(ClassUtil.getClassPath() + File.separator + ZIP_FILE);
 		IOUtil.zipFiles(zipFile, files);
 	}
 

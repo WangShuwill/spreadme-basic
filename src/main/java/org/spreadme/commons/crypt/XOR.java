@@ -18,7 +18,8 @@ package org.spreadme.commons.crypt;
 
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+
+import org.spreadme.commons.lang.Charsets;
 
 /**
  * 异或运算加解密
@@ -27,7 +28,7 @@ import java.nio.charset.StandardCharsets;
  */
 public abstract class XOR {
 
-	private static Charset charset = StandardCharsets.UTF_8;
+	private static Charset charset = Charsets.UTF_8;
 
 	private static byte[] keyBytes = {'(', 'X', 'O', 'R', '!', '@', '#', '$', 'K', 'E', 'Y', '%', '^', '&', '*', ')'};
 

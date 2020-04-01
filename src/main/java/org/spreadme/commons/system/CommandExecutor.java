@@ -35,7 +35,7 @@ import org.spreadme.commons.util.StringUtil;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public class ProcessExecutor {
+public class CommandExecutor {
 
 	public static Runtime runtime = Runtime.getRuntime();
 
@@ -53,7 +53,7 @@ public class ProcessExecutor {
 
 	private StringBuilder plainCommand;
 
-	private ProcessExecutor(String program, String command, Stack<CommandParam> params) {
+	private CommandExecutor(String program, String command, Stack<CommandParam> params) {
 		this.program = program;
 		this.command = command;
 		this.params = params;
@@ -84,8 +84,8 @@ public class ProcessExecutor {
 			return this;
 		}
 
-		public ProcessExecutor build() {
-			ProcessExecutor processExe = new ProcessExecutor(program, command, params);
+		public CommandExecutor build() {
+			CommandExecutor processExe = new CommandExecutor(program, command, params);
 			processExe.plainCommand = new StringBuilder(program).append(command);
 			for (CommandParam param : processExe.params) {
 				processExe.plainCommand.append(param.toString());

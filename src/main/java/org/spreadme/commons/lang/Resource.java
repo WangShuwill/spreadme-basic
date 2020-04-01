@@ -1,5 +1,5 @@
 /*
- * Copyright [3/23/20 10:29 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [3/26/20 2:46 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.http.client;
+package org.spreadme.commons.lang;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
+ * resource
  * @author shuwei.wang
  */
-public interface HttpMessageReader<T> {
+public interface Resource {
 
-	T reader(HttpClientResponse response) throws IOException;
+	String getName();
+
+	InputStream getInputStream() throws IOException;
 }
