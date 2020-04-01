@@ -1,0 +1,12 @@
+stages:
+  - clean
+  - compile
+clean:
+  stage: clean
+  script:
+    - mvn clean
+
+compile:
+  stage: compile
+  script:
+    - mvn compile
