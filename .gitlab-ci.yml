@@ -2,6 +2,7 @@ stages:
   - clean
   - compile
   - test
+  - install
 
 clean:
   stage: clean
@@ -17,3 +18,8 @@ test:
   stage: test
   script:
     - mvn test
+
+install:
+  stage: install
+  script:
+    - mvn install
