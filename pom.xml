@@ -33,7 +33,7 @@
 	<name>Spreadme Commons</name>
 	<inceptionYear>2018</inceptionYear>
 	<description>A set of frameworks for Java rapid development that integrates common tool libs 💪</description>
-	<url>https://github.com/shuwill/spreadme-mapper</url>
+	<url>https://github.com/shuwill/spreadme-commons</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
