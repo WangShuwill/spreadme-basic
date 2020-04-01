@@ -1,5 +1,5 @@
 /*
- * Copyright [12/26/19 5:08 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/1/20 10:16 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.http;
+package org.spreadme.commons.lang;
 
 /**
- * ProtocolType
+ * Throw Exception BiFunction
  * @author shuwei.wang
- * @since 1.0.0
  */
-public enum ProtocolType {
+@FunctionalInterface
+public interface ThrowingBiFunction<T, U, R> {
 
-	HTTP("http"),
+	R apply(T t, U u) throws Exception;
 
-	HTTPS("https");
-
-	private final String protocol;
-
-	ProtocolType(String protocol) {
-		this.protocol = protocol;
-	}
-
-	@Override
-	public String toString() {
-		return protocol;
-	}
 }

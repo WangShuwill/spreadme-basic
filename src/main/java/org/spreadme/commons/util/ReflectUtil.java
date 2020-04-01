@@ -39,6 +39,8 @@ import org.spreadme.commons.lang.Assert;
  * @author shuwei.wang
  * @since 1.0.0
  */
+@Deprecated
+//TODO 重构整个反射方法
 public abstract class ReflectUtil {
 
 	private static List<String> primitiveNames;
@@ -167,15 +169,26 @@ public abstract class ReflectUtil {
 
 	public static Method findMethod(Class<?> type, String name, Class<?>... paramTypes) {
 		try {
-			return type.getDeclaredMethod(name, paramTypes);
+			return type.getMethod(name, paramTypes);
 		}
 		catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException(e.getMessage(), e);
+			do {
+				try {
+					return type.getDeclaredMethod(name, paramTypes);
+				}
+				catch (NoSuchMethodException ignore) {
+				}
+
+				type = type.getSuperclass();
+			}
+			while (type != null);
+			throw new IllegalStateException(e);
 		}
 	}
 
 	public static Object invokeMethod(Method method, Object target, Object... args) {
 		try {
+			method.setAccessible(true);
 			return method.invoke(target, args);
 		}
 		catch (Exception e) {
