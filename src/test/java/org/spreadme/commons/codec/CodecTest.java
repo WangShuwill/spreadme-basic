@@ -19,9 +19,7 @@ package org.spreadme.commons.codec;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.spreadme.commons.codec.Base64;
-import org.spreadme.commons.codec.Hex;
-import org.spreadme.commons.util.StringUtil;
+import org.spreadme.commons.lang.Console;
 
 /**
  * @author shuwei.wang
@@ -33,17 +31,17 @@ public class CodecTest {
 	public void testHex() {
 		final byte[] data = new byte[] {1, 3, 2, 9, 12};
 		String hexStr = Hex.toHexString(data);
-		System.out.println(hexStr);
+		Console.info(hexStr);
 		byte[] originData = Hex.decode(hexStr);
-		System.out.println(Arrays.toString(originData));
+		Console.info(Arrays.equals(data, originData));
 	}
 
 	@Test
 	public void testBase64() {
 		final String data = "test";
 		String base64Str = Base64.toBase64String(data.getBytes());
-		System.out.println(base64Str);
+		Console.info(base64Str);
 		byte[] originData = Base64.decode(base64Str);
-		System.out.println(StringUtil.fromByteArray(originData));
+		Console.info(Arrays.equals(originData, data.getBytes()));
 	}
 }

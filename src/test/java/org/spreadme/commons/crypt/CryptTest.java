@@ -25,6 +25,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -74,18 +77,21 @@ public class CryptTest {
 	@Test
 	public void md5Test() throws Exception {
 		final String data = "test";
-
 		final int THREAD_POOL_SIZE = 100;
-		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+		final Set<String> hashSet = Collections.synchronizedSet(new HashSet<>());
 
+		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
 			try {
-				Console.info(Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5)));
+				final String hash = Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5));
+				hashSet.add(hash);
 			}
 			catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}, executor);
+		Console.info("hash set size %d", hashSet.size());
+		Console.info(hashSet);
 	}
 
 	@Test

@@ -49,7 +49,7 @@ public class CodeGeneratorTest {
 		ImageIO.write(code.getImage(), ImageFormats.PNG.getName(), bos);
 
 		try (ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
-			 FileOutputStream out = new FileOutputStream(new File(ClassUtil.getClassPath() + FILE_NAME))) {
+			 FileOutputStream out = new FileOutputStream(new File(ClassUtil.getClassPath() + File.separator + FILE_NAME))) {
 			IOUtil.copy(in, out);
 		}
 	}
