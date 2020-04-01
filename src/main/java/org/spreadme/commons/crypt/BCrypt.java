@@ -642,7 +642,7 @@ public class BCrypt {
 	}
 
 	/**
-	 * Hash a password using the OpenBSD bcrypt scheme
+	 * Digest a password using the OpenBSD bcrypt scheme
 	 * @param password    the password to hash
 	 * @param salt    the salt to hash with (perhaps generated
 	 * using BCrypt.gensalt)

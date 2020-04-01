@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
 
 import org.junit.Test;
 import org.spreadme.commons.crypt.Algorithm;
-import org.spreadme.commons.crypt.Hash;
+import org.spreadme.commons.crypt.Digest;
 import org.spreadme.commons.id.IdentifierGenerator;
 import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
 import org.spreadme.commons.id.support.SnowflakeLongGenerator;
@@ -55,7 +55,7 @@ public class UtilTest {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
 		Concurrents.startAllTaskInOnce(10, () -> {
 			String result = StringUtil.randomString(8) + " :: " + StringUtil.randomString("-+*", 1);
-			Console.info(result + " :: " + Hash.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
+			Console.info(result + " :: " + Digest.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
 			return result;
 		});
 		Console.info(StringUtil.replace("wsweiwwww//\\w/", "w", "90"));

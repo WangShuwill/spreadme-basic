@@ -38,9 +38,9 @@ import org.spreadme.commons.util.CollectionUtil;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public abstract class Hash {
+public abstract class Digest {
 
-	private Hash() {
+	private Digest() {
 
 	}
 

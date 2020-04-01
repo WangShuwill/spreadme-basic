@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
-import org.spreadme.commons.crypt.Hash;
+import org.spreadme.commons.crypt.Digest;
 import org.spreadme.commons.lang.Charsets;
 import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.system.SystemInfo;
@@ -64,13 +64,13 @@ public class IOTest {
 
 	@Test
 	public void testMessageDigestInputStream() throws Exception {
-		MessageDigest digest = Hash.getMessageDigest(Algorithm.SHA256);
+		MessageDigest digest = Digest.getMessageDigest(Algorithm.SHA256);
 		try (MessageDigestInputStream digestInput = new MessageDigestInputStream(IOUtil.toInputstream(testFileOne), digest);
 			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
 			System.out.println(Hex.toHexString(digest.digest()));
-			System.out.println(Hash.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+			System.out.println(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
 		}
 	}
 

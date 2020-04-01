@@ -69,7 +69,7 @@ public class CryptTest {
 	@Test
 	public void hashTest() throws Exception {
 		try (FileInputStream in = new FileInputStream(testFile)) {
-			byte[] hash = Hash.get(in, Algorithm.MD5);
+			byte[] hash = Digest.get(in, Algorithm.MD5);
 			Console.info(Hex.toHexString(hash));
 		}
 	}
@@ -83,7 +83,7 @@ public class CryptTest {
 		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
 			try {
-				final String hash = Hex.toHexString(Hash.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5));
+				final String hash = Hex.toHexString(Digest.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5));
 				hashSet.add(hash);
 			}
 			catch (Exception ex) {
