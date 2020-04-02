@@ -53,7 +53,7 @@ public class UtilTest {
 	@Test
 	public void testStringUtil() throws Exception {
 		System.out.println(Arrays.toString(Randoms.nextBytes(3)));
-		Concurrents.startAllTaskInOnce(10, () -> {
+		Concurrents.startAll(10, () -> {
 			String result = StringUtil.randomString(8) + " :: " + StringUtil.randomString("-+*", 1);
 			Console.info(result + " :: " + Digest.toHexString(new ByteArrayInputStream(result.getBytes()), Algorithm.MD5));
 			return result;
@@ -84,7 +84,7 @@ public class UtilTest {
 		final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
 		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
-		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+		Concurrents.startAll(THREAD_POOL_SIZE, () -> {
 			try {
 				String dateCreate = "19:30:55 03.05.2015";
 				//sdf.parse(dateCreate);

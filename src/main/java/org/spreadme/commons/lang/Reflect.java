@@ -35,7 +35,9 @@ import org.spreadme.commons.util.CollectionUtil;
  */
 public class Reflect {
 
+	// 基本类型
 	private static final List<Class> primaryTypes;
+	// 包装类型
 	private static final List<Class> wrapTypes;
 
 	static {
@@ -354,5 +356,9 @@ public class Reflect {
 
 	public static class Null {
 
+	}
+
+	public static <T> T initValue(Class<T> type) {
+		return Defaults.defaultValue(type);
 	}
 }

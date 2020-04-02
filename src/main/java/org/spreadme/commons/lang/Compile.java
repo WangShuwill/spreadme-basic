@@ -176,7 +176,7 @@ public class Compile {
 			return classes;
 		}
 
-		Class<?> loadAndReturnMainClass(String mainClassName, ThrowingBiFunction<String, byte[], Class<?>> definer) throws Exception {
+		Class<?> loadAndReturnMainClass(String mainClassName, ThrowableBiFunction<String, byte[], Class<?>> definer) throws Exception {
 			Class<?> result = null;
 			for (Map.Entry<String, byte[]> entry : classes().entrySet()) {
 				Class<?> clazz = definer.apply(entry.getKey(), entry.getValue());

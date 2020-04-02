@@ -21,7 +21,7 @@ package org.spreadme.commons.lang;
  * @author shuwei.wang
  */
 @FunctionalInterface
-public interface ThrowingBiFunction<T, U, R> {
+public interface ThrowableBiFunction<T, U, R> {
 
 	R apply(T t, U u) throws Exception;
 

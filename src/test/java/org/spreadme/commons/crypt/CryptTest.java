@@ -81,7 +81,7 @@ public class CryptTest {
 		final Set<String> hashSet = Collections.synchronizedSet(new HashSet<>());
 
 		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+		Concurrents.startAll(THREAD_POOL_SIZE, () -> {
 			try {
 				final String hash = Hex.toHexString(Digest.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5));
 				hashSet.add(hash);
@@ -96,7 +96,7 @@ public class CryptTest {
 
 	@Test
 	public void aesTest() throws Exception {
-		Concurrents.startAllTaskInOnce(10, () -> {
+		Concurrents.startAll(10, () -> {
 			final String data = "test";
 			byte[] key = AES.generateKey();
 			byte[] encrypt = AES.encrypt(data.getBytes(), key, true);
@@ -124,7 +124,7 @@ public class CryptTest {
 
 	@Test
 	public void testKeyGenerator() throws InterruptedException {
-		Concurrents.startAllTaskInOnce(10, () -> {
+		Concurrents.startAll(10, () -> {
 			byte[] result = AES.generateKey();
 			Console.info(Hex.toHexString(result));
 			return result;
