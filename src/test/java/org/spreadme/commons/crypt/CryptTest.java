@@ -123,15 +123,6 @@ public class CryptTest {
 	}
 
 	@Test
-	public void testBCrypt() {
-		final String pwd = "1234";
-		Console.info(BCrypt.hashpw(pwd, BCrypt.gensalt()));
-		Console.info(BCrypt.hashpw(pwd, BCrypt.gensalt()));
-		Console.info(BCrypt.checkpw(pwd, "$2a$10$bA2.WOmsYX/9To0w5BkaueORBgQPTuvS8MxR6YKTbTk948/5GlfkS"));
-		Console.info(XOR.encrypt(pwd));
-	}
-
-	@Test
 	public void testKeyGenerator() throws InterruptedException {
 		Concurrents.startAllTaskInOnce(10, () -> {
 			byte[] result = AES.generateKey();

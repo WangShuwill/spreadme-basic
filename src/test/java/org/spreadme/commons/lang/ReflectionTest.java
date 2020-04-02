@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflect;
+package org.spreadme.commons.lang;
 
 import org.junit.Test;
 import org.spreadme.commons.util.ClassUtil;

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.reflect;
+package org.spreadme.commons.lang;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import org.junit.Test;
-import org.spreadme.commons.lang.Compile;
-import org.spreadme.commons.lang.CompileOptions;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.StringUtil;
@@ -41,6 +39,7 @@ public class CompileTest {
 			final String content = StringUtil.fromInputStream(in);
 			final String className = "org.spreadme.commons.test.TestCompileMain";
 			Compile.compile(className, content, new CompileOptions());
+			Console.info(Reflect.compile(className, content).create().invoke("hello"));
 		}
 	}
 }

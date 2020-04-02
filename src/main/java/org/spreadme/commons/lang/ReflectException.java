@@ -1,5 +1,5 @@
 /*
- * Copyright [4/1/20 10:59 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/2/20 10:14 AM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,29 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.test;
+package org.spreadme.commons.lang;
 
-import java.util.Collections;
-import java.util.List;
+/**
+ * Compile Exception
+ * @author shuwei.wang
+ */
+public class ReflectException extends RuntimeException {
 
-import org.spreadme.commons.system.SystemInfo;
+	private static final long serialVersionUID = 7679009396519897478L;
 
-public class TestCompileMain{
+	public ReflectException(String message) {
+		super(message);
+	}
 
-	public void hello(){
-		System.out.println("Hello Compile");
+	public ReflectException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ReflectException() {
+		super();
+	}
+
+	public ReflectException(Throwable cause) {
+		super(cause);
 	}
 }

@@ -22,7 +22,6 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -43,7 +42,6 @@ import javax.tools.ToolProvider;
 
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.CollectionUtil;
-import org.spreadme.commons.util.ReflectUtil;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -92,10 +90,8 @@ public class Compile {
 				throw new CompileException(String.format("Compilation error: %s", out));
 			}
 
-			//TODO cache lookup constructor
-			Method defineClassMethod = ReflectUtil.findMethod(classLoader.getClass(), DEFINCLASS_METHOD_NAME, String.class, byte[].class, int.class, int.class);
 			return fileManager.loadAndReturnMainClass(className,
-					(name, bytes) -> (Class<?>) ReflectUtil.invokeMethod(defineClassMethod, classLoader, name, bytes, 0, bytes.length));
+					(name, bytes) -> Reflect.of(classLoader).invoke(DEFINCLASS_METHOD_NAME, name, bytes, 0, bytes.length).get());
 
 		}
 		catch (Exception ex) {
