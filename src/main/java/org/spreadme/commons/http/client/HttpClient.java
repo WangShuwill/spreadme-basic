@@ -27,6 +27,7 @@ import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
 import org.spreadme.commons.http.HttpParam;
 import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -42,6 +43,7 @@ public class HttpClient {
 	public <T> T execute(final String url, HttpMethod method, HttpHeader header,
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) {
 
+		HttpClientResponse response = null;
 		try {
 			HttpClientRequestFactory requestFactory = new DefaultHttpClientRequestFactory();
 			requestFactory.setConnectTimeout(this.connectTimeout);
@@ -51,14 +53,14 @@ public class HttpClient {
 			if (messageWriter != null) {
 				messageWriter.write(request.getBody());
 			}
-			HttpClientResponse response = request.execute();
-			response.getHeader();
-			T result = messageReader.reader(response);
-			response.close();
-			return result;
+			response = request.execute();
+			return messageReader.reader(response);
 		}
 		catch (Exception ex) {
 			throw new IllegalStateException(ex);
+		}
+		finally {
+			IOUtil.close(response);
 		}
 	}
 

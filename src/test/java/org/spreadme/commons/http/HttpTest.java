@@ -16,15 +16,12 @@
 
 package org.spreadme.commons.http;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.OutputStreamWriter;
 import java.util.UUID;
 
 import org.junit.Test;
 import org.spreadme.commons.http.client.HttpClient;
 import org.spreadme.commons.http.client.HttpMessageReader;
-import org.spreadme.commons.http.client.HttpMessageWriter;
 import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
@@ -58,18 +55,12 @@ public class HttpTest {
 
 	@Test
 	public void testClient() {
-		HttpMessageWriter writer = (out) -> {
-			String paramaters = "t";
-			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
-			bufferedWriter.write(paramaters);
-			bufferedWriter.close();
-		};
 		HttpMessageReader<String> reader = response -> {
 			System.out.println(response.getHeader());
 			return StringUtil.fromInputStream(response.getBody());
 		};
 		HttpClient httpClient = new HttpClient();
-		String result = httpClient.execute(URL, HttpMethod.POST, HttpHeader.DEFAULT, writer, reader);
+		String result = httpClient.post(URL, new HttpParam().add("key", "t"), HttpHeader.DEFAULT, reader);
 		System.out.println(result);
 	}
 
