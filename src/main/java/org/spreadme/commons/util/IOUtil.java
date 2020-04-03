@@ -318,13 +318,13 @@ public abstract class IOUtil {
 	}
 
 	/**
-	 * zip inputstream
+	 * zip Resource
 	 *
 	 * @param entries list of Resource {@link Resource}
 	 * @param out OutputStream
 	 * @throws IOException IOException
 	 */
-	public static void zipInputstreams(final List<Resource> entries, OutputStream out) throws IOException {
+	public static void zipResouces(final List<Resource> entries, OutputStream out) throws IOException {
 		try (WritableByteChannel writableChann = Channels.newChannel(out)) {
 			Pipe pipe = Pipe.open();
 			CompletableFuture.runAsync(() -> {
