@@ -1,5 +1,5 @@
 /*
- * Copyright [3/26/20 2:54 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/1/20 10:34 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,18 @@
 package org.spreadme.commons.lang;
 
 /**
- * Serializer
+ * Protocol
  * @author shuwei.wang
  */
-public interface Serializer<T> {
+public final class Protocol {
 
-	byte[] serialize(T t);
+	public static final String HTTP = "http";
 
-	T deserialize(byte[] data);
+	public static final String HTTPS = "https";
+
+	public static final String FTP = "ftp";
+
+	public static final String FILE = "file";
+
+	public static final String NNTP = "nntp";
 }

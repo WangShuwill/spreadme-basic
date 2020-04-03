@@ -1,5 +1,5 @@
 /*
- * Copyright [12/26/19 5:08 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/2/20 10:14 AM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,29 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.http;
+package org.spreadme.commons.lang;
 
 /**
- * ProtocolType
+ * Compile Exception
  * @author shuwei.wang
- * @since 1.0.0
  */
-public enum ProtocolType {
+public class ReflectException extends RuntimeException {
 
-	HTTP("http"),
+	private static final long serialVersionUID = 7679009396519897478L;
 
-	HTTPS("https");
-
-	private final String protocol;
-
-	ProtocolType(String protocol) {
-		this.protocol = protocol;
+	public ReflectException(String message) {
+		super(message);
 	}
 
-	@Override
-	public String toString() {
-		return protocol;
+	public ReflectException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ReflectException() {
+		super();
+	}
+
+	public ReflectException(Throwable cause) {
+		super(cause);
 	}
 }

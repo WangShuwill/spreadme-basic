@@ -16,18 +16,16 @@
 
 package org.spreadme.commons.http;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.OutputStreamWriter;
 import java.util.UUID;
 
 import org.junit.Test;
 import org.spreadme.commons.http.client.HttpClient;
 import org.spreadme.commons.http.client.HttpMessageReader;
-import org.spreadme.commons.http.client.HttpMessageWriter;
 import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.lang.LocalMimeResource;
 import org.spreadme.commons.lang.MimeResource;
 import org.spreadme.commons.lang.MimeType;
@@ -48,29 +46,23 @@ public class HttpTest {
 	public void testUserAgent() {
 		final String useragent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0";
 		Platform platform = UserAgent.getPlatform(useragent);
-		System.out.println("IsMobile: " + platform.isMobile());
-		System.out.println("Platfrom: " + platform.getName());
+		Console.info("IsMobile: " + platform.isMobile());
+		Console.info("Platfrom: " + platform.getName());
 
 		Browser browser = UserAgent.getBrowser(useragent);
-		System.out.println("Browswe Name: " + browser.getName());
-		System.out.println("Browser Version: " + browser.getVersion());
+		Console.info("Browswe Name: " + browser.getName());
+		Console.info("Browser Version: " + browser.getVersion());
 	}
 
 	@Test
-	public void testClient() {
-		HttpMessageWriter writer = (out) -> {
-			String paramaters = "t";
-			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(out));
-			bufferedWriter.write(paramaters);
-			bufferedWriter.close();
-		};
+	public void testPostForm() {
 		HttpMessageReader<String> reader = response -> {
-			System.out.println(response.getHeader());
+			Console.info(response.getHeader());
 			return StringUtil.fromInputStream(response.getBody());
 		};
 		HttpClient httpClient = new HttpClient();
-		String result = httpClient.execute(URL, HttpMethod.POST, HttpHeader.DEFAULT, writer, reader);
-		System.out.println(result);
+		String result = httpClient.post(URL, new HttpParam().add("key", "t"), HttpHeader.DEFAULT, reader);
+		Console.info("Http client request %s, and response %s", URL, result);
 	}
 
 	public void testPostFile() {

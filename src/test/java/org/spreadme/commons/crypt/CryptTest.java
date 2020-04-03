@@ -35,7 +35,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.spreadme.commons.codec.Base64;
 import org.spreadme.commons.codec.Hex;
-import org.spreadme.commons.lang.Console;
+import org.spreadme.commons.lang.Assert;
+import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Concurrents;
 import org.spreadme.commons.util.IOUtil;
@@ -49,7 +51,7 @@ public class CryptTest {
 
 	private static final String TEST_FILE_NAME = "CORE_TEST_FILE_ONE.txt";
 
-	private File testFile = null;
+	private File testFile;
 
 	private byte[] publicKey;
 
@@ -61,43 +63,42 @@ public class CryptTest {
 		KeyPair keyPair = RSA.getKeyPair();
 		publicKey = RSA.getPublicKey(keyPair);
 		privateKey = RSA.getPrivateKey(keyPair);
-
-		Console.info("The publickey is %s", Hex.toHexString(publicKey));
-		Console.info("The privatekey is %s", Hex.toHexString(privateKey));
 	}
 
 	@Test
-	public void hashTest() throws Exception {
+	public void fileHashTest() throws Exception {
 		try (FileInputStream in = new FileInputStream(testFile)) {
 			byte[] hash = Digest.get(in, Algorithm.MD5);
-			Console.info(Hex.toHexString(hash));
+			Console.info("%s文件MD5值 %s", testFile.getName(), Hex.toHexString(hash));
 		}
 	}
 
 	@Test
-	public void md5Test() throws Exception {
-		final String data = "test";
-		final int THREAD_POOL_SIZE = 100;
+	public void concurrentDigestTest() throws Exception {
+		final String plainText = StringUtil.randomString(10);
+		final byte[] data = plainText.getBytes(Charsets.UTF_8);
+		final int poolSize = 10;
 		final Set<String> hashSet = Collections.synchronizedSet(new HashSet<>());
 
-		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-		Concurrents.startAllTaskInOnce(THREAD_POOL_SIZE, () -> {
+		ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+		Concurrents.startAll(poolSize, () -> {
 			try {
-				final String hash = Hex.toHexString(Digest.get(new ByteArrayInputStream(data.getBytes()), Algorithm.MD5));
+				String hash = Hex.toHexString(Digest.get(new ByteArrayInputStream(data), Algorithm.MD5));
+				Console.info("%s的MD5值为 %s", plainText, hash);
 				hashSet.add(hash);
 			}
 			catch (Exception ex) {
-				ex.printStackTrace();
+				throw new IllegalStateException(ex);
 			}
 		}, executor);
-		Console.info("hash set size %d", hashSet.size());
-		Console.info(hashSet);
+
+		Assert.isTrue(hashSet.size() == 1, "多线程摘要测试失败");
 	}
 
 	@Test
 	public void aesTest() throws Exception {
-		Concurrents.startAllTaskInOnce(10, () -> {
-			final String data = "test";
+		final String data = StringUtil.randomString(10);
+		Concurrents.startAll(10, () -> {
 			byte[] key = AES.generateKey();
 			byte[] encrypt = AES.encrypt(data.getBytes(), key, true);
 			byte[] origin = AES.decrypt(encrypt, key, true);
@@ -106,51 +107,22 @@ public class CryptTest {
 			Console.info(result);
 			return result;
 		});
-
 	}
 
 	@Test
 	public void testRSA() throws Exception {
-		byte[] text = "wswei".getBytes(StandardCharsets.UTF_8);
+		final String data = StringUtil.randomString(10);
+		byte[] text = data.getBytes(StandardCharsets.UTF_8);
 		byte[] encryptData = RSA.encryptByPublicKey(text, publicKey);
-		Console.info(Base64.toBase64String(encryptData));
+		Console.info("RSA加密数据 %s", Base64.toBase64String(encryptData));
 		byte[] rawData = RSA.decryptByPrivateKey(encryptData, privateKey);
-		Console.info(new String(rawData));
+		Console.info("RSA解密数据 %s", new String(rawData));
 
 		byte[] signData = RSA.sign(text, privateKey, Algorithm.SHA256withRSA);
-		Console.info(Base64.toBase64String(signData));
-		Console.info(RSA.verify(text, publicKey, signData, Algorithm.SHA256withRSA));
+		Console.info("SHA256withRSA签名数据 %s", Base64.toBase64String(signData));
+		Console.info("SHA256withRSA验签是否成功 %s", RSA.verify(text, publicKey, signData, Algorithm.SHA256withRSA));
 	}
 
-	@Test
-	public void testBCrypt() {
-		final String pwd = "1234";
-		Console.info(BCrypt.hashpw(pwd, BCrypt.gensalt()));
-		Console.info(BCrypt.hashpw(pwd, BCrypt.gensalt()));
-		Console.info(BCrypt.checkpw(pwd, "$2a$10$bA2.WOmsYX/9To0w5BkaueORBgQPTuvS8MxR6YKTbTk948/5GlfkS"));
-		Console.info(XOR.encrypt(pwd));
-	}
-
-	@Test
-	public void testKeyGenerator() throws InterruptedException {
-		Concurrents.startAllTaskInOnce(10, () -> {
-			byte[] result = AES.generateKey();
-			Console.info(Hex.toHexString(result));
-			return result;
-		});
-	}
-
-	@Test
-	public void testDes() throws Exception {
-		final String text = "wswei";
-		byte[] key = AES.generateKey();
-		byte[] encrypt = DES.encrypt(text.getBytes(), key);
-		byte[] origin = DES.decrypt(encrypt, key);
-		Console.info("The key is {%s}, the encrty is {%s}, the origin is {%s}",
-				Hex.toHexString(key),
-				Hex.toHexString(encrypt),
-				StringUtil.fromByteArray(origin));
-	}
 
 	@Test
 	public void testAESFile() throws Exception {
@@ -160,13 +132,13 @@ public class CryptTest {
 			byte[] key = AES.generateKey();
 			InputStream cipherIn = AES.encrypt(in, key, true);
 			IOUtil.copy(cipherIn, out);
-			Console.info(Hex.toHexString(out.toByteArray()));
+			Console.info("%s文件AES加密数据 %s", testFile.getName(), Hex.toHexString(out.toByteArray()));
 
 			ByteArrayInputStream bis = new ByteArrayInputStream(out.toByteArray());
 			ByteArrayOutputStream outer = new ByteArrayOutputStream();
 			OutputStream cipherOut = AES.decrypt(outer, key, true);
 			IOUtil.copy(bis, cipherOut);
-			Console.info(new String(outer.toByteArray()));
+			Console.info("%s文件AES解密数据 %s", testFile.getName(), new String(outer.toByteArray()));
 		}
 	}
 }

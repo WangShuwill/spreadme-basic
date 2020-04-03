@@ -14,19 +14,15 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.reflect;
-
-import org.junit.Test;
-import org.spreadme.commons.util.ClassUtil;
-import org.spreadme.commons.util.ReflectUtil;
+package org.spreadme.commons.lang;
 
 /**
+ * FileWrite Mode
  * @author shuwei.wang
+ * @since 1.0.0
  */
-public class ReflectionTest {
+public enum WriteMode {
 
-	@Test
-	public void testGetClasses() {
-		ReflectUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(System.out::println);
-	}
+	APPEND,
+	OVERWRITE
 }

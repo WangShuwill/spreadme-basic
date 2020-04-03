@@ -1,11 +1,11 @@
 /*
- * Copyright [2019] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/1/20 10:59 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,4 +14,16 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.reflect;
+package org.spreadme.commons.test;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.spreadme.commons.system.SystemInfo;
+
+public class TestCompileMain{
+
+	public void hello(){
+		System.out.println("Hello Compile");
+	}
+}

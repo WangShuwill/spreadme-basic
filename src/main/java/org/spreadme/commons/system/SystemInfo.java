@@ -48,6 +48,9 @@ public class SystemInfo implements Serializable {
 	// Java HOME目录
 	public static final String JAVA_HOME = System.getProperty("java.home");
 
+	// Class Path路径
+	public static final String CLASS_PATH = System.getProperty("java.class.path");
+
 	private String osName;
 
 	private OsType osType;

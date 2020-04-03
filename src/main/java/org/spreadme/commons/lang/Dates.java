@@ -147,15 +147,7 @@ public abstract class Dates {
 	 * @return DateTimeFormatter
 	 */
 	public static DateTimeFormatter getDateFormatter(String pattern) {
-		DateTimeFormatter formatter = FORMATTER_CACHE.get(pattern);
-		if (formatter == null) {
-			formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
-			final DateTimeFormatter previousFormatter = FORMATTER_CACHE.putIfAbsent(pattern, formatter);
-			if (previousFormatter != null) {
-				formatter = previousFormatter;
-			}
-		}
-		return formatter;
+		return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
 	}
 
 	/**

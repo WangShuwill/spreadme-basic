@@ -16,13 +16,26 @@
 
 package org.spreadme.commons.lang;
 
-/**
- * FileWrite Mode
- * @author shuwei.wang
- * @since 1.0.0
- */
-public enum FileWriteMode {
+import java.lang.reflect.Method;
 
-	APPEND,
-	OVERWRITE
+import org.junit.Test;
+import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.Console;
+
+/**
+ * @author shuwei.wang
+ */
+public class ReflectionTest {
+
+	@Test
+	public void testScanTypeNames() {
+		Reflect.scanTypeNames(ClassUtil.getClassPath()).forEach(Console::info);
+	}
+
+	@Test
+	public void testAnnotation() throws NoSuchMethodException {
+		Method method = Reflect.ofClass(ReflectionTest.class).findMethod("testScanTypeNames");
+		Annotate.Definition definition = Annotate.of(method, Test.class).definition();
+		Console.info(definition);
+	}
 }
