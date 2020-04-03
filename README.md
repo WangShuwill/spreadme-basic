@@ -20,10 +20,36 @@ Install
 - #### Maven
 - #### java1.8+
 - #### spread-commons
-    ``` xml
-    <dependency>
-        <groupId>org.spreadme</groupId>
-        <artifactId>spreadme-commons</artifactId>
-        <version>1.5.1</version>
-    </dependency>
-    ```
+``` xml
+<dependency>
+    <groupId>org.spreadme</groupId>
+    <artifactId>spreadme-commons</artifactId>
+    <version>1.5.1</version>
+</dependency>
+```
+
+Example
+-------
+- Date Util
+```java
+// 线程安全的时间解析工具
+String formatter = "HH:mm:ss dd.MM.yyyy";
+String text = "19:30:55 03.05.2015";
+Date data = Dates.parse(text, formatter);
+// Sun May 03 19:30:55 CST 2015
+
+// 格式化日期
+Dates.format(new Date(), formatter)
+// 11:00:40 03.04.2020
+
+// 其他用法
+Console.info("今天开始时间: %s", Dates.getStartOfDate(new Date()));
+Console.info("今天结束时间: %s", Dates.getEndOfDate(new Date()));
+Console.info("100天前的时间: %s", Dates.getDate(new Date(), ChronoUnit.DAYS, -100));
+Console.info("时间戳: %s", Dates.getTimestamp());
+Date oldDate = Dates.parse("19:30:55 03.05.2015", formatter);
+Duration duration = Dates.getDuration(new Date(), oldDate);
+Console.info("相差天数: %d", duration.toDays());
+```
+
+- 
