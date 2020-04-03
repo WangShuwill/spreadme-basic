@@ -16,10 +16,11 @@
 
 package org.spreadme.commons.lang;
 
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Console;
-import org.spreadme.commons.util.ReflectUtil;
 
 /**
  * @author shuwei.wang
@@ -27,7 +28,14 @@ import org.spreadme.commons.util.ReflectUtil;
 public class ReflectionTest {
 
 	@Test
-	public void testGetClasses() {
-		ReflectUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(Console::info);
+	public void testScanTypeNames() {
+		Reflect.scanTypeNames(ClassUtil.getClassPath()).forEach(Console::info);
+	}
+
+	@Test
+	public void testAnnotation() throws NoSuchMethodException {
+		Method method = Reflect.ofClass(ReflectionTest.class).findMethod("testScanTypeNames");
+		Annotate.Definition definition = Annotate.of(method, Test.class).definition();
+		Console.info(definition);
 	}
 }

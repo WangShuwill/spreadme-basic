@@ -16,18 +16,25 @@
 
 package org.spreadme.commons.lang;
 
+import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.spreadme.commons.util.CollectionUtil;
+import org.spreadme.commons.util.FileUtil;
 
 /**
  * Reflect
@@ -144,6 +151,24 @@ public class Reflect {
 		}
 	}
 
+	public Map<String, Reflect> fields() {
+		Map<String, Reflect> result = new LinkedHashMap<>();
+		Class<?> t = this.type();
+		do {
+			for (Field field : t.getDeclaredFields()) {
+				if (type != object ^ Modifier.isStatic(field.getModifiers())) {
+					String name = field.getName();
+					if (!result.containsKey(name)) {
+						result.put(name, this.field(name));
+					}
+				}
+			}
+			t = t.getSuperclass();
+		}
+		while (t != null);
+		return result;
+	}
+
 	public Reflect set(String fieldName, Object value) {
 		try {
 			Field field = this.findField(fieldName);
@@ -184,7 +209,7 @@ public class Reflect {
 		}
 	}
 
-	public Method findMethod(String methodName, Class<?>[] types) throws NoSuchMethodException {
+	public Method findMethod(String methodName, Class<?>... types) throws NoSuchMethodException {
 		Class<?> t = this.type();
 		try {
 			return t.getDeclaredMethod(methodName, types);
@@ -203,7 +228,7 @@ public class Reflect {
 		}
 	}
 
-	public Method findSimilarMethod(String methodName, Class<?>[] types) throws NoSuchMethodException {
+	public Method findSimilarMethod(String methodName, Class<?>... types) throws NoSuchMethodException {
 		Class<?> t = this.type();
 		for (Method method : t.getMethods()) {
 			if (isSimilarSignature(method, methodName, types)) {
@@ -249,7 +274,7 @@ public class Reflect {
 	}
 
 	public <T> T get(String fieldName) {
-		return field(fieldName).get();
+		return this.field(fieldName).get();
 	}
 
 	public Class<?> type() {
@@ -341,6 +366,18 @@ public class Reflect {
 		}
 	}
 
+	public static List<String> scanTypeNames(String path) {
+		try {
+			return FileUtil.getFiles(path, file -> file.getName().endsWith(".class"))
+					.stream()
+					.map(item -> Objects.requireNonNull(FileUtil.getRelativePath(path, item)).replace("/", "."))
+					.collect(Collectors.toList());
+		}
+		catch (IOException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}
+
 	public static Class<?> getWrapType(Class<?> type) {
 		if (type == null) {
 			return null;
@@ -352,6 +389,21 @@ public class Reflect {
 			}
 		}
 		return type;
+	}
+
+	public static Class getSuperClassGenricType(Class clazz, int index) {
+		Type genType = clazz.getGenericSuperclass();
+		if (!(genType instanceof ParameterizedType)) {
+			return Object.class;
+		}
+		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+		if (index >= params.length || index < 0) {
+			return Object.class;
+		}
+		if (!(params[index] instanceof Class)) {
+			return Object.class;
+		}
+		return (Class) params[index];
 	}
 
 	public static class Null {

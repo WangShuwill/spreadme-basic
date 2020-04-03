@@ -74,7 +74,7 @@ public abstract class CollectionUtil {
 	 * @param props Properties
 	 * @return Map
 	 */
-	public static Map<String, Object> propertiesIntoMap(@Nullable Properties props) {
+	public static Map<String, Object> toMap(@Nullable Properties props) {
 		Map<String, Object> map = new HashMap<>();
 		if (props != null) {
 			for (Enumeration<?> en = props.propertyNames(); en.hasMoreElements(); ) {
