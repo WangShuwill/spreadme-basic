@@ -52,4 +52,14 @@ Duration duration = Dates.getDuration(new Date(), oldDate);
 Console.info("相差天数: %d", duration.toDays());
 ```
 
-- 
+- IO Util
+```java
+IOUtil.copy(InputStream, OutputStream);
+
+RepeatableInputStream in = IOUtil.toRepeatable(InputStream inputStream);
+
+IOUtil.zipFiles(List<File> files, OutputStream out);
+
+IOUtil.zipResouces(final List<Resource> entries, OutputStream out)
+...
+```
