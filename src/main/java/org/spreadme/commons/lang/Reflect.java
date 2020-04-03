@@ -359,6 +359,6 @@ public class Reflect {
 	}
 
 	public static <T> T initValue(Class<T> type) {
-		return Defaults.defaultValue(type);
+		return Defaults.of(type);
 	}
 }
