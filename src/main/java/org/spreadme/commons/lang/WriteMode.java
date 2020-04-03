@@ -21,7 +21,7 @@ package org.spreadme.commons.lang;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public enum FileWriteMode {
+public enum WriteMode {
 
 	APPEND,
 	OVERWRITE

@@ -48,11 +48,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.spreadme.commons.io.ArchiveEntry;
 import org.spreadme.commons.io.FastByteArrayOutputStream;
 import org.spreadme.commons.io.RepeatableInputStream;
-import org.spreadme.commons.lang.FileWriteMode;
+import org.spreadme.commons.lang.WriteMode;
 import org.spreadme.commons.lang.LineIterator;
+import org.spreadme.commons.lang.Resource;
 
 /**
  * io util
@@ -150,7 +150,7 @@ public abstract class IOUtil {
 	 * @throws IOException IOException
 	 */
 	public static void toFile(String content, File file) throws IOException {
-		try(FileWriter writer = new FileWriter(file)){
+		try (FileWriter writer = new FileWriter(file)) {
 			writer.write(content);
 		}
 	}
@@ -320,19 +320,19 @@ public abstract class IOUtil {
 	/**
 	 * zip inputstream
 	 *
-	 * @param entries list of ArchiveEntry {@link ArchiveEntry}
+	 * @param entries list of Resource {@link Resource}
 	 * @param out OutputStream
 	 * @throws IOException IOException
 	 */
-	public static void zipInputstreams(final List<ArchiveEntry> entries, OutputStream out) throws IOException {
+	public static void zipInputstreams(final List<Resource> entries, OutputStream out) throws IOException {
 		try (WritableByteChannel writableChann = Channels.newChannel(out)) {
 			Pipe pipe = Pipe.open();
 			CompletableFuture.runAsync(() -> {
 				try (ZipOutputStream zos = new ZipOutputStream(Channels.newOutputStream(pipe.sink()));
 					 WritableByteChannel writableChannl = Channels.newChannel(zos)) {
-					for (ArchiveEntry entry : entries) {
+					for (Resource entry : entries) {
 						zos.putNextEntry(new ZipEntry(entry.getName()));
-						final ReadableByteChannel readableChannel = Channels.newChannel(entry.getIn());
+						final ReadableByteChannel readableChannel = Channels.newChannel(entry.getInputStream());
 						IOUtil.copy(readableChannel, writableChannl);
 						readableChannel.close();
 					}
@@ -432,11 +432,11 @@ public abstract class IOUtil {
 	 *
 	 * @param text text
 	 * @param file file
-	 * @param mode file write mode {@link FileWriteMode}
+	 * @param mode file write mode {@link WriteMode}
 	 * @throws IOException IOException
 	 */
-	public static void append(CharSequence text, File file, FileWriteMode mode) throws IOException {
-		boolean append = mode == FileWriteMode.APPEND;
+	public static void append(CharSequence text, File file, WriteMode mode) throws IOException {
+		boolean append = mode == WriteMode.APPEND;
 		try (FileWriter writer = new FileWriter(file, append);
 			 BufferedWriter bWriter = new BufferedWriter(writer)) {
 			bWriter.append(text);
