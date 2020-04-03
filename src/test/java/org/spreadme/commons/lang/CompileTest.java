@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import org.junit.Test;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.StringUtil;
 
 /**

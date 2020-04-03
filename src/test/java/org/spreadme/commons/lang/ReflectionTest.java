@@ -18,6 +18,7 @@ package org.spreadme.commons.lang;
 
 import org.junit.Test;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.ReflectUtil;
 
 /**
@@ -27,6 +28,6 @@ public class ReflectionTest {
 
 	@Test
 	public void testGetClasses() {
-		ReflectUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(System.out::println);
+		ReflectUtil.scanTypeNames(ClassUtil.getClassPath()).forEach(Console::info);
 	}
 }

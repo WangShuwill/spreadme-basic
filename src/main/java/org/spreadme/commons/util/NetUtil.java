@@ -70,6 +70,7 @@ public abstract class NetUtil {
 	 * @param timeout timeout
 	 * @return isReachable
 	 */
+	@Deprecated
 	public static boolean isReachable(String host, int timeout) {
 		try {
 			InetAddress inetAddress = InetAddress.getByName(host);

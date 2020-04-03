@@ -19,7 +19,10 @@ package org.spreadme.commons.codec;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.spreadme.commons.lang.Console;
+import org.spreadme.commons.lang.Assert;
+import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.util.Console;
+import org.spreadme.commons.util.StringUtil;
 
 /**
  * @author shuwei.wang
@@ -27,21 +30,21 @@ import org.spreadme.commons.lang.Console;
  */
 public class CodecTest {
 
+	private static final String plainText = StringUtil.randomString(10);
+
 	@Test
 	public void testHex() {
-		final byte[] data = new byte[] {1, 3, 2, 9, 12};
-		String hexStr = Hex.toHexString(data);
-		Console.info(hexStr);
-		byte[] originData = Hex.decode(hexStr);
-		Console.info(Arrays.equals(data, originData));
+		String hex = Hex.toHexString(plainText.getBytes(Charsets.UTF_8));
+		Console.info("原文为 %s, Hex编码为 %s", plainText, hex);
+		byte[] originData = Hex.decode(hex);
+		Assert.isTrue(Arrays.equals(plainText.getBytes(Charsets.UTF_8), originData), "hex编码失败");
 	}
 
 	@Test
 	public void testBase64() {
-		final String data = "test";
-		String base64Str = Base64.toBase64String(data.getBytes());
-		Console.info(base64Str);
-		byte[] originData = Base64.decode(base64Str);
-		Console.info(Arrays.equals(originData, data.getBytes()));
+		String base64 = Base64.toBase64String(plainText.getBytes(Charsets.UTF_8));
+		Console.info("原文为 %s, Base65编码为 %s", plainText, base64);
+		byte[] originData = Base64.decode(base64);
+		Assert.isTrue(Arrays.equals(plainText.getBytes(Charsets.UTF_8), originData), "base64编码失败");
 	}
 }

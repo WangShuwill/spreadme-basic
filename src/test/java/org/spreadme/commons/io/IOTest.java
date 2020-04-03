@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -32,6 +33,7 @@ import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.crypt.Algorithm;
 import org.spreadme.commons.crypt.Digest;
 import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
@@ -69,8 +71,8 @@ public class IOTest {
 			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
-			System.out.println(Hex.toHexString(digest.digest()));
-			System.out.println(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+			Console.info(Hex.toHexString(digest.digest()));
+			Console.info(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
 		}
 	}
 
@@ -78,7 +80,7 @@ public class IOTest {
 	public void testFiles() throws IOException {
 		List<File> files = FileUtil.getFiles(ClassUtil.getClassPath());
 		for (File file : files) {
-			System.out.println(file);
+			Console.info(file);
 		}
 		final String path = ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "/testpath/123/test.txt";
 		FileUtil.createFile(path, true);
@@ -92,7 +94,7 @@ public class IOTest {
 		final String destPath = ClassUtil.getClassPath() + "/cfile/test.txt";
 		IOUtil.copy(filePath, destPath);
 		try (FileInputStream in = new FileInputStream(new File(destPath))) {
-			System.out.println(IOUtil.readLines(in, StandardCharsets.UTF_8));
+			Console.info(IOUtil.readLines(in, StandardCharsets.UTF_8));
 		}
 	}
 
@@ -104,7 +106,7 @@ public class IOTest {
 		try (FileInputStream in = new FileInputStream(new File(filePath))) {
 			LineIterator iterator = IOUtil.lineIterator(in, StandardCharsets.UTF_8);
 			while (iterator.hasNext()) {
-				System.out.println(iterator.next());
+				Console.info(iterator.next());
 			}
 		}
 	}
@@ -131,14 +133,14 @@ public class IOTest {
 				.map(IOTest::toFileInputStream)
 				.collect(Collectors.toList());
 		try (MultiInputStream in = new MultiInputStream(ins.iterator())) {
-			System.out.println(StringUtil.fromInputStream(in));
+			Console.info(StringUtil.fromInputStream(in));
 		}
 	}
 
 	@Test
 	public void testGetFileExtension() {
 		final String fileName = ClassUtil.getClassPath() + File.separator + ZIP_FILE;
-		System.out.println(FileUtil.getExtension(fileName));
+		Console.info(Objects.requireNonNull(FileUtil.getExtension(fileName)));
 	}
 
 	private static FileInputStream toFileInputStream(File file) {
