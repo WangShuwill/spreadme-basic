@@ -78,31 +78,30 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testDateFomatter() throws Exception {
-		final int THREAD_POOL_SIZE = 10;
-		final String FORMATTER = "HH:mm:ss dd.MM.yyyy";
-		final SimpleDateFormat sdf = new SimpleDateFormat(FORMATTER);
-		ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+	public void testDates() throws Exception {
+		final int poolSize = 8;
+		final String formatter = "HH:mm:ss dd.MM.yyyy";
+		final SimpleDateFormat sdf = new SimpleDateFormat(formatter);
+		ExecutorService executor = Executors.newFixedThreadPool(poolSize);
 
-		Concurrents.startAll(THREAD_POOL_SIZE, () -> {
-			try {
-				String dateCreate = "19:30:55 03.05.2015";
-				//sdf.parse(dateCreate);
-				Dates.parse(dateCreate, FORMATTER);
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-				return;
-			}
-			Console.info("OK ");
+		Concurrents.startAll(poolSize, () -> {
+			String text = "19:30:55 03.05.2015";
+			//Date date = sdf.parse(dateCreate);
+			Date date = Dates.parse(text, formatter);
+			Console.info("%s parse %s to %s", Thread.currentThread().getName(), text, date);
 		}, executor);
-	}
 
-	@Test
-	public void testDates() {
-		Console.info(Dates.getStartOfDate(new Date()));
-		Console.info(Dates.getEndOfDate(new Date()));
-		Console.info(Dates.getDate(new Date(), ChronoUnit.DAYS, -100));
+		Console.info("今天开始时间: %s", Dates.getStartOfDate(new Date()));
+		Console.info("今天结束时间: %s", Dates.getEndOfDate(new Date()));
+		Console.info("100天前的时间: %s", Dates.getDate(new Date(), ChronoUnit.DAYS, -100));
+
+		Console.info("时间戳: %s", Dates.getTimestamp());
+
+		Date oldDate = Dates.parse("19:30:55 03.05.2015", formatter);
+		Duration duration = Dates.getDuration(new Date(), oldDate);
+		Console.info(duration.toDays());
+
+		Console.info(Dates.format(new Date(), formatter));
 	}
 
 	@Test
@@ -113,12 +112,7 @@ public class UtilTest {
 
 	@Test
 	public void testDateParse() {
-		Date date = Dates.parse("1993-12-12 12:00:09", "yyyy-MM-dd HH:mm:ss");
-		Console.info(date);
-		Console.info(Dates.getTimestamp());
-		Date toDate = new Date();
-		Duration duration = Dates.getDuration(date, toDate);
-		Console.info(duration.toDays());
+
 	}
 
 	@Test
@@ -149,7 +143,7 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testStringLength(){
+	public void testStringLength() {
 		String string = "Hello你好";
 		Console.info(string.length());
 		Console.info(string.codePointCount(0, string.length()));

@@ -55,11 +55,11 @@ public abstract class Concurrents {
 			});
 		}
 		long startTime = System.nanoTime();
-		Console.info("\n[" + Thread.currentThread() + "] All thread is ready to begin task.");
+		Console.info("[" + Thread.currentThread() + "] All thread is ready to begin task.");
 		startGate.countDown();
 		endGate.await();
 		long endTime = System.nanoTime();
-		Console.info("\n[" + Thread.currentThread() + "] All thread is completed.");
+		Console.info("[" + Thread.currentThread() + "] All thread is completed.");
 		return endTime - startTime;
 	}
 
