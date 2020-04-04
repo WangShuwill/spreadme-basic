@@ -74,3 +74,21 @@ CaptchaCode code = LineCaptcha.of(200, 50).create();
 CaptchaCode code = CurvesCaptcha.of(200, 50).create();
 ```
 <img src="https://spreadme.oss-cn-shanghai.aliyuncs.com/static/img/CurvesCaptcha.png" alt="Apache"></a>
+
+- Reflect 反射工具
+```java
+private final String java_source_file = "CompilePerson.java";
+private final String class_name = "org.spreadme.commons.test.CompilePerson";
+try (FileInputStream in = new FileInputStream(java_source_file)) {
+	final String content = StringUtil.fromInputStream(in);
+	Reflect.compile(class_name, content).create("Tom", 27)
+		.invoke("hello")
+		.set("name", "Jack").set("age", 28)
+		.fields()
+		.forEach((key, value) -> Console.info("field name %s, value %s", key, value.get()));
+}
+
+//INFO[2020-04-04 19:17:23] My name is Tom, age is 27, randome string is RUEFkyHI
+//INFO[2020-04-04 19:17:23] field name name, value Jack
+//INFO[2020-04-04 19:17:23] field name age, value 28
+```
