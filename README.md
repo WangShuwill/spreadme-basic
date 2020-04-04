@@ -63,3 +63,16 @@ IOUtil.zipFiles(List<File> files, OutputStream out);
 IOUtil.zipResouces(final List<Resource> entries, OutputStream out)
 ...
 ```
+
+- 验证码工具 Captcha
+```java
+Captcha captcha = new LineCaptcha(200, 50);
+CaptchaCode code = captcha.create();
+```
+<img src="https://spreadme.oss-cn-shanghai.aliyuncs.com/static/img/captcha.png" alt="Apache"></a>
+
+```java
+Captcha captcha = new CurvesCaptcha(200, 50);
+CaptchaCode code = captcha.create();
+```
+<img src="https://spreadme.oss-cn-shanghai.aliyuncs.com/static/img/CurvesCaptcha.png" alt="Apache"></a>
