@@ -74,14 +74,31 @@ public class Reflect {
 		this(type, type);
 	}
 
+	/**
+	 * create Reflect by type and object
+	 * @param type type of object
+	 * @param object object
+	 * @return Reflect
+	 */
 	public static Reflect of(Class<?> type, Object object) {
 		return new Reflect(type, object);
 	}
 
+	/**
+	 * create Reflect by object
+	 * @param object object
+	 * @return Reflect
+	 */
 	public static Reflect of(Object object) {
 		return new Reflect(object == null ? Object.class : object.getClass(), object);
 	}
 
+	/**
+	 * create Reflect by constructor function
+	 * @param constructor constructor
+	 * @param args constructor arguments
+	 * @return Reflect
+	 */
 	public static Reflect of(Constructor<?> constructor, Object... args) {
 		try {
 			return of(constructor.getDeclaringClass(),
@@ -248,10 +265,25 @@ public class Reflect {
 		throw new NoSuchMethodException("No similar method " + methodName + " with params " + Arrays.toString(types) + " could be found on type " + type() + ".");
 	}
 
+	/**
+	 * is similar method signature
+	 * match the parameter types by primary types and wraped types
+	 * @param method Method
+	 * @param desiredMethodName desired method name
+	 * @param desiredParamTypes desired parameter types
+	 * @return is similar method
+	 */
 	private boolean isSimilarSignature(Method method, String desiredMethodName, Class<?>[] desiredParamTypes) {
 		return method.getName().equals(desiredMethodName) && match(method.getParameterTypes(), desiredParamTypes);
 	}
 
+	/**
+	 * match the declared types and actual types
+	 * match the primary types and wraped types
+	 * @param declaredTypes declared types
+	 * @param actualTypes actual types
+	 * @return is matched
+	 */
 	private boolean match(Class<?>[] declaredTypes, Class<?>[] actualTypes) {
 		if (declaredTypes.length == actualTypes.length) {
 			for (int i = 0; i < actualTypes.length; i++) {
@@ -288,8 +320,6 @@ public class Reflect {
 				", object=" + object +
 				'}';
 	}
-
-	//TODO cache lookup constructor
 
 	public static Reflect compile(String name, String content, CompileOptions options) throws CompileException {
 		return Reflect.ofClass(Compile.compile(name, content, options));
@@ -406,11 +436,10 @@ public class Reflect {
 		return (Class) params[index];
 	}
 
-	public static class Null {
-
-	}
-
 	public static <T> T initValue(Class<T> type) {
 		return Defaults.of(type);
+	}
+
+	public static class Null {
 	}
 }

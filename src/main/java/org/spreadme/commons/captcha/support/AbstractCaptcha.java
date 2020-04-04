@@ -34,15 +34,17 @@ public abstract class AbstractCaptcha implements Captcha {
 
 	protected int height; // 图片的高度
 
-	protected Font font = new Font(Font.SANS_SERIF, Font.PLAIN, (int) (this.height * 0.75)); // 字体
+	protected Font font; // 字体
 
-	protected Color color = ImageUtil.hexToColor("#293a80"); //颜色
+	protected Color color; //颜色
 
 	protected CodeGenerator generator; // 验证码生成器
 
 	public AbstractCaptcha(int width, int height, CodeGenerator generator) {
 		this.width = width;
 		this.height = height;
+		this.font = new Font(Font.SANS_SERIF, Font.PLAIN, (int) (this.height * 0.65));
+		this.color = ImageUtil.hexToColor("#293a80");
 		this.generator = generator;
 	}
 

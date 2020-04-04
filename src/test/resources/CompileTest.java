@@ -20,10 +20,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.spreadme.commons.system.SystemInfo;
+import org.spreadme.commons.util.Console;
+import org.spreadme.commons.util.StringUtil;
 
 public class TestCompileMain{
 
 	public void hello(){
-		System.out.println("Hello Compile");
+		Console.info("Hello Compile");
+		Console.info(StringUtil.randomString(10));
 	}
 }

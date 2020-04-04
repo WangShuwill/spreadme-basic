@@ -39,7 +39,6 @@ public class CompileTest {
 		try (FileInputStream in = new FileInputStream(JAVA_TEST_FILE)){
 			final String content = StringUtil.fromInputStream(in);
 			final String className = "org.spreadme.commons.test.TestCompileMain";
-			Compile.compile(className, content, new CompileOptions());
 			Console.info(Reflect.compile(className, content).create().invoke("hello"));
 		}
 	}
