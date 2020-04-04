@@ -31,7 +31,8 @@ import org.spreadme.commons.util.StringUtil;
  */
 public class ReflectionTest {
 
-	private static final String JAVA_TEST_FILE_NAME = "CompileTest.java";
+	private static final String JAVA_TEST_FILE_NAME = "CompilePerson.java";
+	private static final String CLASS_NAME = "org.spreadme.commons.test.CompilePerson";
 	private static final File JAVA_TEST_FILE =
 			new File(ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + JAVA_TEST_FILE_NAME);
 
@@ -39,8 +40,11 @@ public class ReflectionTest {
 	public void testCompile() throws Exception {
 		try (FileInputStream in = new FileInputStream(JAVA_TEST_FILE)) {
 			final String content = StringUtil.fromInputStream(in);
-			final String className = "org.spreadme.commons.test.TestCompileMain";
-			Console.info(Reflect.compile(className, content).create().invoke("hello"));
+			Reflect.compile(CLASS_NAME, content).create("Tom", 27)
+					.invoke("hello")
+					.set("name", "Jack").set("age", 28)
+					.fields()
+					.forEach((key, value) -> Console.info("field name %s, value %s", key, value.get()));
 		}
 	}
 
