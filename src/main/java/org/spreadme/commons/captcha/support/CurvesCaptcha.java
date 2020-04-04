@@ -18,6 +18,7 @@ package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
 
+import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.code.RandomCodeGenerator;
 import org.spreadme.commons.lang.Randoms;
 
@@ -33,6 +34,14 @@ public class CurvesCaptcha extends AbstractCaptcha {
 
 	public CurvesCaptcha(int width, int height) {
 		this(width, height, 5);
+	}
+
+	public static Captcha of(int width, int height, int length) {
+		return new CurvesCaptcha(width, height, length);
+	}
+
+	public static Captcha of(int width, int height) {
+		return new CurvesCaptcha(width, height);
 	}
 
 	@Override

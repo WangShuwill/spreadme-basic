@@ -40,8 +40,7 @@ public class CodeGeneratorTest {
 
 	@Test
 	public void testMathCodeGenerator() throws IOException {
-		Captcha captcha = new LineCaptcha(200, 50);
-		CaptchaCode code = captcha.create();
+		CaptchaCode code = LineCaptcha.of(200, 50).create();
 		Console.info(code);
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

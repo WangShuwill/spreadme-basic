@@ -18,6 +18,7 @@ package org.spreadme.commons.captcha.support;
 
 import java.awt.*;
 
+import org.spreadme.commons.captcha.Captcha;
 import org.spreadme.commons.captcha.code.RandomCodeGenerator;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.util.ImageUtil;
@@ -37,6 +38,14 @@ public class LineCaptcha extends AbstractCaptcha {
 
 	public LineCaptcha(int width, int height) {
 		this(width, height, 5, 50);
+	}
+
+	public static Captcha of(int width, int height, int length, int lineCount) {
+		return new LineCaptcha(width, height, length, lineCount);
+	}
+
+	public static Captcha of(int width, int height) {
+		return new LineCaptcha(width, height);
 	}
 
 	@Override
