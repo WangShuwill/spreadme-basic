@@ -16,14 +16,41 @@
 
 package org.spreadme.commons.test;
 
-import java.util.Collections;
-import java.util.List;
+import org.spreadme.commons.util.Console;
+import org.spreadme.commons.util.StringUtil;
 
-import org.spreadme.commons.system.SystemInfo;
+public class CompilePerson {
 
-public class TestCompileMain{
+	private String name;
+	private Integer age;
 
-	public void hello(){
-		System.out.println("Hello Compile");
+	public CompilePerson() {
+
+	}
+
+	public CompilePerson(String name, Integer age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public void hello() {
+		Console.info("My name is %s, age is %d, randome string is %s",
+				this.name, this.age, StringUtil.randomString(8));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
 	}
 }
