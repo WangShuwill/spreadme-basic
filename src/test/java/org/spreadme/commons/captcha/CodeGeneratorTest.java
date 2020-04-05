@@ -16,39 +16,37 @@
 
 package org.spreadme.commons.captcha;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.junit.Test;
+import org.spreadme.commons.captcha.support.CurvesCaptcha;
 import org.spreadme.commons.captcha.support.LineCaptcha;
 import org.spreadme.commons.lang.ImageFormats;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.IOUtil;
+import org.spreadme.commons.util.ImageUtil;
 
 /**
  * @author shuwei.wang
  */
 public class CodeGeneratorTest {
 
-	private static final String FILE_NAME = "captcha.png";
-
 	@Test
 	public void testMathCodeGenerator() throws IOException {
-		CaptchaCode code = LineCaptcha.of(200, 50).create();
-		Console.info(code);
+		CaptchaCode lineCode = LineCaptcha.of(200, 50).create();
+		Console.info(lineCode);
+		IOUtil.toFile(
+				ImageUtil.toBytes(lineCode.getImage(), ImageFormats.PNG),
+				ClassUtil.getClassPath() + File.separator + lineCode.getText() + "." + ImageFormats.PNG.getName()
+		);
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(code.getImage(), ImageFormats.PNG.getName(), bos);
-
-		try (ByteArrayInputStream in = new ByteArrayInputStream(bos.toByteArray());
-			 FileOutputStream out = new FileOutputStream(new File(ClassUtil.getClassPath() + File.separator + FILE_NAME))) {
-			IOUtil.copy(in, out);
-		}
+		CaptchaCode curvesCode = CurvesCaptcha.of(200, 50).create();
+		Console.info(curvesCode);
+		IOUtil.toFile(
+				ImageUtil.toBytes(curvesCode.getImage(), ImageFormats.PNG),
+				ClassUtil.getClassPath() + File.separator + curvesCode.getText() + "." + ImageFormats.PNG.getName()
+		);
 	}
 }
