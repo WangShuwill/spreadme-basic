@@ -3,23 +3,21 @@
 <p align="center">
     <a href="#Apahce"><img src="https://img.shields.io/badge/License-Apache-brightgreen.svg" alt="Apache"></a>
     <a href="#Maven"><img src="https://img.shields.io/badge/Build-Maven-blue.svg" alt="Maven"></a>
-    <a href="#Java"><img src="https://img.shields.io/badge/Programma-Java8+-important.svg" alt="Java8+"></a>
+    <a href="#Java"><img src="https://img.shields.io/badge/Programme-Java-important.svg" alt="Java"></a>
 </p>
 
-spreadme-frame是一套用于Java开发的基础工具框架,集成了常用的工具类,让Java开发
-变得更加简单高效.
+spreadme-commons集成了常用的工具类,让Java开发变得更加简单高效
 
 Liense
 ------
 This code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0).
 
-See the `NOTICE.txt` file for required notices and attributions.
 
 Install
 -------
 - #### Maven
-- #### java1.8+
-- #### spread-commons
+- #### Java8 +
+- #### Spread-commons
 ``` xml
 <dependency>
     <groupId>org.spreadme</groupId>
