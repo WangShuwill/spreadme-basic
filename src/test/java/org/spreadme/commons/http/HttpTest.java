@@ -66,7 +66,7 @@ public class HttpTest {
 	}
 
 	public void testPostFile() {
-		MimeResource resource = new LocalMimeResource(POST_FILE_PATH, MimeType.DOCX);
+		MimeResource resource = new LocalMimeResource(POST_FILE_PATH, MimeType.docx);
 		HttpParam param = new HttpParam().add("file", resource);
 		HttpClient httpClient = new HttpClient();
 		httpClient.setConnectTimeout(10);

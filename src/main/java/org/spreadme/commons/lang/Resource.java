@@ -18,6 +18,8 @@ package org.spreadme.commons.lang;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 /**
  * resource
@@ -25,7 +27,13 @@ import java.io.InputStream;
  */
 public interface Resource {
 
+	boolean exsit();
+
 	String getName();
 
 	InputStream getInputStream() throws IOException;
+
+	default ReadableByteChannel readableChannel() throws IOException {
+		return Channels.newChannel(getInputStream());
+	}
 }
