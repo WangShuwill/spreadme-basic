@@ -19,7 +19,7 @@ package org.spreadme.commons.system;
 import java.lang.management.ManagementFactory;
 
 import com.sun.management.OperatingSystemMXBean;
-import org.spreadme.commons.util.MathUtil;
+import org.spreadme.commons.lang.SizeUnit;
 
 /**
  * monitor service
@@ -42,21 +42,21 @@ public class SystemMonitor {
 		SystemInfo systemInfo = new SystemInfo();
 		// jvm
 		systemInfo.setTotalJvmMemory(runtime.totalMemory());
-		systemInfo.setTotalJvmMemoryUnit(MathUtil.lengthToUnit(systemInfo.getTotalJvmMemory()));
+		systemInfo.setTotalJvmMemoryUnit(SizeUnit.convert(systemInfo.getTotalJvmMemory()));
 		systemInfo.setFreeJvmMemory(runtime.freeMemory());
-		systemInfo.setFreeJvmMemoryUnit(MathUtil.lengthToUnit(systemInfo.getFreeJvmMemory()));
+		systemInfo.setFreeJvmMemoryUnit(SizeUnit.convert(systemInfo.getFreeJvmMemory()));
 		systemInfo.setMaxJvmMemory(runtime.maxMemory());
-		systemInfo.setMaxJvmMemoryUnit(MathUtil.lengthToUnit(systemInfo.getMaxJvmMemory()));
+		systemInfo.setMaxJvmMemoryUnit(SizeUnit.convert(systemInfo.getMaxJvmMemory()));
 		// os
 		OperatingSystemMXBean osmxbean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		systemInfo.setTotalMemory(osmxbean.getTotalPhysicalMemorySize());
-		systemInfo.setTotalMemoryUnit(MathUtil.lengthToUnit(systemInfo.getTotalMemory()));
+		systemInfo.setTotalMemoryUnit(SizeUnit.convert(systemInfo.getTotalMemory()));
 
 		systemInfo.setFreeMemory(osmxbean.getFreePhysicalMemorySize());
-		systemInfo.setFreeMemoryUnit(MathUtil.lengthToUnit(systemInfo.getFreeMemory()));
+		systemInfo.setFreeMemoryUnit(SizeUnit.convert(systemInfo.getFreeMemory()));
 
 		systemInfo.setUsedMemory(systemInfo.getTotalMemory() - systemInfo.getFreeMemory());
-		systemInfo.setUsedMemoryUnit(MathUtil.lengthToUnit(systemInfo.getUsedMemory()));
+		systemInfo.setUsedMemoryUnit(SizeUnit.convert(systemInfo.getUsedMemory()));
 
 		systemInfo.setProcessors(osmxbean.getAvailableProcessors());
 		String osName = System.getProperty(OS_NAME_KEY);

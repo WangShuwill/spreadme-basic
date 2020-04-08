@@ -20,7 +20,7 @@ package org.spreadme.commons.util;
  * math util
  * @author shuwei.wang
  */
-public abstract class MathUtil {
+public abstract class NumberUtil {
 
 	private static final int UNIT_SIZE = 1024;
 	private static final String[] UNITS = new String[] {"", "K", "M", "G", "T", "P", "E"};

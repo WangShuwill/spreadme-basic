@@ -54,6 +54,11 @@ public class LocalMimeResource implements MimeResource {
 	}
 
 	@Override
+	public boolean exsit() {
+		return this.file != null && this.file.exists();
+	}
+
+	@Override
 	public String toString() {
 		return "LocalMimeResource{" +
 				"path='" + path + '\'' +

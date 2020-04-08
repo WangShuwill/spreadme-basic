@@ -1,5 +1,5 @@
 /*
- * Copyright [3/26/20 2:46 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/8/20 2:34 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,28 @@
 
 package org.spreadme.commons.lang;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-
 /**
- * resource
+ * size unit
  * @author shuwei.wang
+ * @since 1.0.0
  */
-public interface Resource {
+public enum SizeUnit {
 
-	boolean exsit();
+	B,
+	KB,
+	MB,
+	GB,
+	TB;
 
-	String getName();
+	private static final int UNIT_SIZE = 1024;
 
-	InputStream getInputStream() throws IOException;
-
-	default ReadableByteChannel readableChannel() throws IOException {
-		return Channels.newChannel(getInputStream());
+	public static String convert(long length) {
+		for (int i = SizeUnit.values().length - 1; i > 0; i--) {
+			double step = Math.pow(UNIT_SIZE, i);
+			if (length > step) {
+				return String.format("%3.1f%s", length / step, SizeUnit.values()[i]);
+			}
+		}
+		return Long.toString(length);
 	}
 }
