@@ -17,18 +17,22 @@
 package org.spreadme.commons.system;
 
 import java.io.File;
-import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+
+import com.sun.management.OperatingSystemMXBean;
 
 /**
  * system info
  * @author shuwei.wang
  * @since 1.0.0
  */
-public class SystemInfo implements Serializable {
-
-	private static final long serialVersionUID = 3798488087128864675L;
+public final class SystemInfo {
 
 	public static final int EOF = -1;
+
+	private static final String OS_NAME_KEY = "os.name";
+
+	private static final OperatingSystemMXBean MX_BEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
 	// 文件路径分隔符
 	public static final String FILE_SEPARATOR = File.separator;
@@ -51,196 +55,10 @@ public class SystemInfo implements Serializable {
 	// Class Path路径
 	public static final String CLASS_PATH = System.getProperty("java.class.path");
 
-	private String osName;
+	public static final String OS_NAME = System.getProperty(OS_NAME_KEY);
 
-	private OsType osType;
+	public static final OsType OS_TYPE = OsType.resolve(OS_NAME);
 
-	private ArchType archType;
+	public static final ArchType ARCH_TYPE = ArchType.resolve(MX_BEAN.getArch());
 
-	private int processors;
-
-	private long totalJvmMemory;
-
-	private String totalJvmMemoryUnit;
-
-	private long freeJvmMemory;
-
-	private String freeJvmMemoryUnit;
-
-	private long maxJvmMemory;
-
-	private String maxJvmMemoryUnit;
-
-	private long totalMemory;
-
-	private String totalMemoryUnit;
-
-	private long freeMemory;
-
-	private String freeMemoryUnit;
-
-	private long usedMemory;
-
-	private String usedMemoryUnit;
-
-	private Double cpuLoad;
-
-	public String getOsName() {
-		return osName;
-	}
-
-	public void setOsName(String osName) {
-		this.osName = osName;
-	}
-
-	public OsType getOsType() {
-		return osType;
-	}
-
-	public void setOsType(OsType osType) {
-		this.osType = osType;
-	}
-
-	public ArchType getArchType() {
-		return archType;
-	}
-
-	public void setArchType(ArchType archType) {
-		this.archType = archType;
-	}
-
-	public int getProcessors() {
-		return processors;
-	}
-
-	public void setProcessors(int processors) {
-		this.processors = processors;
-	}
-
-	public long getTotalJvmMemory() {
-		return totalJvmMemory;
-	}
-
-	public void setTotalJvmMemory(long totalJvmMemory) {
-		this.totalJvmMemory = totalJvmMemory;
-	}
-
-	public long getFreeJvmMemory() {
-		return freeJvmMemory;
-	}
-
-	public void setFreeJvmMemory(long freeJvmMemory) {
-		this.freeJvmMemory = freeJvmMemory;
-	}
-
-	public long getMaxJvmMemory() {
-		return maxJvmMemory;
-	}
-
-	public void setMaxJvmMemory(long maxJvmMemory) {
-		this.maxJvmMemory = maxJvmMemory;
-	}
-
-	public long getTotalMemory() {
-		return totalMemory;
-	}
-
-	public void setTotalMemory(long totalMemory) {
-		this.totalMemory = totalMemory;
-	}
-
-	public long getFreeMemory() {
-		return freeMemory;
-	}
-
-	public void setFreeMemory(long freeMemory) {
-		this.freeMemory = freeMemory;
-	}
-
-	public long getUsedMemory() {
-		return usedMemory;
-	}
-
-	public void setUsedMemory(long usedMemory) {
-		this.usedMemory = usedMemory;
-	}
-
-	public String getTotalJvmMemoryUnit() {
-		return totalJvmMemoryUnit;
-	}
-
-	public void setTotalJvmMemoryUnit(String totalJvmMemoryUnit) {
-		this.totalJvmMemoryUnit = totalJvmMemoryUnit;
-	}
-
-	public String getFreeJvmMemoryUnit() {
-		return freeJvmMemoryUnit;
-	}
-
-	public void setFreeJvmMemoryUnit(String freeJvmMemoryUnit) {
-		this.freeJvmMemoryUnit = freeJvmMemoryUnit;
-	}
-
-	public String getMaxJvmMemoryUnit() {
-		return maxJvmMemoryUnit;
-	}
-
-	public void setMaxJvmMemoryUnit(String maxJvmMemoryUnit) {
-		this.maxJvmMemoryUnit = maxJvmMemoryUnit;
-	}
-
-	public String getTotalMemoryUnit() {
-		return totalMemoryUnit;
-	}
-
-	public void setTotalMemoryUnit(String totalMemoryUnit) {
-		this.totalMemoryUnit = totalMemoryUnit;
-	}
-
-	public String getFreeMemoryUnit() {
-		return freeMemoryUnit;
-	}
-
-	public void setFreeMemoryUnit(String freeMemoryUnit) {
-		this.freeMemoryUnit = freeMemoryUnit;
-	}
-
-	public String getUsedMemoryUnit() {
-		return usedMemoryUnit;
-	}
-
-	public void setUsedMemoryUnit(String usedMemoryUnit) {
-		this.usedMemoryUnit = usedMemoryUnit;
-	}
-
-	public Double getCpuLoad() {
-		return cpuLoad;
-	}
-
-	public void setCpuLoad(Double cpuLoad) {
-		this.cpuLoad = cpuLoad;
-	}
-
-	@Override
-	public String toString() {
-		return "SystemInfo{" +
-				"osName='" + osName + '\'' +
-				", osType='" + osType + '\'' +
-				", archType='" + archType + '\'' +
-				", processors=" + processors +
-				", totalJvmMemory=" + totalJvmMemory +
-				", totalJvmMemoryUnit='" + totalJvmMemoryUnit + '\'' +
-				", freeJvmMemory=" + freeJvmMemory +
-				", freeJvmMemoryUnit='" + freeJvmMemoryUnit + '\'' +
-				", maxJvmMemory=" + maxJvmMemory +
-				", maxJvmMemoryUnit='" + maxJvmMemoryUnit + '\'' +
-				", totalMemory=" + totalMemory +
-				", totalMemoryUnit='" + totalMemoryUnit + '\'' +
-				", freeMemory=" + freeMemory +
-				", freeMemoryUnit='" + freeMemoryUnit + '\'' +
-				", usedMemory=" + usedMemory +
-				", usedMemoryUnit='" + usedMemoryUnit + '\'' +
-				", cpuLoad='" + cpuLoad + '\'' +
-				'}';
-	}
 }

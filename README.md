@@ -90,3 +90,21 @@ try (FileInputStream in = new FileInputStream(java_source_file)) {
 //INFO[2020-04-04 19:17:23] field name name, value Jack
 //INFO[2020-04-04 19:17:23] field name age, value 28
 ```
+
+- Codec
+```java
+//Hex
+String plainText = StringUtil.randomString(10);
+String hex = Hex.toHexString(plainText.getBytes(Charsets.UTF_8));
+Hex.decode(hex);
+//Base64
+String base64 = Base64.toBase64String(plainText.getBytes(Charsets.UTF_8));
+Base64.decode(base64);
+```
+
+- Digest
+```java
+FileInputStream in = new FileInputStream(testFile)
+byte[] md5 = Digest.get(in, Algorithm.MD5);
+byte[] sha256 = Digest.get(in, Algorithm.SHA256);
+```

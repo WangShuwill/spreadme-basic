@@ -25,6 +25,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -37,8 +39,12 @@ import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Dates;
 import org.spreadme.commons.lang.ImageFormats;
 import org.spreadme.commons.lang.Randoms;
+import org.spreadme.commons.lang.SizeUnit;
 import org.spreadme.commons.system.SystemInfo;
-import org.spreadme.commons.system.SystemMonitor;
+import org.spreadme.commons.system.sampler.JvmMemorySampler;
+import org.spreadme.commons.system.sampler.ProcessorSampler;
+import org.spreadme.commons.system.sampler.Sampler;
+import org.spreadme.commons.system.sampler.UptimeSampler;
 
 /**
  * @author shuwei.wang
@@ -104,9 +110,27 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testSystemInfo() {
-		SystemMonitor monitor = new SystemMonitor();
-		Console.info(monitor.getSystemInfo());
+	public void testSampler() throws InterruptedException {
+		Console.info("osName: %s, osType: %s, archType: %s",
+				SystemInfo.OS_NAME, SystemInfo.OS_TYPE, SystemInfo.ARCH_TYPE);
+		Sampler processorSampler = new ProcessorSampler();
+		Sampler jvmMemorySampler = new JvmMemorySampler();
+		Sampler uptimeSampler = new UptimeSampler();
+		for (int i = 0; i < 10; i++) {
+			TimeUnit.SECONDS.sleep(1);
+			String processor = processorSampler.sample().stream()
+					.map(m -> String.format("%s: %5.4f", m.name(), m.value()))
+					.collect(Collectors.joining(", "));
+			Console.info(processor);
+			String jvmmemory = jvmMemorySampler.sample().stream().filter(m -> !m.name().contains("buffer"))
+					.map(m -> String.format("%s: %s", m.name(), SizeUnit.convert(m.value().longValue())))
+					.collect(Collectors.joining(", "));
+			Console.info(jvmmemory);
+			String uptime = uptimeSampler.sample().stream()
+					.map(m -> String.format("%s: %d", m.name(), m.value().longValue()))
+					.collect(Collectors.joining(", "));
+			Console.info(uptime);
+		}
 	}
 
 	@Test
