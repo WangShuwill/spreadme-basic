@@ -16,7 +16,9 @@
 
 package org.spreadme.commons.system.sampler;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.ToDoubleFunction;
 
 import org.spreadme.commons.lang.SizeUnit;
@@ -25,13 +27,16 @@ import org.spreadme.commons.lang.SizeUnit;
  * Metrics
  * @author shuwei.wang
  */
-public class Metrics {
+public class Metrics implements Serializable {
+
+	private static final long serialVersionUID = -6523823373030440648L;
 
 	private final Double value;
 
 	private String name;
 	private String description;
-	private SizeUnit sizeUnit;
+	private SizeUnit sizeunit;
+	private TimeUnit timeunit;
 
 	private Metrics(Double value) {
 		this.value = value;
@@ -51,8 +56,13 @@ public class Metrics {
 		return this;
 	}
 
-	public Metrics sizeunit(SizeUnit sizeUnit) {
-		this.sizeUnit = sizeUnit;
+	public Metrics sizeunit(SizeUnit sizeunit) {
+		this.sizeunit = sizeunit;
+		return this;
+	}
+
+	public Metrics timeunit(TimeUnit timeunit) {
+		this.timeunit = timeunit;
 		return this;
 	}
 
@@ -61,19 +71,23 @@ public class Metrics {
 	}
 
 	public String name() {
-		return name;
+		return this.name;
 	}
 
 	public Double value() {
-		return value;
+		return this.value;
 	}
 
 	public String description() {
-		return description;
+		return this.description;
 	}
 
 	public SizeUnit sizeunit() {
-		return sizeUnit;
+		return this.sizeunit;
+	}
+
+	public TimeUnit timeunit() {
+		return this.timeunit;
 	}
 
 	@Override
@@ -81,7 +95,8 @@ public class Metrics {
 		return "Metrics{" +
 				"name='" + name + '\'' +
 				", value=" + value +
-				", sizeUnit=" + sizeUnit +
+				", sizeUnit=" + sizeunit +
+				", timeUnit=" + timeunit +
 				'}';
 	}
 }

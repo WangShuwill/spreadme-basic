@@ -44,6 +44,7 @@ import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.system.sampler.JvmMemorySampler;
 import org.spreadme.commons.system.sampler.ProcessorSampler;
 import org.spreadme.commons.system.sampler.Sampler;
+import org.spreadme.commons.system.sampler.UptimeSampler;
 
 /**
  * @author shuwei.wang
@@ -109,11 +110,12 @@ public class UtilTest {
 	}
 
 	@Test
-	public void testMetrics() throws InterruptedException {
+	public void testSampler() throws InterruptedException {
 		Console.info("osName: %s, osType: %s, archType: %s",
 				SystemInfo.OS_NAME, SystemInfo.OS_TYPE, SystemInfo.ARCH_TYPE);
 		Sampler processorSampler = new ProcessorSampler();
 		Sampler jvmMemorySampler = new JvmMemorySampler();
+		Sampler uptimeSampler = new UptimeSampler();
 		for (int i = 0; i < 10; i++) {
 			TimeUnit.SECONDS.sleep(1);
 			String processor = processorSampler.sample().stream()
@@ -124,6 +126,10 @@ public class UtilTest {
 					.map(m -> String.format("%s: %s", m.name(), SizeUnit.convert(m.value().longValue())))
 					.collect(Collectors.joining(", "));
 			Console.info(jvmmemory);
+			String uptime = uptimeSampler.sample().stream()
+					.map(m -> String.format("%s: %d", m.name(), m.value().longValue()))
+					.collect(Collectors.joining(", "));
+			Console.info(uptime);
 		}
 	}
 
