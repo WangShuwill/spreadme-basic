@@ -59,7 +59,7 @@ public abstract class Digest {
 		));
 		MESSAGEDIGEST = new HashMap<>(ALGORITHM.size());
 		for (Algorithm algorithm : ALGORITHM) {
-			MESSAGEDIGEST.put(algorithm, createThreadLocalMessageDigest(algorithm));
+			MESSAGEDIGEST.put(algorithm, createMessageDigest(algorithm));
 		}
 	}
 
@@ -69,7 +69,7 @@ public abstract class Digest {
 	 * @param algorithm hash算法 {@link Algorithm}
 	 * @return ThreadLocal MessageDIgest
 	 */
-	private static ThreadLocal<MessageDigest> createThreadLocalMessageDigest(Algorithm algorithm) {
+	private static ThreadLocal<MessageDigest> createMessageDigest(Algorithm algorithm) {
 		return ThreadLocal.withInitial(() -> {
 			try {
 				return MessageDigest.getInstance(algorithm.getValue());
