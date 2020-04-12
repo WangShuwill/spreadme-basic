@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,25 +42,24 @@ import org.spreadme.commons.util.CollectionUtil;
 public abstract class Digest {
 
 	private Digest() {
-
 	}
 
 	private static final int BUFFER_LENGTH = 8 * 1024;
 
-	/**
-	 * 支持的Hash算法
-	 */
-	private static final List<Algorithm> SUPPORT_HASH_ALGO = CollectionUtil.toList(
-			Algorithm.SHA, Algorithm.SHA1, Algorithm.SHA224,
-			Algorithm.SHA256, Algorithm.SHA384, Algorithm.SHA512,
-			Algorithm.MD5
-	);
+	// the support message digest algorithm
+	private static final List<Algorithm> ALGORITHM;
 
-	private static final Map<Algorithm, ThreadLocal<MessageDigest>> MESSAGEDIGEST_MAP = new HashMap<>(SUPPORT_HASH_ALGO.size());
+	private static final Map<Algorithm, ThreadLocal<MessageDigest>> MESSAGEDIGEST;
 
 	static {
-		for (Algorithm algorithm : SUPPORT_HASH_ALGO) {
-			MESSAGEDIGEST_MAP.put(algorithm, createThreadLocalMessageDigest(algorithm));
+		ALGORITHM = Collections.unmodifiableList(CollectionUtil.toList(
+				Algorithm.SHA, Algorithm.SHA1, Algorithm.SHA224,
+				Algorithm.SHA256, Algorithm.SHA384, Algorithm.SHA512,
+				Algorithm.MD5
+		));
+		MESSAGEDIGEST = new HashMap<>(ALGORITHM.size());
+		for (Algorithm algorithm : ALGORITHM) {
+			MESSAGEDIGEST.put(algorithm, createThreadLocalMessageDigest(algorithm));
 		}
 	}
 
@@ -87,7 +87,7 @@ public abstract class Digest {
 	 * @return is support
 	 */
 	public static boolean isSupport(Algorithm algorithm) {
-		return SUPPORT_HASH_ALGO.contains(algorithm);
+		return ALGORITHM.contains(algorithm);
 	}
 
 	/**
@@ -163,7 +163,10 @@ public abstract class Digest {
 	 * @return MessageDigest {@link MessageDigest}
 	 */
 	public static MessageDigest getMessageDigest(Algorithm algorithm) {
-		ThreadLocal<MessageDigest> digestThreadLocal = MESSAGEDIGEST_MAP.get(algorithm);
+		if (!isSupport(algorithm)) {
+			throw new IllegalArgumentException(String.format("can not support the algorithm %s to digest.", algorithm.name()));
+		}
+		ThreadLocal<MessageDigest> digestThreadLocal = MESSAGEDIGEST.get(algorithm);
 		MessageDigest messageDigest = digestThreadLocal.get();
 		messageDigest.reset();
 		return messageDigest;
