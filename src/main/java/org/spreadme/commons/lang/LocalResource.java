@@ -23,23 +23,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * LocalMimeResource
+ * LocalResource
  * @author shuwei.wang
  */
-public class LocalMimeResource implements MimeResource {
+public class LocalResource extends AbstractResource {
 
 	private String path;
-	private MimeType mimeType;
+	private ContentType mimeType;
 	private File file;
 
-	public LocalMimeResource(String path, MimeType mimeType) {
+	public LocalResource(String path, ContentType mimeType) {
 		this.path = path;
 		this.file = new File(path);
 		this.mimeType = mimeType;
 	}
 
 	@Override
-	public MimeType getMimeType() {
+	public ContentType getContentType() {
 		return this.mimeType;
 	}
 
@@ -60,7 +60,7 @@ public class LocalMimeResource implements MimeResource {
 
 	@Override
 	public String toString() {
-		return "LocalMimeResource{" +
+		return "LocalResource{" +
 				"path='" + path + '\'' +
 				", mimeType=" + mimeType +
 				'}';

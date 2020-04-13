@@ -23,7 +23,7 @@ import java.util.Map;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public enum MimeType {
+public enum ContentType {
 
 	txt("text/plain"),
 	css("text/css"),
@@ -141,28 +141,27 @@ public enum MimeType {
 	doc("application/msword"),
 	wps("application/msword"),
 	xls("application/vnd.ms-excel"),
-	ppt("application/vnd.ms-powerpoint");
+	ppt("application/vnd.ms-powerpoint"),
 
-	private static Map<String, MimeType> map = new HashMap<>(128);
+	multipart("multipart/form-data"),
+	formurlencoded("application/x-www-form-urlencoded");
+
+	private static Map<String, ContentType> map = new HashMap<>(132);
 
 	static {
-		for (MimeType mimeType : MimeType.values()) {
+		for (ContentType mimeType : ContentType.values()) {
 			map.put(mimeType.name(), mimeType);
 		}
 	}
 
 	private String value;
 
-	MimeType(String value) {
+	ContentType(String value) {
 		this.value = value;
 	}
 
-	public String getMimeType() {
+	public String getType() {
 		return value;
-	}
-
-	public void setMimeType(String value) {
-		this.value = value;
 	}
 
 }

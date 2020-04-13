@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.spreadme.commons.lang.MimeResource;
+import org.spreadme.commons.lang.AbstractResource;
 import org.spreadme.commons.util.StringUtil;
 
 /**
@@ -31,7 +31,7 @@ public class HttpParam {
 
 	private boolean isMultiPart = false;
 	private Map<String, String> params = new LinkedHashMap<>();
-	private Map<String, MimeResource> multipart = new LinkedHashMap<>();
+	private Map<String, AbstractResource> multipart = new LinkedHashMap<>();
 
 	public HttpParam() {
 	}
@@ -41,9 +41,9 @@ public class HttpParam {
 	}
 
 	public HttpParam add(String key, Object value) {
-		if (value instanceof MimeResource) {
+		if (value instanceof AbstractResource) {
 			this.isMultiPart = true;
-			this.multipart.put(key, (MimeResource) value);
+			this.multipart.put(key, (AbstractResource) value);
 		}
 		else {
 			this.params.put(key, String.valueOf(value));
@@ -66,7 +66,7 @@ public class HttpParam {
 		return params;
 	}
 
-	public Map<String, MimeResource> getMultipart() {
+	public Map<String, AbstractResource> getMultipart() {
 		return multipart;
 	}
 

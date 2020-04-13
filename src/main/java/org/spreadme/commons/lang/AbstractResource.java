@@ -20,7 +20,7 @@ package org.spreadme.commons.lang;
  * Mime Resource
  * @author shuwei.wang
  */
-public interface MimeResource extends Resource {
+public abstract class AbstractResource implements Resource {
 
-	MimeType getMimeType();
+	public abstract ContentType getContentType();
 }
