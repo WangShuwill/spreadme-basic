@@ -66,7 +66,13 @@ public interface CacheClient<K, V> {
 	 * @param type 类型
 	 * @return 值
 	 */
-	V get(K key, Class<V> type);
+	default V get(K key, Class<V> type){
+		V value = get(key);
+		if (value != null && type != null && !type.isInstance(value)) {
+			throw new IllegalStateException(String.format("Cached value is not of required type [%s]: %s", type.getName(), value));
+		}
+		return value;
+	}
 
 
 	/**

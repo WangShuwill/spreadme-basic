@@ -32,6 +32,7 @@ public class Metrics implements Serializable {
 	private static final long serialVersionUID = -6523823373030440648L;
 
 	private final Double value;
+	private final Long timestamp;
 
 	private String name;
 	private String description;
@@ -40,6 +41,7 @@ public class Metrics implements Serializable {
 
 	private Metrics(Double value) {
 		this.value = value;
+		this.timestamp = System.currentTimeMillis();
 	}
 
 	public static <T> Metrics of(T t, ToDoubleFunction<T> f) {
@@ -76,6 +78,10 @@ public class Metrics implements Serializable {
 
 	public Double value() {
 		return this.value;
+	}
+
+	public Long timestamp() {
+		return this.timestamp;
 	}
 
 	public String description() {
