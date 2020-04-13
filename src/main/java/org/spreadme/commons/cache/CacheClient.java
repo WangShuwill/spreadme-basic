@@ -49,7 +49,7 @@ public interface CacheClient<K, V> {
 	 * @param timeout 过期时间
 	 * @param timeUnit 时间单位 {@link TimeUnit}
 	 */
-	void put(K key, V value, int timeout, TimeUnit timeUnit);
+	void put(K key, V value, long timeout, TimeUnit timeUnit);
 
 	/**
 	 * 获取缓存对象

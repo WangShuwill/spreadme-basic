@@ -52,7 +52,7 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 	}
 
 	@Override
-	public void put(K key, V value, int timeout, TimeUnit timeUnit) {
+	public void put(K key, V value, long timeout, TimeUnit timeUnit) {
 		ValueWrapper<V> valueWrapper = new ValueWrapper<>(value);
 		POOL.put(key, valueWrapper);
 		valueWrapper.schedule(new TimerTask() {
