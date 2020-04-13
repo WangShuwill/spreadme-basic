@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.spreadme.commons.lang.ContentType;
+
 /**
  * Http Header
  * @author shuwei.wang
@@ -33,7 +35,10 @@ public class HttpHeader implements Iterable<HttpHeader.HttpHeaderProperty> {
 
 	static {
 		DEFAULT.setHeader(HeaderType.ACCEPT_ENCODING, "gzip,deflate");
-		DEFAULT.setHeader(HeaderType.ACCEPT, String.join(",", ContentType.TEXT_PLAIN, ContentType.TEXT_HTMl, ContentType.JSON));
+		DEFAULT.setHeader(HeaderType.ACCEPT, String.join(",",
+				ContentType.txt.getType(),
+				ContentType.html.getType(),
+				ContentType.json.getType()));
 	}
 
 	public HttpHeader setHeader(String key, String value) {
@@ -41,7 +46,7 @@ public class HttpHeader implements Iterable<HttpHeader.HttpHeaderProperty> {
 		return this;
 	}
 
-	public HttpHeader setContentType(String contentType){
+	public HttpHeader setContentType(String contentType) {
 		properties.add(new HttpHeaderProperty(HeaderType.CONTENT_TYPE, contentType));
 		return this;
 	}
