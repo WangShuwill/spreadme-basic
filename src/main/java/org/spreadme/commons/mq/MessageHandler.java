@@ -1,5 +1,5 @@
 /*
- * Copyright [4/13/20 9:42 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/13/20 10:15 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,12 @@
 
 package org.spreadme.commons.mq;
 
-import java.io.Serializable;
-
-import org.spreadme.commons.lang.ContentType;
-
 /**
- * mq message
+ * Message Handler
  * @author shuwei.wang
  */
-public interface Message extends Serializable {
+public interface MessageHandler<M extends Message> {
 
-	String getName();
-
-	ContentType getContentType();
-
-	String getType();
+	void handle(M message) throws Exception;
 }
+

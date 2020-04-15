@@ -1,5 +1,5 @@
 /*
- * Copyright [4/13/20 9:42 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/13/20 10:17 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,15 @@
 
 package org.spreadme.commons.mq;
 
-import java.io.Serializable;
-
-import org.spreadme.commons.lang.ContentType;
+import java.util.concurrent.TimeUnit;
 
 /**
- * mq message
+ * Message Producer
  * @author shuwei.wang
  */
-public interface Message extends Serializable {
+public interface MessageProducer<M extends Message> {
 
-	String getName();
+	void produce(M message);
 
-	ContentType getContentType();
-
-	String getType();
+	void produce(M message, long delaytime, TimeUnit timeUnit);
 }
