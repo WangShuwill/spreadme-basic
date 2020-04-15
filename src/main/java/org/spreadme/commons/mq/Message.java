@@ -1,5 +1,5 @@
 /*
- * Copyright [3/26/20 2:46 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/13/20 9:42 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.mq;
+
+import java.io.Serializable;
+
+import org.spreadme.commons.lang.ContentType;
 
 /**
- * Mime Resource
+ * mq message
  * @author shuwei.wang
  */
-public interface MimeResource extends Resource {
+public interface Message extends Serializable {
 
-	MimeType getMimeType();
+	String getName();
+
+	ContentType getContentType();
+
+	String getType();
 }

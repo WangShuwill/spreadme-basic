@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 import org.spreadme.commons.http.HttpParam;
-import org.spreadme.commons.lang.MimeResource;
+import org.spreadme.commons.lang.AbstractResource;
 import org.spreadme.commons.util.IOUtil;
 
 /**
@@ -65,8 +65,8 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 		}
 	}
 
-	private void writeMultipart(Map<String, MimeResource> multipat, byte[] boundary, OutputStream out, Charset charset) throws IOException {
-		for (Map.Entry<String, MimeResource> entry : multipat.entrySet()) {
+	private void writeMultipart(Map<String, AbstractResource> multipat, byte[] boundary, OutputStream out, Charset charset) throws IOException {
+		for (Map.Entry<String, AbstractResource> entry : multipat.entrySet()) {
 			this.writeNewLine(out);
 			this.writeBoundary(out, boundary);
 			byte[] multipartBytes = this.getMultipart(entry.getKey(), entry.getValue(), this.charset);
@@ -84,14 +84,14 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 		return builder.toString().getBytes(charset);
 	}
 
-	private byte[] getMultipart(String key, MimeResource resource, Charset charset) {
+	private byte[] getMultipart(String key, AbstractResource resource, Charset charset) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Content-Disposition:form-data;name=\"");
 		builder.append(key);
 		builder.append("\";filename=\"");
 		builder.append(resource.getName());
 		builder.append("\"\r\nContent-Type:");
-		builder.append(resource.getMimeType().getMimeType());
+		builder.append(resource.getContentType().getType());
 		builder.append("\r\n\r\n");
 		return builder.toString().getBytes(charset);
 	}

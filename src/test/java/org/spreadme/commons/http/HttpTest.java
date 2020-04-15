@@ -25,10 +25,10 @@ import org.spreadme.commons.http.client.HttpMessageReader;
 import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
+import org.spreadme.commons.lang.LocalResource;
 import org.spreadme.commons.util.Console;
-import org.spreadme.commons.lang.LocalMimeResource;
-import org.spreadme.commons.lang.MimeResource;
-import org.spreadme.commons.lang.MimeType;
+import org.spreadme.commons.lang.AbstractResource;
+import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
@@ -66,7 +66,7 @@ public class HttpTest {
 	}
 
 	public void testPostFile() {
-		MimeResource resource = new LocalMimeResource(POST_FILE_PATH, MimeType.docx);
+		AbstractResource resource = new LocalResource(POST_FILE_PATH, ContentType.docx);
 		HttpParam param = new HttpParam().add("file", resource);
 		HttpClient httpClient = new HttpClient();
 		httpClient.setConnectTimeout(10);

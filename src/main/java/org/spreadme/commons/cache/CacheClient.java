@@ -49,7 +49,7 @@ public interface CacheClient<K, V> {
 	 * @param timeout 过期时间
 	 * @param timeUnit 时间单位 {@link TimeUnit}
 	 */
-	void put(K key, V value, int timeout, TimeUnit timeUnit);
+	void put(K key, V value, long timeout, TimeUnit timeUnit);
 
 	/**
 	 * 获取缓存对象
@@ -66,7 +66,13 @@ public interface CacheClient<K, V> {
 	 * @param type 类型
 	 * @return 值
 	 */
-	V get(K key, Class<V> type);
+	default V get(K key, Class<V> type){
+		V value = get(key);
+		if (value != null && type != null && !type.isInstance(value)) {
+			throw new IllegalStateException(String.format("Cached value is not of required type [%s]: %s", type.getName(), value));
+		}
+		return value;
+	}
 
 
 	/**

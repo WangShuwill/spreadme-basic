@@ -52,7 +52,7 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 	}
 
 	@Override
-	public void put(K key, V value, int timeout, TimeUnit timeUnit) {
+	public void put(K key, V value, long timeout, TimeUnit timeUnit) {
 		ValueWrapper<V> valueWrapper = new ValueWrapper<>(value);
 		POOL.put(key, valueWrapper);
 		valueWrapper.schedule(new TimerTask() {
@@ -71,16 +71,6 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 		ValueWrapper<V> valueWrapper = POOL.get(key);
 		return valueWrapper != null ? valueWrapper.getValue() : null;
 	}
-
-	@Override
-	public V get(K key, Class<V> type) {
-		V value = get(key);
-		if (value != null && type != null && !type.isInstance(value)) {
-			throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
-		}
-		return value;
-	}
-
 
 	@Override
 	public boolean remove(K key) {

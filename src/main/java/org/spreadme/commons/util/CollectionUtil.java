@@ -95,4 +95,13 @@ public abstract class CollectionUtil {
 		}
 		return all;
 	}
+
+	@SafeVarargs
+	public static <E> Collection<E> addAll(Collection<E> all, E... values){
+		if(values == null || values.length == 0){
+			return all;
+		}
+		all.addAll(Arrays.asList(values));
+		return all;
+	}
 }

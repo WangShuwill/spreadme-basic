@@ -30,9 +30,11 @@ public final class SystemInfo {
 
 	public static final int EOF = -1;
 
-	private static final String OS_NAME_KEY = "os.name";
+	private static final OperatingSystemMXBean MXBEAN;
 
-	private static final OperatingSystemMXBean MX_BEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+	static {
+		MXBEAN = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+	}
 
 	// 文件路径分隔符
 	public static final String FILE_SEPARATOR = File.separator;
@@ -55,10 +57,13 @@ public final class SystemInfo {
 	// Class Path路径
 	public static final String CLASS_PATH = System.getProperty("java.class.path");
 
-	public static final String OS_NAME = System.getProperty(OS_NAME_KEY);
+	// operating system name
+	public static final String OS_NAME = System.getProperty("os.name");
 
+	// operating system type
 	public static final OsType OS_TYPE = OsType.resolve(OS_NAME);
 
-	public static final ArchType ARCH_TYPE = ArchType.resolve(MX_BEAN.getArch());
+	// arch type
+	public static final ArchType ARCH_TYPE = ArchType.resolve(MXBEAN.getArch());
 
 }

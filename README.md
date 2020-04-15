@@ -6,8 +6,6 @@
     <a href="#Java"><img src="https://img.shields.io/badge/Programme-Java-important.svg" alt="Java"></a>
 </p>
 
-spreadme-commons集成了常用的工具类,让Java开发变得更加简单高效
-
 Liense
 ------
 This code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0).

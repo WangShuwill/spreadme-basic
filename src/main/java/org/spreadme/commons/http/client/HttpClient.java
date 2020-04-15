@@ -22,11 +22,11 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import org.spreadme.commons.http.ContentType;
 import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
 import org.spreadme.commons.http.HttpParam;
 import org.spreadme.commons.lang.Charsets;
+import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
 
@@ -82,11 +82,11 @@ public class HttpClient {
 		final Charset charset = Charsets.UTF_8;
 		if (param.isMultiPart()) {
 			final String boundary = StringUtil.randomString(36);
-			header.setContentType(ContentType.MULTIPART + ";charset=" + charset + ";boundary=" + boundary);
+			header.setContentType(ContentType.multipart.getType() + ";charset=" + charset + ";boundary=" + boundary);
 			return execute(url, HttpMethod.POST, header, new FormHttpMessageWriter(param, charset, boundary), reader);
 		}
 		else {
-			header.setContentType(ContentType.FORM_URLENCODED + ";charset=" + charset);
+			header.setContentType(ContentType.formurlencoded.getType() + ";charset=" + charset);
 			byte[] content = param.getParams().isEmpty() ? new byte[0] : param.getQueryString().getBytes(Charsets.UTF_8);
 			return execute(url, HttpMethod.POST, header, out -> out.write(content), reader);
 		}
