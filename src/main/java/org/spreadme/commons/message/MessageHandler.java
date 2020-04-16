@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.mq;
+package org.spreadme.commons.message;
 
 /**
  * Message Handler

@@ -1,5 +1,5 @@
 /*
- * Copyright [4/13/20 9:42 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/15/20 11:03 AM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.mq;
-
-import java.io.Serializable;
-
-import org.spreadme.commons.lang.ContentType;
+package org.spreadme.commons.message;
 
 /**
- * mq message
+ * Message Listener Registrar
  * @author shuwei.wang
  */
-public interface Message extends Serializable {
+public interface MessageListenerRegistrar {
 
-	String getName();
-
-	ContentType getContentType();
-
-	String getType();
+	<M extends Message> void register(MessageListener<M> listener);
+	
+	void destroy();
 }

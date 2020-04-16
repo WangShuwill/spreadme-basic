@@ -1,5 +1,5 @@
 /*
- * Copyright [4/13/20 10:13 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/16/20 10:56 AM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.mq;
+package org.spreadme.commons.message;
 
 /**
- * Message Listener
+ * Message Publisher
  * @author shuwei.wang
  */
-public interface MessageListener<M extends Message> {
+public interface MessagePublisher<M extends Message> {
 
-	void on(M message);
+	void publish(M message);
 }
