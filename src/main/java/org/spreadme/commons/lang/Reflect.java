@@ -412,6 +412,26 @@ public class Reflect {
 			return Object.class;
 		}
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+		return getClassByType(params, index);
+	}
+
+	public static Class getInterfaceGenericType(Class clazz, int index) {
+		Type[] types = clazz.getGenericInterfaces();
+		ParameterizedType parameterizedType = null;
+		for (Type type : types) {
+			if (type instanceof ParameterizedType) {
+				parameterizedType = (ParameterizedType) type;
+				break;
+			}
+		}
+		if (parameterizedType == null) {
+			return Object.class;
+		}
+		Type[] params = parameterizedType.getActualTypeArguments();
+		return getClassByType(params, index);
+	}
+
+	private static Class getClassByType(Type[] params, int index) {
 		if (index >= params.length || index < 0) {
 			return Object.class;
 		}

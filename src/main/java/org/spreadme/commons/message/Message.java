@@ -1,5 +1,5 @@
 /*
- * Copyright [4/13/20 10:17 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/13/20 9:42 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.mq;
+package org.spreadme.commons.message;
 
-import java.util.concurrent.TimeUnit;
+import java.io.Serializable;
+
+import org.spreadme.commons.lang.ContentType;
 
 /**
- * Message Producer
+ * message message
  * @author shuwei.wang
  */
-public interface MessageProducer<M extends Message> {
+public interface Message extends Serializable {
 
-	void produce(M message);
+	default ContentType getContentType() {
+		return ContentType.json;
+	}
 
-	void produce(M message, long delaytime, TimeUnit timeUnit);
 }
