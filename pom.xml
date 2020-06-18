@@ -28,7 +28,7 @@
 
 	<groupId>org.spreadme</groupId>
 	<artifactId>spreadme-commons</artifactId>
-	<version>1.5.2</version>
+	<version>1.5.3</version>
 
 	<name>Spreadme Commons</name>
 	<inceptionYear>2018</inceptionYear>
