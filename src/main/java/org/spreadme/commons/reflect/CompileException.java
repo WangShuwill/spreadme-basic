@@ -1,5 +1,5 @@
 /*
- * Copyright [4/2/20 10:14 AM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/1/20 10:43 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.reflect;
 
 /**
  * Compile Exception
  * @author shuwei.wang
  */
-public class ReflectException extends RuntimeException {
+public class CompileException extends RuntimeException {
 
-	private static final long serialVersionUID = 7679009396519897478L;
+	private static final long serialVersionUID = 3824980821083838187L;
 
-	public ReflectException(String message) {
+	public CompileException(String message) {
 		super(message);
 	}
 
-	public ReflectException(String message, Throwable cause) {
+	public CompileException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public ReflectException() {
+	public CompileException() {
 		super();
 	}
 
-	public ReflectException(Throwable cause) {
+	public CompileException(Throwable cause) {
 		super(cause);
 	}
 }

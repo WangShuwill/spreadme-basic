@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
+import org.spreadme.commons.reflect.Annotate;
+import org.spreadme.commons.reflect.Reflect;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Console;

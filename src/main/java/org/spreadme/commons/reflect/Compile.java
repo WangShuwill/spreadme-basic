@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.reflect;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,6 +40,8 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.spreadme.commons.lang.Protocol;
+import org.spreadme.commons.lang.ThrowableBiFunction;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.CollectionUtil;
 import org.spreadme.commons.util.StringUtil;

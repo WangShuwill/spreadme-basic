@@ -21,7 +21,7 @@ import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spreadme.commons.lang.Reflect;
+import org.spreadme.commons.reflect.Reflect;
 
 /**
  * Processor Sampler
