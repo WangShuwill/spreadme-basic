@@ -17,10 +17,10 @@
 package org.spreadme.commons.cache.support;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 import org.spreadme.commons.cache.CacheClient;
 
@@ -73,9 +73,9 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 	}
 
 	@Override
-	public boolean remove(K key) {
-		Object value = POOL.remove(key);
-		return Objects.isNull(value);
+	public V remove(K key) {
+		ValueWrapper<V> wrapper = POOL.remove(key);
+		return wrapper != null ? wrapper.getValue() : null;
 	}
 
 	@Override
@@ -83,4 +83,8 @@ public class LocalCacheClient<K, V> implements CacheClient<K, V> {
 		POOL.clear();
 	}
 
+	@Override
+	public Lock getLock(K key) {
+		throw new IllegalStateException("LocalCacheClient not support cache lock");
+	}
 }

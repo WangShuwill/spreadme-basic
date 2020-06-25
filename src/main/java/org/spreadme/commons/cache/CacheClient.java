@@ -17,6 +17,7 @@
 package org.spreadme.commons.cache;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 /**
  * 缓存客户端
@@ -66,7 +67,7 @@ public interface CacheClient<K, V> {
 	 * @param type 类型
 	 * @return 值
 	 */
-	default V get(K key, Class<V> type){
+	default V get(K key, Class<V> type) {
 		V value = get(key);
 		if (value != null && type != null && !type.isInstance(value)) {
 			throw new IllegalStateException(String.format("Cached value is not of required type [%s]: %s", type.getName(), value));
@@ -81,10 +82,17 @@ public interface CacheClient<K, V> {
 	 * @param key 键
 	 * @return 是否移除成功
 	 */
-	boolean remove(K key);
+	V remove(K key);
 
 	/**
 	 * 清除缓存
 	 */
 	void clear();
+
+	/**
+	 * 获取缓存锁
+	 * @param key 锁的名称
+	 * @return Lock
+	 */
+	Lock getLock(K key);
 }
