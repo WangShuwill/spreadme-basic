@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.spreadme.commons.lang.ImageFormats;
+import org.spreadme.commons.lang.ImageType;
 import org.spreadme.commons.lang.Randoms;
 
 /**
@@ -69,7 +69,7 @@ public abstract class ImageUtil {
 		return new Color(Integer.parseInt(hex.replace("#", StringUtil.EMPTY), 16));
 	}
 
-	public static byte[] toBytes(BufferedImage image, ImageFormats format) throws IOException {
+	public static byte[] toBytes(BufferedImage image, ImageType format) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ImageIO.write(image, format.getName(), out);
 		return out.toByteArray();

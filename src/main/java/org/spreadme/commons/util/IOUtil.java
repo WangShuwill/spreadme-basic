@@ -52,7 +52,7 @@ import java.util.zip.ZipOutputStream;
 import org.spreadme.commons.io.FastByteArrayOutputStream;
 import org.spreadme.commons.io.RepeatableInputStream;
 import org.spreadme.commons.lang.LineIterator;
-import org.spreadme.commons.lang.Resource;
+import org.spreadme.commons.io.resources.Resource;
 import org.spreadme.commons.lang.WriteMode;
 
 /**

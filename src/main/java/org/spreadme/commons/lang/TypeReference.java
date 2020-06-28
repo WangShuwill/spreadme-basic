@@ -29,23 +29,11 @@ public abstract class TypeReference<T> {
 	private final Type rawType;
 
 	protected TypeReference() {
-		this.rawType = getSupperclassTypeParameter(getClass());
-	}
-
-	private Type getSupperclassTypeParameter(Class<?> clazz) {
-		Type genericSupperclass = clazz.getGenericSuperclass();
-		if (genericSupperclass instanceof Class) {
-			if (TypeReference.class != genericSupperclass) {
-				return getSupperclassTypeParameter(clazz.getSuperclass());
-			}
-
+		Type superClass = getClass().getGenericSuperclass();
+		if (superClass instanceof Class<?>) {
+			throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
 		}
-
-		Type rawType = ((ParameterizedType) genericSupperclass).getActualTypeArguments()[0];
-		if (rawType instanceof ParameterizedType) {
-			rawType = ((ParameterizedType) rawType).getRawType();
-		}
-		return rawType;
+		this.rawType = ((ParameterizedType) superClass).getActualTypeArguments()[0];
 	}
 
 	public final Type getRawType() {

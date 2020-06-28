@@ -25,9 +25,9 @@ import org.spreadme.commons.http.client.HttpMessageReader;
 import org.spreadme.commons.http.useragent.Browser;
 import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
-import org.spreadme.commons.lang.LocalResource;
+import org.spreadme.commons.io.resources.LocalResource;
+import org.spreadme.commons.io.resources.Resource;
 import org.spreadme.commons.util.Console;
-import org.spreadme.commons.lang.AbstractResource;
 import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.IOUtil;
@@ -66,7 +66,7 @@ public class HttpTest {
 	}
 
 	public void testPostFile() {
-		AbstractResource resource = new LocalResource(POST_FILE_PATH, ContentType.docx);
+		Resource resource = new LocalResource(POST_FILE_PATH, ContentType.docx);
 		HttpParam param = new HttpParam().add("file", resource);
 		HttpClient httpClient = new HttpClient();
 		httpClient.setConnectTimeout(10);

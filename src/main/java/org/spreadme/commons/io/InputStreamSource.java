@@ -16,18 +16,19 @@
 
 package org.spreadme.commons.io;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * InputStreamWrapper
+ * InputStreamSource
  * @author shuwei.wang
  * @since 1.0.0
  */
-public interface InputStreamWrapper {
+public interface InputStreamSource {
 
 	/**
 	 * @return
 	 * the underlying input stream wrapped by this class.
 	 */
-	InputStream getWrappedInputStream();
+	InputStream getInputStream() throws IOException;
 }

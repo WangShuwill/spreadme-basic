@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.io.serialize;
+package org.spreadme.commons.serialize;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

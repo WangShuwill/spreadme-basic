@@ -24,7 +24,7 @@ import java.io.InputStream;
  * @author shuwei.wang
  * @since 1.0.0
  */
-public class RepeatableInputStream extends InputStream implements InputStreamWrapper {
+public class RepeatableInputStream extends InputStream implements InputStreamSource {
 
 	private InputStream is;
 
@@ -163,7 +163,7 @@ public class RepeatableInputStream extends InputStream implements InputStreamWra
 	}
 
 	@Override
-	public InputStream getWrappedInputStream() {
+	public InputStream getInputStream() {
 		return is;
 	}
 

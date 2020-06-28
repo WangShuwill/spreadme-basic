@@ -1,11 +1,11 @@
 /*
- * Copyright [3/26/20 2:46 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [2019] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.serialize;
+
+import org.spreadme.commons.lang.Nullable;
 
 /**
- * Mime Resource
+ * Serialization
  * @author shuwei.wang
  */
-public abstract class AbstractResource implements Resource {
+public interface Serializer<T> {
 
-	public abstract ContentType getContentType();
+	byte[] serialize(@Nullable T object) throws SerializeException;
+
+	T deserialize(@Nullable byte[] bytes) throws SerializeException;
 }

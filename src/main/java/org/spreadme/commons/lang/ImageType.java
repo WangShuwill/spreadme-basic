@@ -1,11 +1,11 @@
 /*
- * Copyright [3/26/20 2:46 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [2019] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,24 +16,39 @@
 
 package org.spreadme.commons.lang;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-
 /**
- * resource
+ * Image Formats
  * @author shuwei.wang
  */
-public interface Resource {
+public enum ImageType {
 
-	boolean exsit();
+	BMP,
+	DCX,
+	GIF,
+	ICNS,
+	ICO,
+	JBIG2,
+	JPEG,
+	PAM,
+	PSD,
+	PBM,
+	PGM,
+	PNM,
+	PPM,
+	PCX,
+	PNG,
+	RGBE,
+	TGA,
+	TIFF,
+	WBMP,
+	XBM,
+	XPM;
 
-	String getName();
+	public String getName() {
+		return name().toLowerCase();
+	}
 
-	InputStream getInputStream() throws IOException;
-
-	default ReadableByteChannel readableChannel() throws IOException {
-		return Channels.newChannel(getInputStream());
+	public String getExtension() {
+		return name().toLowerCase();
 	}
 }

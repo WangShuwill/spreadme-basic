@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.io.resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +22,13 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.spreadme.commons.lang.ContentType;
+
 /**
  * LocalResource
  * @author shuwei.wang
  */
-public class LocalResource extends AbstractResource {
+public class LocalResource implements Resource {
 
 	private String path;
 	private ContentType mimeType;

@@ -37,7 +37,7 @@ import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
 import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
 import org.spreadme.commons.lang.Dates;
-import org.spreadme.commons.lang.ImageFormats;
+import org.spreadme.commons.lang.ImageType;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.lang.SizeUnit;
 import org.spreadme.commons.system.SystemInfo;
@@ -136,7 +136,7 @@ public class UtilTest {
 	@Test
 	public void testTextToImage() throws IOException {
 		BufferedImage image = ImageUtil.toImage("Test测试", new Font(Font.SANS_SERIF, Font.PLAIN, (int) (50 * 0.75)), Color.BLACK);
-		ImageIO.write(image, ImageFormats.PNG.getName(),
+		ImageIO.write(image, ImageType.PNG.getName(),
 				new File(ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "water.png"));
 	}
 

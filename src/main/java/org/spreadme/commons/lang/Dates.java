@@ -27,22 +27,14 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.time.temporal.TemporalUnit;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-
-import org.spreadme.commons.cache.CacheClient;
-import org.spreadme.commons.cache.support.LocalCacheClient;
 
 /**
  * date utils
  * @author shuwei.wang
  */
 public abstract class Dates {
-
-	private static final CacheClient<String, DateTimeFormatter> FORMATTER_CACHE = new LocalCacheClient<>(16);
-
-	private static final Calendar CALENDAR = Calendar.getInstance();
 
 	private Dates() {
 
@@ -126,18 +118,6 @@ public abstract class Dates {
 		Instant instant = date.toInstant();
 		ZoneId zoneId = ZoneId.systemDefault();
 		return instant.atZone(zoneId).toLocalTime();
-	}
-
-	/**
-	 * date to Calendar
-	 *
-	 * @param date date
-	 * @return Calendar
-	 */
-	@Deprecated
-	public static Calendar toCalendar(Date date) {
-		CALENDAR.setTime(date);
-		return CALENDAR;
 	}
 
 	/**

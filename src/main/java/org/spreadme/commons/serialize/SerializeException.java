@@ -14,4 +14,25 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.io.serialize;
+package org.spreadme.commons.serialize;
+
+/**
+ * Serializer Exception
+ * @author shuwei.wang
+ */
+public class SerializeException extends RuntimeException {
+
+	private static final long serialVersionUID = -717625035363051092L;
+
+	private Throwable cause;
+
+	public SerializeException(String msg, Throwable cause) {
+		super(msg);
+
+		this.cause = cause;
+	}
+
+	public Throwable getCause() {
+		return cause;
+	}
+}

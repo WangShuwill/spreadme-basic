@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 import org.spreadme.commons.http.HttpParam;
-import org.spreadme.commons.lang.AbstractResource;
+import org.spreadme.commons.io.resources.Resource;
 import org.spreadme.commons.util.IOUtil;
 
 /**
@@ -65,8 +65,8 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 		}
 	}
 
-	private void writeMultipart(Map<String, AbstractResource> multipat, byte[] boundary, OutputStream out, Charset charset) throws IOException {
-		for (Map.Entry<String, AbstractResource> entry : multipat.entrySet()) {
+	private void writeMultipart(Map<String, Resource> multipat, byte[] boundary, OutputStream out, Charset charset) throws IOException {
+		for (Map.Entry<String, Resource> entry : multipat.entrySet()) {
 			this.writeNewLine(out);
 			this.writeBoundary(out, boundary);
 			byte[] multipartBytes = this.getMultipart(entry.getKey(), entry.getValue(), this.charset);
@@ -84,7 +84,7 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 		return builder.toString().getBytes(charset);
 	}
 
-	private byte[] getMultipart(String key, AbstractResource resource, Charset charset) {
+	private byte[] getMultipart(String key, Resource resource, Charset charset) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Content-Disposition:form-data;name=\"");
 		builder.append(key);
