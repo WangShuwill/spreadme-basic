@@ -81,6 +81,9 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 		else {
 			connection.setDoOutput(false);
 		}
+		if(httpHeader == null) {
+			httpHeader = HttpHeader.DEFAULT;
+		}
 		for (HttpHeader.HttpHeaderProperty property : httpHeader) {
 			connection.setRequestProperty(property.getKey(), property.getValue());
 		}
