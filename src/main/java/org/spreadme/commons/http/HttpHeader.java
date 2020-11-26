@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.spreadme.commons.lang.ContentType;
-
 /**
  * Http Header
  * @author shuwei.wang
@@ -32,14 +30,6 @@ public class HttpHeader implements Iterable<HttpHeader.HttpHeaderProperty> {
 	private List<HttpHeaderProperty> properties = new ArrayList<>(32);
 
 	public static HttpHeader DEFAULT = new HttpHeader();
-
-	static {
-		DEFAULT.setHeader(HeaderType.ACCEPT_ENCODING, "gzip,deflate");
-		DEFAULT.setHeader(HeaderType.ACCEPT, String.join(",",
-				ContentType.txt.getType(),
-				ContentType.html.getType(),
-				ContentType.json.getType()));
-	}
 
 	public HttpHeader setHeader(String key, String value) {
 		properties.add(new HttpHeaderProperty(key, value));

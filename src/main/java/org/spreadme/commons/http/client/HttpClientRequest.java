@@ -16,6 +16,7 @@
 
 package org.spreadme.commons.http.client;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -23,7 +24,7 @@ import java.io.OutputStream;
  * Http Client Request
  * @author shuwei.wang
  */
-public interface HttpClientRequest extends HttpMessage{
+public interface HttpClientRequest extends HttpMessage, Closeable{
 
 	/**
 	 * Execute this request, resulting in a {@link HttpClientResponse} that can be read.

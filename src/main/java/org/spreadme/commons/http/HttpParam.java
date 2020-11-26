@@ -37,7 +37,9 @@ public class HttpParam {
 	}
 
 	public HttpParam(Map<String, String> params) {
-		this.params.putAll(params);
+		if(params != null) {
+			this.params.putAll(params);
+		}
 	}
 
 	public HttpParam add(String key, Object value) {

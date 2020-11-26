@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.http;
+package org.spreadme.commons.http.client;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -30,13 +30,13 @@ import javax.net.ssl.X509TrustManager;
  * SSL Initializer
  * @author shuwei.wang
  */
-public class SSLInitializer {
+public class DefaultHttpsInitializer implements HttpsInitializer{
 
 	private SSLContext sslcontext;
 
 	private HostnameVerifier allHostsValid;
 
-	public SSLInitializer() {
+	public DefaultHttpsInitializer() {
 		initContext();
 	}
 
@@ -63,6 +63,7 @@ public class SSLInitializer {
 		allHostsValid = (hostname, session) -> true;
 	}
 
+	@Override
 	public HttpsURLConnection init(HttpsURLConnection connection) {
 		connection.setSSLSocketFactory(sslcontext.getSocketFactory());
 		connection.setHostnameVerifier(allHostsValid);

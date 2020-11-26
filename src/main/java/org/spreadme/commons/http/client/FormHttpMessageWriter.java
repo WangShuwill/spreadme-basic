@@ -32,8 +32,8 @@ import org.spreadme.commons.util.IOUtil;
 public class FormHttpMessageWriter implements HttpMessageWriter {
 
 	private HttpParam param;
-	private Charset charset;
-	private byte[] boundary;
+	private final Charset charset;
+	private final byte[] boundary;
 
 	public FormHttpMessageWriter(HttpParam param, Charset charset, String boundary) {
 		this.param = param;
@@ -43,48 +43,48 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 
 	@Override
 	public void write(OutputStream out) throws IOException {
-		this.wirteParam(this.param.getParams(), this.boundary, out, this.charset);
-		this.writeMultipart(this.param.getMultipart(), this.boundary, out, this.charset);
+		this.wirteParam(this.param.getParams(), out);
+		this.writeMultipart(this.param.getMultipart(), out);
 		this.writeNewLine(out);
-		this.writeEnd(out, this.boundary);
+		this.writeEnd(out);
 	}
 
-	private void wirteParam(Map<String, String> params, byte[] boundary, OutputStream out, Charset charset) throws IOException {
+	private void wirteParam(Map<String, String> params, OutputStream out) throws IOException {
 		boolean firstParam = true;
 		for (Map.Entry<String, String> entry : params.entrySet()) {
-			byte[] paramBytes = this.getText(entry.getKey(), entry.getValue(), this.charset);
+			byte[] paramBytes = this.getText(entry.getKey(), entry.getValue());
 			if (firstParam) {
-				this.writeBoundary(out, boundary);
+				this.writeBoundary(out);
 				firstParam = false;
 			}
 			else {
 				this.writeNewLine(out);
-				this.writeBoundary(out, boundary);
+				this.writeBoundary(out);
 			}
 			out.write(paramBytes);
 		}
 	}
 
-	private void writeMultipart(Map<String, Resource> multipat, byte[] boundary, OutputStream out, Charset charset) throws IOException {
+	private void writeMultipart(Map<String, Resource> multipat, OutputStream out) throws IOException {
 		for (Map.Entry<String, Resource> entry : multipat.entrySet()) {
 			this.writeNewLine(out);
-			this.writeBoundary(out, boundary);
-			byte[] multipartBytes = this.getMultipart(entry.getKey(), entry.getValue(), this.charset);
+			this.writeBoundary(out);
+			byte[] multipartBytes = this.getMultipart(entry.getKey(), entry.getValue());
 			out.write(multipartBytes);
 			IOUtil.copy(entry.getValue().getInputStream(), out);
 		}
 	}
 
-	private byte[] getText(String key, String value, Charset charset) {
+	private byte[] getText(String key, String value) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Content-Disposition:form-data;name=\"");
 		builder.append(key);
 		builder.append("\"\r\nContent-Type:text/plain\r\n\r\n");
 		builder.append(value);
-		return builder.toString().getBytes(charset);
+		return builder.toString().getBytes(this.charset);
 	}
 
-	private byte[] getMultipart(String key, Resource resource, Charset charset) {
+	private byte[] getMultipart(String key, Resource resource) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Content-Disposition:form-data;name=\"");
 		builder.append(key);
@@ -93,20 +93,20 @@ public class FormHttpMessageWriter implements HttpMessageWriter {
 		builder.append("\"\r\nContent-Type:");
 		builder.append(resource.getContentType().getType());
 		builder.append("\r\n\r\n");
-		return builder.toString().getBytes(charset);
+		return builder.toString().getBytes(this.charset);
 	}
 
-	private void writeBoundary(OutputStream os, byte[] boundary) throws IOException {
+	private void writeBoundary(OutputStream os) throws IOException {
 		os.write('-');
 		os.write('-');
-		os.write(boundary);
+		os.write(this.boundary);
 		writeNewLine(os);
 	}
 
-	private void writeEnd(OutputStream os, byte[] boundary) throws IOException {
+	private void writeEnd(OutputStream os) throws IOException {
 		os.write('-');
 		os.write('-');
-		os.write(boundary);
+		os.write(this.boundary);
 		os.write('-');
 		os.write('-');
 		writeNewLine(os);

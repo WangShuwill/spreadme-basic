@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 import org.spreadme.commons.http.HttpHeader;
+import org.spreadme.commons.util.IOUtil;
 
 /**
  * Default HttpClientRequest
@@ -64,4 +65,8 @@ public class DefaultHttpClientRequest implements HttpClientRequest {
 		return this.httpHeader;
 	}
 
+	@Override
+	public void close() throws IOException {
+		IOUtil.close(this.body);
+	}
 }

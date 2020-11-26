@@ -17,6 +17,7 @@
 package org.spreadme.commons.http;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -27,9 +28,9 @@ import org.spreadme.commons.http.useragent.Platform;
 import org.spreadme.commons.http.useragent.UserAgent;
 import org.spreadme.commons.io.resources.LocalResource;
 import org.spreadme.commons.io.resources.Resource;
-import org.spreadme.commons.util.Console;
 import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.util.ClassUtil;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
 
@@ -55,21 +56,20 @@ public class HttpTest {
 	}
 
 	@Test
-	public void testPostForm() {
+	public void testPostForm() throws IOException{
 		HttpMessageReader<String> reader = response -> {
 			Console.info(response.getHeader());
 			return StringUtil.fromInputStream(response.getBody());
 		};
-		HttpClient httpClient = new HttpClient();
+		HttpClient httpClient = HttpClient.builder().build();
 		String result = httpClient.post(URL, new HttpParam().add("key", "t"), HttpHeader.DEFAULT, reader);
 		Console.info("Http client request %s, and response %s", URL, result);
 	}
 
-	public void testPostFile() {
+	public void testPostFile() throws IOException{
 		Resource resource = new LocalResource(POST_FILE_PATH, ContentType.docx);
 		HttpParam param = new HttpParam().add("file", resource);
-		HttpClient httpClient = new HttpClient();
-		httpClient.setConnectTimeout(10);
+		HttpClient httpClient = HttpClient.builder().connectTimeout(10).build();
 		httpClient.post(URL, param, HttpHeader.DEFAULT, r -> {
 			IOUtil.toFile(r.getBody(), ClassUtil.getClassPath() + File.separator + UUID.randomUUID().toString() + ".pdf");
 			return true;

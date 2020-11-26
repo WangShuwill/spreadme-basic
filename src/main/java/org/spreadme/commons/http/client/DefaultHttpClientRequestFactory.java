@@ -19,7 +19,6 @@ package org.spreadme.commons.http.client;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -27,7 +26,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
-import org.spreadme.commons.http.SSLInitializer;
 
 /**
  * Simple HttpClient Request Factory
@@ -35,21 +33,20 @@ import org.spreadme.commons.http.SSLInitializer;
  */
 public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory {
 
-	private static final int DEFAULT_CHUNK_SIZE = 4096;
-
 	private Proxy proxy;
 	private int connectTimeout = -1;
 	private int readTimeout = -1;
+	private HttpsInitializer httpsInitializer = new DefaultHttpsInitializer();
 
 	@Override
-	public HttpClientRequest createRequest(URI uri, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException {
-		HttpURLConnection connection = openConnection(uri.toURL(), this.proxy);
+	public HttpClientRequest createRequest(URL url, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException {
+		HttpURLConnection connection = openConnection(url);
 		prepareConnection(connection, httpMethod, httpHeader);
 		return new DefaultHttpClientRequest(httpHeader, connection);
 	}
 
-	protected HttpURLConnection openConnection(URL url, Proxy proxy) throws IOException {
-		URLConnection connection = proxy != null ? url.openConnection(proxy) : url.openConnection();
+	protected HttpURLConnection openConnection(URL url) throws IOException {
+		URLConnection connection = this.proxy != null ? url.openConnection(this.proxy) : url.openConnection();
 		if (!(connection instanceof HttpURLConnection)) {
 			throw new IllegalStateException("HttpURLConnection required for [" + url + "] but got: " + connection);
 		}
@@ -58,7 +55,7 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 
 	protected void prepareConnection(HttpURLConnection connection, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException {
 		if (connection instanceof HttpsURLConnection) {
-			connection = new SSLInitializer().init((HttpsURLConnection) connection);
+			connection = httpsInitializer.init((HttpsURLConnection) connection);
 		}
 		if (this.connectTimeout >= 0) {
 			connection.setConnectTimeout(this.connectTimeout);
@@ -103,5 +100,13 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 	@Override
 	public void setReadTimeout(int readTimeout) {
 		this.readTimeout = readTimeout;
+	}
+	
+	@Override
+	public void setHttpsInitializer(HttpsInitializer initializer) {
+		if(initializer == null) {
+			this.httpsInitializer = new DefaultHttpsInitializer();
+		}
+		this.httpsInitializer = initializer;
 	}
 }

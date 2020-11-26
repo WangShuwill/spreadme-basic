@@ -18,7 +18,7 @@ package org.spreadme.commons.http.client;
 
 import java.io.IOException;
 import java.net.Proxy;
-import java.net.URI;
+import java.net.URL;
 
 import org.spreadme.commons.http.HttpHeader;
 import org.spreadme.commons.http.HttpMethod;
@@ -46,16 +46,22 @@ public interface HttpClientRequestFactory {
 	 * @param readTimeout read timeout
 	 */
 	void setReadTimeout(int readTimeout);
+	
+	/**
+	 * set https initializer
+	 * @param initializer {@link HttpsInitializer}}
+	 */
+	void setHttpsInitializer(HttpsInitializer initializer);
 
 	/**
 	 * Create a new {@link HttpClientRequest} for the specified URI and HTTP method.
 	 * <p>The returned request can be written to, and then executed by calling
 	 * {@link HttpClientRequest#execute()}.
-	 * @param uri the URI to create a request for
+	 * @param url the URL to create a request for
 	 * @param httpMethod the HTTP method to execute
 	 * @param httpHeader the HTTP header
 	 * @return the created request
 	 * @throws IOException in case of I/O errors
 	 */
-	HttpClientRequest createRequest(URI uri, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException;
+	HttpClientRequest createRequest(URL url, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException;
 }
