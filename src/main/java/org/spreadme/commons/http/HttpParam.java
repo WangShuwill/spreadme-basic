@@ -16,12 +16,14 @@
 
 package org.spreadme.commons.http;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.spreadme.commons.io.resources.Resource;
-import org.spreadme.commons.util.StringUtil;
 
 /**
  * Http Parameter
@@ -30,7 +32,7 @@ import org.spreadme.commons.util.StringUtil;
 public class HttpParam {
 
 	private boolean isMultiPart = false;
-	private Map<String, String> params = new LinkedHashMap<>();
+	private Map<String, String> commonParams = new LinkedHashMap<>();
 	private Map<String, Resource> multipart = new LinkedHashMap<>();
 
 	public HttpParam() {
@@ -38,7 +40,7 @@ public class HttpParam {
 
 	public HttpParam(Map<String, String> params) {
 		if(params != null) {
-			this.params.putAll(params);
+			this.commonParams.putAll(params);
 		}
 	}
 
@@ -48,24 +50,35 @@ public class HttpParam {
 			this.multipart.put(key, (Resource) value);
 		}
 		else {
-			this.params.put(key, String.valueOf(value));
+			this.commonParams.put(key, String.valueOf(value));
 		}
 		return this;
 	}
-
+	
+	public HttpParam addAll(Map<String, String> params) {
+		this.commonParams.putAll(params);
+		return this;
+	}
+	
+	public String getQuery(boolean encode, Charset charset) {
+		return this.commonParams.entrySet().stream().map(e -> {
+			try {
+				String key = encode ? URLEncoder.encode(e.getKey(), charset.name()) : e.getKey();
+				String value = encode ? URLEncoder.encode(e.getValue(), charset.name()) : e.getValue(); 
+				return key + "=" + value;
+			} catch (UnsupportedEncodingException ex) {
+				throw new IllegalArgumentException(ex);
+			}
+			
+		}).collect(Collectors.joining("&"));
+	}
+	
 	public boolean isMultiPart() {
 		return this.isMultiPart;
 	}
 
-	public String getQueryString() {
-		return params.entrySet().stream()
-				.filter(e -> StringUtil.isNotBlank(e.getKey()))
-				.map(e -> e.getKey() + "=" + StringUtil.noneNullString(e.getValue()))
-				.collect(Collectors.joining("&"));
-	}
-
 	public Map<String, String> getParams() {
-		return params;
+		return commonParams;
 	}
 
 	public Map<String, Resource> getMultipart() {
@@ -76,7 +89,7 @@ public class HttpParam {
 	public String toString() {
 		return "HttpParam{" +
 				"isMultiPart=" + isMultiPart +
-				", params=" + params +
+				", params=" + commonParams +
 				", multipart=" + multipart +
 				'}';
 	}

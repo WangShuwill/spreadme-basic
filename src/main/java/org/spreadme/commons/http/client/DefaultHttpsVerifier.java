@@ -30,24 +30,27 @@ import javax.net.ssl.X509TrustManager;
  * SSL Initializer
  * @author shuwei.wang
  */
-public class DefaultHttpsInitializer implements HttpsInitializer{
+public class DefaultHttpsVerifier implements HttpsVerifier{
 
 	private SSLContext sslcontext;
 
 	private HostnameVerifier allHostsValid;
 
-	public DefaultHttpsInitializer() {
+	public DefaultHttpsVerifier() {
 		initContext();
 	}
 
 	private void initContext() {
 		TrustManager trustAllManager = new X509TrustManager() {
+			@Override
 			public void checkClientTrusted(X509Certificate[] cert, String arg1) {
 			}
 
+			@Override
 			public void checkServerTrusted(X509Certificate[] cert, String arg1) {
 			}
 
+			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
@@ -64,7 +67,7 @@ public class DefaultHttpsInitializer implements HttpsInitializer{
 	}
 
 	@Override
-	public HttpsURLConnection init(HttpsURLConnection connection) {
+	public HttpsURLConnection verify(HttpsURLConnection connection) {
 		connection.setSSLSocketFactory(sslcontext.getSocketFactory());
 		connection.setHostnameVerifier(allHostsValid);
 		return connection;

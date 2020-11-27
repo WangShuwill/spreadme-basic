@@ -14,37 +14,27 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.crypt;
+package org.spreadme.commons.digest;
 
 /**
- * Algorithm
+ * DecoderException
  * @author shuwei.wang
  * @since 1.0.0
  */
-public enum Algorithm {
+public class DigestException extends IllegalStateException {
 
-	DES("DES"),
-	DES_CBC_PKCS5Padding("DES/CBC/PKCS5Padding"),
-	SHA1("SHA-1"),
-	SHA224("SHA-224"),
-	SHA256("SHA-256"),
-	SHA384("SHA-384"),
-	SHA512("SHA-512"),
-	MD5("MD5"),
-	SHA("SHA"),
-	AES("AES"),
-	AES_CBC_PKCS5Padding("AES/CBC/PKCS5Padding"),
-	RSA("RSA"),
-	RSA_ECB_PKCS1Padding("RSA/ECB/PKCS1Padding"),
-	SHA256withRSA("SHA256withRSA");
+	private static final long serialVersionUID = -2288673793914290482L;
 
-	private final String value;
+	private Throwable cause;
 
-	Algorithm(final String value) {
-		this.value = value;
+	public DigestException(String msg, Throwable cause) {
+		super(msg);
+
+		this.cause = cause;
 	}
 
-	public String getValue() {
-		return this.value;
+	public Throwable getCause() {
+		return cause;
 	}
+
 }

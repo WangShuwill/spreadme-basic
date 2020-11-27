@@ -30,14 +30,13 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
-import org.spreadme.commons.crypt.Algorithm;
-import org.spreadme.commons.crypt.Digest;
+import org.spreadme.commons.digest.Digest;
 import org.spreadme.commons.lang.Charsets;
-import org.spreadme.commons.util.Console;
 import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.CollectionUtil;
+import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.FileUtil;
 import org.spreadme.commons.util.IOUtil;
 import org.spreadme.commons.util.StringUtil;
@@ -66,13 +65,13 @@ public class IOTest {
 
 	@Test
 	public void testMessageDigestInputStream() throws Exception {
-		MessageDigest digest = Digest.getMessageDigest(Algorithm.SHA256);
+		MessageDigest digest = Digest.getMessageDigest(Digest.Algorithm.SHA256);
 		try (MessageDigestInputStream digestInput = new MessageDigestInputStream(IOUtil.toInputstream(testFileOne), digest);
 			 FastByteArrayOutputStream out = new FastByteArrayOutputStream()) {
 
 			IOUtil.copy(digestInput, out);
 			Console.info(Hex.toHexString(digest.digest()));
-			Console.info(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Algorithm.SHA256));
+			Console.info(Digest.toHexString(new ByteArrayInputStream(out.toByteArray()), Digest.Algorithm.SHA256));
 		}
 	}
 

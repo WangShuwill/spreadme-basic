@@ -49,9 +49,9 @@ public interface HttpClientRequestFactory {
 	
 	/**
 	 * set https initializer
-	 * @param initializer {@link HttpsInitializer}}
+	 * @param verifier {@link HttpsVerifier}}
 	 */
-	void setHttpsInitializer(HttpsInitializer initializer);
+	void setVerifier(HttpsVerifier verifier);
 
 	/**
 	 * Create a new {@link HttpClientRequest} for the specified URI and HTTP method.

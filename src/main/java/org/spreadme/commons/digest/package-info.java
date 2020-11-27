@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.crypt;
+package org.spreadme.commons.digest;

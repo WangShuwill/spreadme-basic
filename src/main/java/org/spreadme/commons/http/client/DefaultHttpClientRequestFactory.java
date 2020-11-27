@@ -36,7 +36,7 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 	private Proxy proxy;
 	private int connectTimeout = -1;
 	private int readTimeout = -1;
-	private HttpsInitializer httpsInitializer = new DefaultHttpsInitializer();
+	private HttpsVerifier verifier;
 
 	@Override
 	public HttpClientRequest createRequest(URL url, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException {
@@ -55,7 +55,7 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 
 	protected void prepareConnection(HttpURLConnection connection, HttpMethod httpMethod, HttpHeader httpHeader) throws IOException {
 		if (connection instanceof HttpsURLConnection) {
-			connection = httpsInitializer.init((HttpsURLConnection) connection);
+			connection = verifier.verify((HttpsURLConnection) connection);
 		}
 		if (this.connectTimeout >= 0) {
 			connection.setConnectTimeout(this.connectTimeout);
@@ -103,10 +103,10 @@ public class DefaultHttpClientRequestFactory implements HttpClientRequestFactory
 	}
 	
 	@Override
-	public void setHttpsInitializer(HttpsInitializer initializer) {
-		if(initializer == null) {
-			this.httpsInitializer = new DefaultHttpsInitializer();
+	public void setVerifier(HttpsVerifier verifier) {
+		if(verifier == null) {
+			this.verifier = new DefaultHttpsVerifier();
 		}
-		this.httpsInitializer = initializer;
+		this.verifier = verifier;
 	}
 }

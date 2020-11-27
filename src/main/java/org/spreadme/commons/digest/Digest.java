@@ -14,21 +14,19 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.crypt;
+package org.spreadme.commons.digest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.lang.Nullable;
 import org.spreadme.commons.lang.Randoms;
-import org.spreadme.commons.util.CollectionUtil;
 
 /**
  * 各种Hash算法
@@ -41,24 +39,37 @@ import org.spreadme.commons.util.CollectionUtil;
  */
 public abstract class Digest {
 
+	private static final int BUFFER_LENGTH = 8 * 1024;
+	
 	private Digest() {
 	}
+	
+	public enum Algorithm {
+		
+		MD5("MD5"), 
+		SHA("SHA"),
+		SHA1("SHA-1"), 
+		SHA224("SHA-224"), 
+		SHA256("SHA-256"), 
+		SHA384("SHA-384"), 
+		SHA512("SHA-512");
 
-	private static final int BUFFER_LENGTH = 8 * 1024;
+		private final String value;
 
-	// the support message digest algorithm
-	private static final List<Algorithm> ALGORITHM;
+		Algorithm(final String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return this.value;
+		}
+	}
 
 	private static final Map<Algorithm, ThreadLocal<MessageDigest>> MESSAGEDIGEST;
-
 	static {
-		ALGORITHM = Collections.unmodifiableList(CollectionUtil.toList(
-				Algorithm.SHA, Algorithm.SHA1, Algorithm.SHA224,
-				Algorithm.SHA256, Algorithm.SHA384, Algorithm.SHA512,
-				Algorithm.MD5
-		));
-		MESSAGEDIGEST = new HashMap<>(ALGORITHM.size());
-		for (Algorithm algorithm : ALGORITHM) {
+		Algorithm[] algorithms = Algorithm.values();
+		MESSAGEDIGEST = new HashMap<>(algorithms.length);
+		for (Algorithm algorithm : algorithms) {
 			MESSAGEDIGEST.put(algorithm, createMessageDigest(algorithm));
 		}
 	}
@@ -80,16 +91,22 @@ public abstract class Digest {
 		});
 	}
 
-	/**
-	 * 判断该算法是否支持
-	 *
-	 * @param algorithm hash算法
-	 * @return is support
-	 */
-	public static boolean isSupport(Algorithm algorithm) {
-		return ALGORITHM.contains(algorithm);
+	public static byte[] get(byte[] bytes, Algorithm algorithm) {
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)) {
+			return get(inputStream, algorithm);
+		} catch (IOException e) {
+			throw new DigestException(e.getMessage(), e);
+		}
 	}
-
+	
+	public static String toHexString(byte[] bytes, Algorithm algorithm) {
+		try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)) {
+			return toHexString(inputStream, algorithm);
+		} catch (IOException e) {
+			throw new DigestException(e.getMessage(), e);
+		}
+	}
+	
 	/**
 	 * 输入流进行Hash运算
 	 *
@@ -163,9 +180,6 @@ public abstract class Digest {
 	 * @return MessageDigest {@link MessageDigest}
 	 */
 	public static MessageDigest getMessageDigest(Algorithm algorithm) {
-		if (!isSupport(algorithm)) {
-			throw new IllegalArgumentException(String.format("can not support the algorithm %s to digest.", algorithm.name()));
-		}
 		ThreadLocal<MessageDigest> digestThreadLocal = MESSAGEDIGEST.get(algorithm);
 		MessageDigest messageDigest = digestThreadLocal.get();
 		messageDigest.reset();
