@@ -132,7 +132,7 @@ public class HttpClient {
 	}
 	
 	private Map<String, String> getQueryParams(String query) throws IOException{
-        Map<String, String> params = new HashMap<String, String>(); 
+        Map<String, String> params = new HashMap<>();
         if(StringUtil.isNotBlank(query)) {
         	for(String param : query.split("&")) {
         		String[] pair = param.split("=");
