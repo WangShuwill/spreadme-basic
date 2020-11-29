@@ -31,4 +31,8 @@ public final class Protocol {
 	public static final String FILE = "file";
 
 	public static final String NNTP = "nntp";
+	
+	public static boolean isHttp(String protocol) {
+		return HTTP.equals(protocol) || HTTPS.equals(protocol);
+	}
 }

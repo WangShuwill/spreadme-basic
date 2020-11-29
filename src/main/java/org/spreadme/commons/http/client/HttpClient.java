@@ -62,6 +62,9 @@ public class HttpClient {
 	public <T> T execute(final URL url, HttpMethod method, HttpHeader header,
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) throws IOException{
 		
+		if (!Protocol.isHttp(url.getProtocol())) {
+			throw new MalformedURLException("Only http & https protocols supported");
+		}
 		HttpClientRequest request = null;
 		HttpClientResponse response = null;
 		try {
@@ -89,11 +92,6 @@ public class HttpClient {
 			HttpMessageWriter messageWriter, HttpMessageReader<T> messageReader) throws IOException{
 
 		URL requestUrl = this.encodeToUrl(url);
-		String protocol = requestUrl.getProtocol();
-		if (!protocol.equals(Protocol.HTTP) && !protocol.equals(Protocol.HTTPS)) {
-			throw new MalformedURLException("Only http & https protocols supported");
-		}
-		
 		return this.execute(requestUrl, method, header, messageWriter, messageReader);
 	}
 	
