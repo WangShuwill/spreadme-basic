@@ -77,6 +77,7 @@ public class HttpTest {
 		Console.info("Http client request %s, and response %s", LINK, result);
 	}
 
+	@Test
 	public void testPostFile() throws IOException{
 		Resource resource = new LocalResource(POST_FILE_PATH, ContentType.docx);
 		HttpParam param = new HttpParam().add("file", resource);
