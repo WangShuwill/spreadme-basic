@@ -1,11 +1,11 @@
 /*
- * Copyright [2019] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/1/20 10:16 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,41 +14,15 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.function;
 
 /**
- * Image Formats
+ * Throw Exception BiFunction
  * @author shuwei.wang
  */
-public enum ImageType {
+@FunctionalInterface
+public interface ThrowableBiFunction<T, U, R> {
 
-	BMP,
-	DCX,
-	GIF,
-	ICNS,
-	ICO,
-	JBIG2,
-	JPEG,
-	PAM,
-	PSD,
-	PBM,
-	PGM,
-	PNM,
-	PPM,
-	PCX,
-	PNG,
-	RGBE,
-	TGA,
-	TIFF,
-	WBMP,
-	XBM,
-	XPM;
+	R apply(T t, U u) throws Exception;
 
-	public String getName() {
-		return name().toLowerCase();
-	}
-
-	public String getExtension() {
-		return name().toLowerCase();
-	}
 }

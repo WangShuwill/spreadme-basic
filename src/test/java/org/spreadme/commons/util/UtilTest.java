@@ -16,7 +16,8 @@
 
 package org.spreadme.commons.util;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +37,8 @@ import org.spreadme.commons.id.IdentifierGenerator;
 import org.spreadme.commons.id.support.PrefixedLeftNumericGenerator;
 import org.spreadme.commons.id.support.SnowflakeLongGenerator;
 import org.spreadme.commons.id.support.TimeBasedIdentifierGenerator;
+import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.lang.Dates;
-import org.spreadme.commons.lang.ImageType;
 import org.spreadme.commons.lang.Randoms;
 import org.spreadme.commons.lang.SizeUnit;
 import org.spreadme.commons.system.SystemInfo;
@@ -136,18 +137,7 @@ public class UtilTest {
 	@Test
 	public void testTextToImage() throws IOException {
 		BufferedImage image = ImageUtil.toImage("Test测试", new Font(Font.SANS_SERIF, Font.PLAIN, (int) (50 * 0.75)), Color.BLACK);
-		ImageIO.write(image, ImageType.PNG.getName(),
-				new File(ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "water.png"));
-	}
-
-	@Test
-	public void testNetUtil() {
-		String url = "https://shuwei.me";
-		final String host = NetUtil.getHostByUrl(url);
-		final String hostIp = NetUtil.getIpByDomain(host);
-		Console.info("%s的host为%s", url, host);
-		Console.info("%s的host ip为%s", url, hostIp);
-		Console.info("%s是否可以连接%s", url, NetUtil.isConnected(url, 5000));
+		ImageIO.write(image, ContentType.png.name(), new File(ClassUtil.getClassPath() + SystemInfo.FILE_SEPARATOR + "water.png"));
 	}
 
 }

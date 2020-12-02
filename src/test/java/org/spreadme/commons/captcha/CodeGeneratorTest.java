@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.junit.Test;
 import org.spreadme.commons.captcha.support.CurvesCaptcha;
 import org.spreadme.commons.captcha.support.LineCaptcha;
-import org.spreadme.commons.lang.ImageType;
+import org.spreadme.commons.lang.ContentType;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.IOUtil;
@@ -38,15 +38,15 @@ public class CodeGeneratorTest {
 		CaptchaCode lineCode = LineCaptcha.of(200, 50).create();
 		Console.info(lineCode);
 		IOUtil.toFile(
-				ImageUtil.toBytes(lineCode.getImage(), ImageType.PNG),
-				ClassUtil.getClassPath() + File.separator + lineCode.getText() + "." + ImageType.PNG.getName()
+				ImageUtil.toBytes(lineCode.getImage(), ContentType.png),
+				ClassUtil.getClassPath() + File.separator + lineCode.getText() + "." + ContentType.png.name()
 		);
 
 		CaptchaCode curvesCode = CurvesCaptcha.of(200, 50).create();
 		Console.info(curvesCode);
 		IOUtil.toFile(
-				ImageUtil.toBytes(curvesCode.getImage(), ImageType.PNG),
-				ClassUtil.getClassPath() + File.separator + curvesCode.getText() + "." + ImageType.PNG.getName()
+				ImageUtil.toBytes(curvesCode.getImage(), ContentType.png),
+				ClassUtil.getClassPath() + File.separator + curvesCode.getText() + "." + ContentType.png.name()
 		);
 	}
 }

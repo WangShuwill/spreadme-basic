@@ -23,13 +23,47 @@ package org.spreadme.commons.lang;
  */
 public enum SizeUnit {
 
-	B,
-	KB,
-	MB,
-	GB,
-	TB;
+	B{
+		public long toByte(long d) {return d;}
+		public long toKilobyte(long d) {return d / UNIT_SIZE;}
+		public long toMegabyte(long d) {return d / UNIT_SIZE^2;}
+		public long toGigabyte(long d) {return d / UNIT_SIZE^3;}
+		public long toTrillionbyte(long d) {return d / UNIT_SIZE^4;}
+	},
+	
+	KB{
+		public long toByte(long d) {return d * UNIT_SIZE;}
+		public long toKilobyte(long d) {return d;}
+		public long toMegabyte(long d) {return d / UNIT_SIZE;}
+		public long toGigabyte(long d) {return d / UNIT_SIZE^2;}
+		public long toTrillionbyte(long d) {return d / UNIT_SIZE^3;}
+	},
+	
+	MB{
+		public long toByte(long d) {return d * UNIT_SIZE^2;}
+		public long toKilobyte(long d) {return d * UNIT_SIZE;}
+		public long toMegabyte(long d) {return d;}
+		public long toGigabyte(long d) {return d / UNIT_SIZE^1;}
+		public long toTrillionbyte(long d) {return d / UNIT_SIZE^2;}
+	},
+	
+	GB{
+		public long toByte(long d) {return d * UNIT_SIZE^3;}
+		public long toKilobyte(long d) {return d * UNIT_SIZE^2;}
+		public long toMegabyte(long d) {return d * UNIT_SIZE;}
+		public long toGigabyte(long d) {return d;}
+		public long toTrillionbyte(long d) {return d / UNIT_SIZE;}
+	},
+	
+	TB{
+		public long toByte(long d) {return d * UNIT_SIZE^4;}
+		public long toKilobyte(long d) {return d * UNIT_SIZE^3;}
+		public long toMegabyte(long d) {return d * UNIT_SIZE^2;}
+		public long toGigabyte(long d) {return d * UNIT_SIZE;}
+		public long toTrillionbyte(long d) {return d;}
+	};
 
-	private static final int UNIT_SIZE = 1024;
+	static final int UNIT_SIZE = 1024;
 
 	public static String convert(long length) {
 		for (int i = SizeUnit.values().length - 1; i > 0; i--) {
