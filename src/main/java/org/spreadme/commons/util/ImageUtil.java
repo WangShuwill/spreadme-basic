@@ -32,8 +32,6 @@ import org.spreadme.commons.lang.Randoms;
  */
 public abstract class ImageUtil {
 
-	private static final String FORMAT_NAME = "png";
-
 	/**
 	 * 随机生成颜色
 	 *
