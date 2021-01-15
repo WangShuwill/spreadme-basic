@@ -1,6 +1,5 @@
 package org.spreadme.commons.http;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -22,7 +21,7 @@ public class HttpUrl implements Serializable{
 		this.path = path;
 	}
 
-	public static HttpUrl toHttpUrl(URL url) throws IOException{
+	public static HttpUrl toHttpUrl(URL url) {
 		final String protocol = url.getProtocol();
 		final String host = url.getHost();
 		final int port = url.getPort();

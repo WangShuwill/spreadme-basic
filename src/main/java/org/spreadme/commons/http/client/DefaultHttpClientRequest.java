@@ -66,7 +66,7 @@ public class DefaultHttpClientRequest implements HttpClientRequest {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		IOUtil.close(this.body);
 	}
 }

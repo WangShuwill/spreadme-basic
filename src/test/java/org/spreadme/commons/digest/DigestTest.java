@@ -16,7 +16,6 @@
 
 package org.spreadme.commons.digest;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Collections;
@@ -46,7 +45,7 @@ public class DigestTest {
 	private File testFile;
 
 	@Before
-	public void init() throws Exception {
+	public void init() {
 		testFile = new File(ClassUtil.getClassPath() + File.separator + TEST_FILE_NAME);
 	}
 
@@ -68,8 +67,8 @@ public class DigestTest {
 		ExecutorService executor = Executors.newFixedThreadPool(poolSize);
 		Concurrents.startAll(poolSize, () -> {
 			try {
-				String hash = Hex.toHexString(Digest.get(new ByteArrayInputStream(data), Digest.Algorithm.MD5));
-				Console.info("%s的MD5值为 %s", plainText, hash);
+				String hash = Digest.toHexString(data, Digest.Algorithm.SHA256);
+				Console.info("%s的SHA256值为 %s", plainText, hash);
 				hashSet.add(hash);
 			}
 			catch (Exception ex) {

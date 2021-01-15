@@ -21,11 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import org.spreadme.commons.lang.Charsets;
 
 /**
  * ClassUtil
@@ -71,11 +72,11 @@ public abstract class ClassUtil {
 			Enumeration<URL> resources = getClassLoader().getResources(packagePath);
 			while (resources.hasMoreElements()) {
 				String path = resources.nextElement().getPath();
-				paths.add(isDecode ? URLDecoder.decode(path, StandardCharsets.UTF_8.name()) : path);
+				paths.add(isDecode ? URLDecoder.decode(path, Charsets.UTF_8.name()) : path);
 			}
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			throw new  IllegalArgumentException(e.getMessage(), e);
 		}
 		return paths;
 	}
