@@ -399,7 +399,7 @@ public abstract class IOUtil {
 		else {
 			base = StringUtil.isBlank(base) ? file.getName() : base;
 			zos.putNextEntry(new ZipEntry(base));
-			FileChannel fileChann = new FileInputStream(new File(file.getAbsolutePath())).getChannel();
+			FileChannel fileChann = new FileInputStream(file.getAbsolutePath()).getChannel();
 			fileChann.transferTo(0, fileChann.size(), writableChann);
 			fileChann.close();
 		}

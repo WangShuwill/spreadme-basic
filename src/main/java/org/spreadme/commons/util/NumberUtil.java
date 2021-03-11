@@ -42,8 +42,6 @@ public abstract class NumberUtil {
 			long i = new Long(value);
 			return i > Integer.MAX_VALUE || i < Integer.MIN_VALUE ? new Long(i) : new Integer((int) i);
 		}
-		else {
-			return new Double(value);
-		}
+		return new Double(value);
 	}
 }

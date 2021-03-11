@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.spreadme.commons.lang.Defaults;
 import org.spreadme.commons.util.CollectionUtil;
 
 /**
@@ -41,16 +40,16 @@ import org.spreadme.commons.util.CollectionUtil;
 public class Reflect {
 
 	// 基本类型
-	private static final List<Class> primaryTypes;
+	private static final List<Class<?>> primaryTypes;
 	// 包装类型
-	private static final List<Class> wrapTypes;
+	private static final List<Class<?>> wrapTypes;
 
 	static {
-		List<Class> primaries = CollectionUtil.toList(
+		List<Class<?>> primaries = CollectionUtil.toList(
 				boolean.class, char.class, byte.class, short.class,
 				int.class, long.class, float.class, double.class, void.class
 		);
-		List<Class> wrapes = CollectionUtil.toList(
+		List<Class<?>> wrapes = CollectionUtil.toList(
 				Boolean.class, Character.class, Byte.class, Short.class,
 				Integer.class, Long.class, Float.class, Double.class, Void.class
 		);
@@ -407,7 +406,7 @@ public class Reflect {
 		return type;
 	}
 
-	public static Class getSuperClassGenricType(Class clazz, int index) {
+	public static Class<?> getSuperClassGenricType(Class<?> clazz, int index) {
 		Type genType = clazz.getGenericSuperclass();
 		if (!(genType instanceof ParameterizedType)) {
 			return Object.class;
@@ -416,7 +415,7 @@ public class Reflect {
 		return getClassByType(params, index);
 	}
 
-	public static Class getInterfaceGenericType(Class clazz, int index) {
+	public static Class<?> getInterfaceGenericType(Class<?> clazz, int index) {
 		Type[] types = clazz.getGenericInterfaces();
 		ParameterizedType parameterizedType = null;
 		for (Type type : types) {
@@ -432,18 +431,14 @@ public class Reflect {
 		return getClassByType(params, index);
 	}
 
-	private static Class getClassByType(Type[] params, int index) {
+	private static Class<?> getClassByType(Type[] params, int index) {
 		if (index >= params.length || index < 0) {
 			return Object.class;
 		}
 		if (!(params[index] instanceof Class)) {
 			return Object.class;
 		}
-		return (Class) params[index];
-	}
-
-	public static <T> T initValue(Class<T> type) {
-		return Defaults.of(type);
+		return (Class<?>) params[index];
 	}
 
 	public static class Null {
