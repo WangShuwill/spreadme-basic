@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.spreadme.commons.codec.Hex;
 import org.spreadme.commons.digest.Digest;
 import org.spreadme.commons.lang.Charsets;
-import org.spreadme.commons.lang.LineIterator;
 import org.spreadme.commons.system.SystemInfo;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.CollectionUtil;

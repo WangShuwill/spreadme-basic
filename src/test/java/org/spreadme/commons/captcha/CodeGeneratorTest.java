@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.junit.Test;
 import org.spreadme.commons.captcha.support.CurvesCaptcha;
 import org.spreadme.commons.captcha.support.LineCaptcha;
-import org.spreadme.commons.lang.ImageType;
+import org.spreadme.commons.image.ImageType;
 import org.spreadme.commons.util.ClassUtil;
 import org.spreadme.commons.util.Console;
 import org.spreadme.commons.util.IOUtil;

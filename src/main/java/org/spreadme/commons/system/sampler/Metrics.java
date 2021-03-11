@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.ToDoubleFunction;
 
-import org.spreadme.commons.lang.SizeUnit;
+import org.spreadme.commons.io.SizeUnit;
 
 /**
  * Metrics

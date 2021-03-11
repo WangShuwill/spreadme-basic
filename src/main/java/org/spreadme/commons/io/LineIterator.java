@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.io;
 
 import java.io.BufferedReader;
 import java.io.Closeable;

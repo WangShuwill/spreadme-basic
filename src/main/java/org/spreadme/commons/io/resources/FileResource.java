@@ -25,16 +25,16 @@ import java.nio.file.Paths;
 import org.spreadme.commons.lang.ContentType;
 
 /**
- * LocalResource
+ * FileResource
  * @author shuwei.wang
  */
-public class LocalResource implements Resource {
+public class FileResource implements Resource {
 
 	private String path;
 	private ContentType mimeType;
 	private File file;
 
-	public LocalResource(String path, ContentType mimeType) {
+	public FileResource(String path, ContentType mimeType) {
 		this.path = path;
 		this.file = new File(path);
 		this.mimeType = mimeType;
@@ -62,7 +62,7 @@ public class LocalResource implements Resource {
 
 	@Override
 	public String toString() {
-		return "LocalResource{" +
+		return "FileResource{" +
 				"path='" + path + '\'' +
 				", mimeType=" + mimeType +
 				'}';

@@ -22,7 +22,7 @@ import java.lang.management.MemoryPoolMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spreadme.commons.lang.SizeUnit;
+import org.spreadme.commons.io.SizeUnit;
 import org.spreadme.commons.util.StringUtil;
 
 /**

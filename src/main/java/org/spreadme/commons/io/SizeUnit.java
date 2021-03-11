@@ -1,5 +1,5 @@
 /*
- * Copyright [4/1/20 10:16 PM] [shuwei.wang (c) wswill@foxmail.com]
+ * Copyright [4/8/20 2:34 PM] [shuwei.wang (c) wswill@foxmail.com]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,30 @@
  * limitations under the License.
  */
 
-package org.spreadme.commons.lang;
+package org.spreadme.commons.io;
 
 /**
- * Throw Exception BiFunction
+ * size unit
  * @author shuwei.wang
+ * @since 1.0.0
  */
-@FunctionalInterface
-public interface ThrowableBiFunction<T, U, R> {
+public enum SizeUnit {
 
-	R apply(T t, U u) throws Exception;
+	B,
+	KB,
+	MB,
+	GB,
+	TB;
 
+	private static final int UNIT_SIZE = 1024;
+
+	public static String convert(long length) {
+		for (int i = SizeUnit.values().length - 1; i > 0; i--) {
+			double step = Math.pow(UNIT_SIZE, i);
+			if (length > step) {
+				return String.format("%3.1f%s", length / step, SizeUnit.values()[i]);
+			}
+		}
+		return Long.toString(length);
+	}
 }

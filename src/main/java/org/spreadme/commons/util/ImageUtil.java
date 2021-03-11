@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.spreadme.commons.lang.ImageType;
+import org.spreadme.commons.image.ImageType;
 import org.spreadme.commons.lang.Randoms;
 
 /**
